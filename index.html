@@ -4,77 +4,149 @@
   <meta charset="UTF-8">
   <title>Live by the Qur’an</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Arabic & Calibri fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New&family=Calibri&display=swap" rel="stylesheet">
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    html, body { height:100%; overflow:hidden; font-family:'Calibri', sans-serif; color:white; }
+    html, body { height:100%; overflow:hidden; font-family:'Calibri', sans-serif; color:#fff; }
     body {
-      background: url('bg_composite.png') center bottom no-repeat;
+      background: url('quran_background.png') center bottom no-repeat;
       background-size: cover;
       position: relative;
     }
     @media(max-width:600px) {
       body { background-image: url('quran_background_mobile.png'); }
     }
-    header { position:absolute; top:20px; left:20px; right:20px; display:flex; justify-content:space-between; align-items:center; }
+    header {
+      position:absolute; top:20px; left:20px; right:20px;
+      display:flex; justify-content:space-between; align-items:center;
+    }
     .logo img { height:50px; }
-    nav a { margin-left:20px; color:white; text-decoration:none; opacity:0.9; transition:opacity .2s; }
+    nav a {
+      margin-left:20px; color:white; text-decoration:none; opacity:0.9;
+      transition:opacity .2s;
+    }
     nav a:hover { opacity:1; }
-    .main { position:absolute; top:40%; left:50%; transform:translate(-50%,-45%); text-align:center; width:90%; max-width:800px; }
-    h1 { font-size:3rem; font-family:'Scheherazade New', serif; text-shadow:2px 2px 8px rgba(0,0,0,0.6); }
-    .tagline { margin-top:8px; font-size:1.2rem; font-style:italic; text-shadow:1px 1px 6px rgba(0,0,0,0.6); }
-    .ayah { margin:2rem 0; line-height:1.6; text-shadow:1px 1px 6px rgba(0,0,0,0.6); }
-    .ayah .arabic { font-family:'Scheherazade New', serif; font-size:1.6rem; direction:rtl; margin:0.5rem 0; }
-    .buttons { display:flex; justify-content:center; gap:16px; flex-wrap:wrap; margin-top:1rem; }
-    .buttons button { padding:0.75rem 1.5rem; border:2px solid #ffe58a; background:transparent; color:white; border-radius:5px; font-weight:bold; cursor:pointer; transition:background .3s, color .3s; }
-    .buttons button:hover { background:#ffe58a; color:#333; }
-    .subscribe-bar { position:absolute; bottom:40px; left:50%; transform:translateX(-50%); display:flex; width:80%; max-width:500px; box-shadow:0 4px 12px rgba(0,0,0,0.4); }
-    .subscribe-bar input { flex:1; padding:12px 16px; border:none; font-size:1rem; border-radius:5px 0 0 5px; }
-    .subscribe-bar button { padding:12px 16px; border:none; background:#ffe58a; color:#333; font-weight:bold; border-radius:0 5px 5px 0; cursor:pointer; }
+    .main {
+      position:absolute; top:40%; left:50%;
+      transform:translate(-50%,-45%); text-align:center;
+      width:90%; max-width:800px;
+    }
+    h1 {
+      font-size:3rem; font-family:'Scheherazade New', serif;
+      text-shadow:2px 2px 8px rgba(0,0,0,0.6);
+    }
+    .tagline {
+      margin-top:8px; font-size:1.2rem; font-style:italic;
+      text-shadow:1px 1px 6px rgba(0,0,0,0.6);
+    }
+    .ayah {
+      margin:2rem 0; line-height:1.6;
+      text-shadow:1px 1px 6px rgba(0,0,0,0.6);
+    }
+    .ayah .arabic {
+      font-family:'Scheherazade New', serif; font-size:1.6rem;
+      direction:rtl; margin:0.5rem 0;
+    }
+    .buttons {
+      display:flex; justify-content:center;
+      gap:16px; flex-wrap:wrap; margin-top:1rem;
+    }
+    .buttons button {
+      padding:0.75rem 1.5rem; border:2px solid #ffe58a;
+      background:transparent; color:white; border-radius:5px;
+      font-weight:bold; cursor:pointer;
+      transition:background .3s, color .3s;
+    }
+    .buttons button:hover {
+      background:#ffe58a; color:#333;
+    }
+    .subscribe-bar {
+      position:absolute; bottom:40px; left:50%;
+      transform:translateX(-50%);
+      display:flex; width:80%; max-width:500px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.4);
+    }
+    .subscribe-bar input {
+      flex:1; padding:12px 16px; border:none;
+      font-size:1rem; border-radius:5px 0 0 5px;
+    }
+    .subscribe-bar button {
+      padding:12px 16px; border:none; background:#ffe58a;
+      color:#333; font-weight:bold; font-size:1rem;
+      border-radius:0 5px 5px 0; cursor:pointer;
+    }
   </style>
 </head>
 <body>
+
   <header>
-    <div class="logo"><img src="Livebyquran Logo.PNG" alt="Logo"></div>
+    <div class="logo">
+      <img src="Livebyquran Logo.PNG" alt="Live by Quran Logo">
+    </div>
     <nav>
-      <a href="#">Home</a><a href="#">Books</a><a href="#">Audio Lectures</a><a href="#">Articles</a><a href="#">Q&A</a><a href="#"><img src="email-icon.png" alt="Contact" style="height:24px;"></a>
+      <a href="#">Home</a>
+      <a href="#">Books</a>
+      <a href="#">Audio Lectures</a>
+      <a href="#">Articles</a>
+      <a href="#">Q&A</a>
+      <a href="#"><img src="email-icon.png" alt="Contact" style="height:24px;"></a>
     </nav>
   </header>
+
   <div class="main">
     <h1>Live by the Qur’an</h1>
     <div class="tagline">Learn. Reflect. Transform.</div>
-    <div class="ayah" id="ayah">Loading...</div>
+    <div class="ayah" id="ayah">Loading…</div>
     <div class="buttons">
-      <button>Explore Books</button><button>Listen to Lectures</button><button>Read Articles</button><button>Q&A</button>
+      <button>Explore Books</button>
+      <button>Listen to Lectures</button>
+      <button>Read Articles</button>
+      <button>Q&A</button>
     </div>
   </div>
-  <div class="subscribe-bar"><input type="email" placeholder="Email address"><button>Subscribe</button></div>
+
+  <div class="subscribe-bar">
+    <input type="email" placeholder="Email address">
+    <button>Subscribe</button>
+  </div>
+
+  <!-- PapaParse for CSV parsing -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
-<script>
-  Papa.parse('ayahs.csv', {
-    download: true,
-    header: true,
-    complete(results) {
-      console.log('CSV parse results:', results);
-      const ayahs = results.data.filter(a => a.surah);
-      if (!ayahs.length) {
-        document.getElementById('ayah').textContent = 'No verses found.';
-        return;
+  <script>
+    const ayahEl = document.getElementById('ayah');
+
+    Papa.parse('ayahs.csv', {
+      download: true,
+      header: true,
+      skipEmptyLines: true,
+      complete(results) {
+        console.log('CSV loaded:', results);
+        const ayahs = results.data.filter(a => a && a.surah && a.arabic && a.translation);
+        if (!ayahs.length) {
+          ayahEl.textContent = 'No verses available.';
+          return;
+        }
+        // Compute day-of-year index
+        const today = new Date(),
+              start = new Date(today.getFullYear(), 0, 0),
+              doy = Math.floor((today - start) / (1000*60*60*24)),
+              a = ayahs[doy % ayahs.length];
+        if (!a || !a.surah) {
+          ayahEl.textContent = 'Error selecting verse.';
+          return;
+        }
+        ayahEl.innerHTML = `
+          <strong>${a.surah} — Verse ${a.verse}</strong>
+          <div class="arabic">${a.arabic}</div>
+          <div style="font-family:Calibri, sans-serif;">${a.translation}</div>`;
+      },
+      error(err) {
+        console.error('Error loading ayahs.csv:', err);
+        ayahEl.textContent = 'Could not load Ayah of the Day.';
       }
-      const today = new Date(),
-            start = new Date(today.getFullYear(), 0, 0),
-            doy = Math.floor((today - start) / (1000*60*60*24)),
-            a = ayahs[doy % ayahs.length];
-      document.getElementById('ayah').innerHTML = `
-        <strong>${a.surah} — Verse ${a.verse}</strong>
-        <div class="arabic">${a.arabic}</div>
-        <div style="font-family:Calibri, sans-serif;">${a.translation}</div>`;
-    },
-    error(err) {
-      console.error('Error loading or parsing ayahs.csv:', err);
-      document.getElementById('ayah').textContent = 'Error loading Ayah.';
-    }
-  });
-</script>
+    });
+  </script>
+
 </body>
 </html>
