@@ -1,4 +1,1 @@
-echo "livebyquran.com" > CNAME
-git add CNAME
-git commit -m "Add CNAME for GitHub Pages"
-git push
+livebyquran.com
