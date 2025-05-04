@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Read · Live by Quran</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <link rel="stylesheet" href="vendor/turnjs/turn.min.css">
+  <style>
+    body { margin:0; padding:0; background:#333; }
+    #flipbook {
+      width: 90vw; height: 80vh;
+      margin:2vh auto;
+      background:#888;
+    }
+    #flipbook .page {
+      width:100%; height:100%;
+      background:#fff; overflow:hidden;
+    }
+    canvas { display:block; width:100%; height:100%; }
+  </style>
+</head>
+<body>
+
+  <div id="flipbook">
+    <!-- pages will be injected here -->
+  </div>
+
+  <script src="vendor/pdfjs/pdf.min.js"></script>
+  <script src="vendor/turnjs/turn.min.js"></script>
+  <script>
+    // configure PDF.js worker
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'vendor/pdfjs/pdf.worker.min.js';
+
+    // parse file= query param
+    const params = new URLSearchParams(location.search);
+    const file = params.get('file');
+    if (!file) {
+      document.body.innerHTML = '<p style="color:white;text-align:center;margin-top:2rem;">No PDF specified.</p>';
+      throw new Error('No file parameter');
+    }
+
+    // initialize Turn.js
+    const flipbook = document.getElementById('flipbook');
+    $('#flipbook').turn({
+      width: flipbook.clientWidth,
+      height: flipbook.clientHeight,
+      autoCenter: true
+    });
+
+    // load PDF
+    pdfjsLib.getDocument(file).promise.then(pdf => {
+      const total = pdf.numPages;
+      for (let i = 1; i <= total; i++) {
+        // create container for each page
+        const pageDiv = document.createElement('div');
+        pageDiv.className = 'page';
+        const canvas = document.createElement('canvas');
+        pageDiv.appendChild(canvas);
+        $('#flipbook').turn('addPage', pageDiv, i);
+
+        // render page
+        pdf.getPage(i).then(page => {
+          const viewport = page.getViewport({ scale: 1.5 });
+          canvas.width  = viewport.width;
+          canvas.height = viewport.height;
+          page.render({ canvasContext: canvas.getContext('2d'), viewport });
+        });
+      }
+    }).catch(err => {
+      console.error(err);
+      alert('Failed to load PDF: ' + err.message);
+    });
+  </script>
+
+</body>
+</html>
