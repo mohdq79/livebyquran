@@ -1,11 +1,41 @@
-surah,verse,arabic,translation
-Al-Fatihah,5,إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ,You ˹alone˺ we worship and You ˹alone˺ we ask for help.
-Al-Baqarah,2,ذَٰلِكَ ٱلۡكِتَٰبُ لَا رَيۡبَۛ فِيهِۛ هُدٗى لِّلۡمُتَّقِينَ,This is the Book! There is no doubt about it—a guide for those mindful ˹of Allah˺.
-Al-Baqarah,186,وَإِذَا سَأَلَكَ عِبَادِي عَنِّي فَإِنِّي قَرِيبٌۖ أُجِيبُ دَعۡوَةَ ٱلدَّاعِ إِذَا دَعَانِۖ,When My servants ask you ˹O Prophet˺ about Me: I am truly near. I respond to one’s prayer when they call upon Me.
-Ali 'Imran,139,وَلَا تَهِنُوا وَلَا تَحۡزَنُوا وَأَنتُمُ ٱلۡأَعۡلَوۡنَ إِن كُنتُم مُّؤۡمِنِينَ,"Do not falter or grieve, for you will have the upper hand, if you are ˹true˺ believers."
-Al-An'am,59,وَعِندَهُۥ مَفَاتِحُ ٱلۡغَيۡبِ لَا يَعۡلَمُهَآ إِلَّا هُوَۚ,With Him are the keys of the unseen—no one knows them except Him.
-Ar-Ra'd,28,ٱلَّذِينَ آمَنُواْ وَتَطۡمَئِنُّ قُلُوبُهُم بِذِكۡرِ ٱللَّهِۗ أَلَا بِذِكۡرِ ٱللَّهِ تَطۡمَئِنُّ ٱلۡقُلُوبُ,Those who believe and whose hearts find comfort in the remembrance of Allah. Surely in the remembrance of Allah do hearts find comfort.
-Ibrahim,7,لَئِن شَكَرۡتُمۡ لَأَزِيدَنَّكُمۡۖ وَلَئِن كَفَرۡتُمۡ إِنَّ عَذَابِي لَشَدِيدٞ,"If you are thankful, I will certainly give you more. But if you are ungrateful, surely My punishment is severe."
-Al-Kahf,10,رَبَّنَآ ءَاتِنَا مِن لَّدُنكَ رَحۡمَةٗ وَهَيِّئۡ لَنَا مِنۡ أَمۡرِنَا رَشَدٗا,Our Lord! Grant us mercy from Yourself and guide us rightly through our ordeal.
-Taha,14,إِنَّنِيٓ أَنَا ٱللَّهُ لَآ إِلَٰهَ إِلَّآ أَنَا۠ فَٱعۡبُدۡنِي وَأَقِمِ ٱلصَّلَوٰةَ لِذِكۡرِيٓ,"It is truly I. I am Allah! There is no god ˹worthy of worship˺ except Me. So worship Me ˹alone˺, and establish prayer for My remembrance."
-Al-Ikhlas,1-4,قُلْ هُوَ ٱللَّهُ أَحَدٌ ٱللَّهُ ٱلصَّمَدُ لَمْ يَلِدْ وَلَمْ يُولَدْ وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌ,"Say, ˹O Prophet,˺ “He is Allah—One ˹and Indivisible˺; Allah—the Sustainer ˹needed by all˺. He has never had offspring, nor was He born. And there is none comparable to Him.”"
+surahNumber,surah,verse,arabic,translation
+1,Al-Fatihah,5,إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ,You ˹alone˺ we worship and You ˹alone˺ we ask for help.
+2,Al-Baqarah,2,ذَٰلِكَ ٱلۡكِتَٰبُ لَا رَيۡبَۛ فِيهِۛ هُدٗى لِّلۡمُتَّقِينَ,This is the Book! There is no doubt about it—a guide for those mindful ˹of Allah˺.
+2,Al-Baqarah,186,وَإِذَا سَأَلَكَ عِبَادِي عَنِّي فَإِنِّي قَرِيبٌۖ أُجِيبُ دَعۡوَةَ ٱلدَّاعِ إِذَا دَعَانِۖ,When My servants ask you ˹O Prophet˺ about Me: I am truly near. I respond to one’s prayer when they call upon Me.
+3,Ali 'Imran,139,وَلَا تَهِنُوا وَلَا تَحۡزَنُوا وَأَنتُمُ ٱلۡأَعۡلَوۡنَ إِن كُنتُم مُّؤۡمِنِينَ,"Do not falter or grieve, for you will have the upper hand, if you are ˹true˺ believers."
+6,Al-An'am,59,وَعِندَهُۥ مَفَاتِحُ ٱلۡغَيۡبِ لَا يَعۡلَمُهَآ إِلَّا هُوَۚ,With Him are the keys of the unseen—no one knows them except Him.
+13,Ar-Ra'd,28,ٱلَّذِينَ آمَنُواْ وَتَطۡمَئِنُّ قُلُوبُهُم بِذِكۡرِ ٱللَّهِۗ أَلَا بِذِكۡرِ ٱللَّهِ تَطۡمَئِنُّ ٱلۡقُلُوبُ,Those who believe and whose hearts find comfort in the remembrance of Allah. Surely in the remembrance of Allah do hearts find comfort.
+14,Ibrahim,7,لَئِن شَكَرۡتُمۡ لَأَزِيدَنَّكُمۡۖ وَلَئِن كَفَرۡتُمۡ إِنَّ عَذَابِي لَشَدِيدٞ,"If you are thankful, I will certainly give you more. But if you are ungrateful, surely My punishment is severe."
+18,Al-Kahf,10,رَبَّنَآ ءَاتِنَا مِن لَّدُنكَ رَحۡمَةٗ وَهَيِّئۡ لَنَا مِنۡ أَمۡرِنَا رَشَدٗا,Our Lord! Grant us mercy from Yourself and guide us rightly through our ordeal.
+20,Taha,14,إِنَّنِيٓ أَنَا ٱللَّهُ لَآ إِلَٰهَ إِلَّآ أَنَا۠ فَٱعۡبُدۡنِي وَأَقِمِ ٱلصَّلَوٰةَ لِذِكۡرِيٓ,"It is truly I. I am Allah! There is no god ˹worthy of worship˺ except Me. So worship Me ˹alone˺, and establish prayer for My remembrance."
+112,Al-Ikhlas,1-4,قُلْ هُوَ ٱللَّهُ أَحَدٌ ٱللَّهُ ٱلصَّمَدُ لَمْ يَلِدْ وَلَمْ يُولَدْ وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌ,"Say, ˹O Prophet,˺ “He is Allah—One ˹and Indivisible˺; Allah—the Sustainer ˹needed by all˺. He has never had offspring, nor was He born. And there is none comparable to Him.”"
+9,At-Tawbah,51,قُل لَّن يُصِيبَنَآ إِلَّا مَا كَتَبَ ٱللَّهُ لَنَا هُوَ مَوْلَىٰنَاۚ وَعَلَى ٱللَّهِ فَلْيَتَوَكَّلِ ٱلْمُؤْمِنُونَ,"Say, “Nothing will ever befall us except what Allah has destined for us. He is our Protector.” So in Allah let the believers put their trust."
+10,Yunus,12,وَإِذَا مَسَّ ٱلْإِنسَـٰنَ ٱلضُّرُّ دَعَانَا لِجَنبِهِۦٓ أَوْ قَاعِدًا أَوْ قَآئِمًۭا,"When someone is touched with hardship, they cry out to Us whether lying down, sitting, or standing."
+10,Yunus,57,يَـٰٓأَيُّهَا ٱلنَّاسُ قَدْ جَآءَتْكُم مَّوْعِظَةٌۭ مِّن رَّبِّكُمْ وَشِفَآءٌۭ لِّمَا فِى ٱلصُّدُورِ,O humanity! There has come to you ˹enlightenment˺ from your Lord—a healing for what is in the hearts.
+11,Hud,6,وَمَا مِن دَآبَّةٍۢ فِى ٱلْأَرْضِ إِلَّا عَلَى ٱللَّهِ رِزْقُهَا,There is no creature on earth whose provision is not upon Allah.
+12,Yusuf,87,وَلَا تَيْـَٔسُوا۟ مِن رَّوْحِ ٱللَّهِۖ إِنَّهُۥ لَا يَيْـَٔسُ مِن رَّوْحِ ٱللَّهِ إِلَّا ٱلْقَوْمُ ٱلْكَـٰفِرُونَ,"Never despair of Allah’s mercy. Indeed, no one despairs of Allah’s mercy except the disbelieving people."
+16,An-Nahl,18,وَإِن تَعُدُّوا۟ نِعْمَتَ ٱللَّهِ لَا تُحْصُوهَآۗ,"And if you tried to count Allah’s blessings, you could never enumerate them."
+17,Al-Isra,23,فَلَا تَقُل لَّهُمَآ أُفٍّۢ وَلَا تَنْهَرْهُمَا وَقُل لَّهُمَا قَوْلًۭا كَرِيمًۭا,"Do not even say “Uff” to your parents, nor scold them. Speak to them kindly."
+17,Al-Isra,36,وَلَا تَقْفُ مَا لَيْسَ لَكَ بِهِۦ عِلْمٌ,Do not follow what you do not know.
+18,Al-Kahf,46,ٱلْمَالُ وَٱلْبَنُونَ زِينَةُ ٱلْحَيَوٰةِ ٱلدُّنْيَا,Wealth and children are [but] adornment of this worldly life.
+21,Al-Anbiya,87,لَّآ إِلَـٰهَ إِلَّآ أَنتَ سُبْحَـٰنَكَ إِنِّي كُنتُ مِنَ ٱلظَّـٰلِمِينَ,There is no god but You. Glory be to You! I was truly among the wrongdoers.
+23,Al-Mu’minun,1,قَدْ أَفْلَحَ ٱلْمُؤْمِنُونَ,Successful indeed are the believers.
+24,An-Nur,35,ٱللَّهُ نُورُ ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضِ,Allah is the Light of the heavens and the earth.
+25,Al-Furqan,63,وَعِبَادُ ٱلرَّحْمَـٰنِ ٱلَّذِينَ يَمْشُونَ عَلَى ٱلْأَرْضِ هَوْنًۭا,The servants of the Most Merciful are those who walk humbly upon the earth.
+26,Ash-Shu'ara,80,وَإِذَا مَرِضْتُ فَهُوَ يَشْفِينِ,"And when I am ill, it is He who cures me."
+28,Al-Qasas,77,وَٱبْتَغِ فِيمَآ ءَاتَىٰكَ ٱللَّهُ ٱلدَّارَ ٱلْـَٔاخِرَةَ وَلَا تَنسَ نَصِيبَكَ مِنَ ٱلدُّنْيَا,"Seek the Hereafter with what Allah has given you, but do not forget your share of this world."
+29,Al-Ankabut,2,أَحَسِبَ ٱلنَّاسُ أَن يُتْرَكُوٓا۟ أَن يَقُولُوٓا۟ ءَامَنَّا وَهُمْ لَا يُفْتَنُونَ,Do people think they will be left alone because they say “We believe” without being tested?
+31,Luqman,14,أَنِ ٱشْكُرْ لِي وَلِوَٰلِدَيْكَ,Be grateful to Me and to your parents.
+33,Al-Ahzab,70,يَـٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُواْ ٱتَّقُواْ ٱللَّهَ وَقُولُواْ قَوْلًۭا سَدِيدًۭا,"O believers! Be mindful of Allah, and say what is right."
+35,Fatir,28,إِنَّمَا يَخْشَى ٱللَّهَ مِنْ عِبَادِهِ ٱلْعُلَمَـٰٓؤُا۟,Only those who have knowledge fear Allah among His servants.
+36,Ya-Sin,58,سَلَـٰمٌۭ قَوْلًۭا مِّن رَّبٍّۢ رَّحِيمٍۢ,“Peace!”—a word from the Merciful Lord.
+37,As-Saffat,96,وَٱللَّهُ خَلَقَكُمْ وَمَا تَعْمَلُونَ,It is Allah who created you and what you do.
+39,Az-Zumar,53,قُلْ يَـٰعِبَادِىَ ٱلَّذِينَ أَسْرَفُوا۟ عَلَىٰٓ أَنفُسِهِمْ لَا تَقْنَطُوا۟ مِن رَّحْمَةِ ٱللَّهِ,"Say, ˹O Prophet,˺ that Allah says, “O My servants who have exceeded the limits against their souls! Do not lose hope in Allah’s mercy."
+40,Ghafir,60,وَقَالَ رَبُّكُمُ ٱدْعُونِىٓ أَسْتَجِبْ لَكُمْ,Your Lord has proclaimed: “Call upon Me—I will respond to you.”
+41,Fussilat,34,ٱدْفَعْ بِٱلَّتِى هِىَ أَحْسَنُ,Respond to evil with what is better.
+42,Ash-Shura,36,وَمَا عِندَ ٱللَّهِ خَيْرٌۭ وَأَبْقَىٰ,What is with Allah is far better and more lasting.
+49,Al-Hujurat,13,إِنَّ أَكْرَمَكُمْ عِندَ ٱللَّهِ أَتْقَىٰكُمْ,The most noble of you in the sight of Allah is the most righteous.
+50,Qaf,16,وَنَحْنُ أَقْرَبُ إِلَيْهِ مِنْ حَبْلِ ٱلْوَرِيدِ,We are closer to him than his jugular vein.
+51,Adh-Dhariyat,56,وَمَا خَلَقْتُ ٱلْجِنَّ وَٱلْإِنسَ إِلَّا لِيَعْبُدُونِ,I did not create jinn and mankind except to worship Me.
+55,Ar-Rahman,13,فَبِأَىِّ ءَالَآءِ رَبِّكُمَا تُكَذِّبَانِ,So which of your Lord’s favours will you both deny?
+89,Al-Fajr,27-30,يَـٰٓأَيَّتُهَا ٱلنَّفْسُ ٱلْمُطْمَئِنَّةُ ٱرْجِعِىٓ إِلَىٰ رَبِّكِ رَاضِيَةًۭ مَّرْضِيَّةًۭ فَٱدْخُلِى فِى عِبَـٰدِى وَٱدْخُلِى جَنَّتِى,"O tranquil soul, return to your Lord—well pleased ˹with Him˺ and well pleasing ˹to Him˺. So join My servants, and enter My Paradise."
