@@ -21,9 +21,7 @@
       --btn-night: #bfa76d;
       --nav-gap: 140px;
     }
-body.night nav a {
-  color: #fff !important;
-}
+
     /*───────────────────────────────────────────────
       Background & Day/Night Swap
     ───────────────────────────────────────────────*/
@@ -88,6 +86,11 @@ body.night nav a {
       opacity:.9; transition:opacity .2s;
     }
     nav a:hover { opacity:1 }
+
+    /* force white nav links in night mode */
+    body.night nav a {
+      color: #fff !important;
+    }
 
     /*───────────────────────────────────────────────
       Date Display
