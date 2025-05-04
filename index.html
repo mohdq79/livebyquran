@@ -5,14 +5,14 @@
   <title>Live by Quran</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New&family=Calibri&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Scheherazade+New&family=Calibri&display=swap" rel="stylesheet">
   <style>
     /* Reset & Vars */
-    * { margin: 0; padding: 0; box-sizing: border-box }
-    html, body { height: 100%; overflow: hidden; position: relative; }
+    * { margin:0; padding:0; box-sizing:border-box }
+    html,body { height:100%; overflow:hidden; position:relative }
     :root {
       --day-overlay: rgba(255,255,255,0);
-      --night-overlay: rgba(0,0,50,0.5);
+      --night-overlay: rgba(0,0,0,0.2);
       --text-day: #222;
       --text-night: #f2f2f2;
       --btn-day: #ffe58a;
@@ -21,16 +21,16 @@
 
     /* Background & Day/Night */
     body {
-      font-family: 'Calibri', sans-serif;
+      font-family:Calibri,sans-serif;
       background: url('quran_background.png') center bottom/cover no-repeat;
       color: var(--text-day);
     }
     body::before {
-      content: '';
-      position: absolute; inset: 0;
+      content:'';
+      position:absolute; inset:0;
       background: var(--day-overlay);
       transition: background 1s;
-      z-index: 0;
+      z-index:0;
     }
     body.night {
       color: var(--text-night);
@@ -39,12 +39,10 @@
       background: var(--night-overlay);
     }
 
-    /* --- Birds (behind everything) --- */
+    /* Birds (flapping & drifting) */
     .bird-container {
-      position: absolute;
-      top: 0; left: -15%;
-      transform-origin: center;
-      z-index: 0;
+      position:absolute; top:0; left:-15%;
+      transform-origin:center; z-index:0;
       animation-timing-function: linear;
       animation-iteration-count: infinite;
     }
@@ -54,139 +52,131 @@
     .bird-container-four  { animation: fly-path 26s linear -2s infinite; }
 
     .bird {
-      width: 88px; height: 125px;
-      background: url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/174479/bird-cells-new.svg') 0 0 no-repeat;
-      background-size: auto 100%;
+      width:88px; height:125px;
+      background:url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/174479/bird-cells-new.svg') 0 0 no-repeat;
+      background-size:auto 100%;
       animation: flap 1s steps(10) infinite;
       filter: invert(34%) sepia(55%) saturate(427%) hue-rotate(141deg)
               brightness(93%) contrast(91%);
     }
-    /* Individual wing‐flap offsets */
-    .bird-one   { animation-delay: -0.5s;  }
-    .bird-two   { animation-duration: 1.1s;  animation-delay: -0.7s; }
-    .bird-three { animation-duration: 0.9s;  animation-delay: -0.3s; }
-    .bird-four  { animation-duration: 1.25s; animation-delay: -0.4s; }
+    .bird-one   { animation-delay: -0.5s;   }
+    .bird-two   { animation-duration: 1.1s; animation-delay: -0.7s; }
+    .bird-three { animation-duration: 0.9s; animation-delay: -0.3s; }
+    .bird-four  { animation-duration: 1.25s;animation-delay: -0.4s; }
 
     @keyframes flap {
       100% { background-position: -900px 0; }
     }
     @keyframes fly-path {
-      0%   { transform: translateX(-15vw) translateY(10vh) scale(0.4);    }
-      25%  { transform: translateX(25vw)  translateY(5vh)  scale(0.45);   }
-      50%  { transform: translateX(55vw)  translateY(12vh) scale(0.5);    }
-      75%  { transform: translateX(85vw)  translateY(8vh)  scale(0.55);   }
-      100% { transform: translateX(115vw) translateY(10vh) scale(0.6);    }
+      0%   { transform: translateX(-15vw) translateY(10vh) scale(0.4); }
+      25%  { transform: translateX(25vw)  translateY(6vh)  scale(0.45);}
+      50%  { transform: translateX(55vw)  translateY(12vh) scale(0.5); }
+      75%  { transform: translateX(85vw)  translateY(8vh)  scale(0.55);}
+      100% { transform: translateX(115vw) translateY(10vh) scale(0.6); }
     }
 
-    /* --- Header & Nav (z-index:1) --- */
+    /* Header & Nav */
     header {
-      position: absolute; top:20px; left:20px; right:20px;
-      display: flex; justify-content: space-between; align-items: center;
-      z-index: 1;
+      position:absolute; top:20px; left:20px; right:20px;
+      display:flex; justify-content:space-between; align-items:center;
+      z-index:1;
     }
-    .logo img { height: 50px; }
+    .logo img { height:50px; }
     nav a {
-      margin-left: 20px; color: inherit; text-decoration: none;
-      opacity: .9; transition: opacity .2s;
+      margin-left:20px; color:inherit; text-decoration:none;
+      opacity:.9; transition:opacity .2s;
     }
-    nav a:hover { opacity: 1; }
+    nav a:hover { opacity:1; }
 
-    /* --- Date Display (stacked) --- */
+    /* Date Display (stacked, larger) */
     #date-display {
-      position: absolute; top: 90px; right: 30px;
-      text-align: right; line-height: 1.2;
-      z-index: 1;
+      position:absolute; top:90px; right:30px;
+      text-align:right; line-height:1.2; z-index:1;
     }
     #date-display .isl {
-      font-size: 1.2rem; display: block;
+      font-size:1.3rem; display:block;
     }
     #date-display .greg {
-      font-size: 1rem; font-weight: bold; display: block;
+      font-size:1rem; font-weight:bold; display:block;
     }
 
-    /* --- Main Content --- */
+    /* Main (moved up to 20%) */
     .main {
-      position: absolute; top: 35%; left: 50%;
-      transform: translate(-50%,-40%);
-      text-align: center; width: 90%; max-width: 800px;
-      z-index: 1;
+      position:absolute; top:20%; left:50%;
+      transform:translate(-50%,-10%);
+      text-align:center; width:90%; max-width:800px;
+      z-index:1;
     }
     h1 {
-      font-family: 'Scheherazade New', serif;
-      font-size: 3rem; margin-bottom: .3em;
-      text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+      font-family:'Playfair Display',serif;
+      font-size:3.2rem; margin-bottom:.3em;
+      text-shadow:2px 2px 8px rgba(0,0,0,0.6);
     }
     .tagline {
-      font-style: italic; font-size: 1.2rem; margin-bottom: 1em;
-      text-shadow: 1px 1px 6px rgba(0,0,0,0.6);
+      font-style:italic; font-size:1.2rem; margin-bottom:1em;
+      text-shadow:1px 1px 6px rgba(0,0,0,0.6);
     }
     .ayah {
-      margin: 2em 0; line-height: 1.6;
-      text-shadow: 1px 1px 6px rgba(0,0,0,0.6);
+      margin:2em 0; line-height:1.6;
+      text-shadow:1px 1px 6px rgba(0,0,0,0.6);
     }
     .ayah strong {
-      display: block; font-size: 1.5rem; margin-bottom: .5em;
+      display:block; font-size:1.6rem; margin-bottom:.5em;
     }
     .ayah .arabic {
-      font-family: 'Scheherazade New', serif;
-      font-size: 1.9rem; direction: rtl; margin-bottom: .5em;
+      font-family:'Scheherazade New',serif;
+      font-size:2rem; direction:rtl; margin-bottom:.5em;
     }
 
-    /* --- Buttons & Subscribe (z-index:1) --- */
+    /* Navigation Buttons (in front of stone) */
     .buttons {
-      display: flex; justify-content: center; gap: 1em; flex-wrap: wrap;
-      z-index: 1;
+      position:absolute; bottom:200px; left:50%;
+      transform:translateX(-50%);
+      display:flex; gap:1em; z-index:1;
     }
     .buttons button {
-      padding: .75em 1.5em; border: 2px solid var(--btn-day);
-      background: transparent; border-radius: 5px;
-      font-weight: bold; cursor: pointer;
-      transition: background .3s, color .3s;
+      padding:.75em 1.5em; border:2px solid var(--btn-day);
+      background:transparent; border-radius:5px;
+      font-weight:bold; cursor:pointer;
+      transition:background .3s,color .3s;
     }
-    body.night .buttons button { border-color: var(--btn-night); }
+    body.night .buttons button { border-color:var(--btn-night) }
     .buttons button:hover {
-      background: var(--btn-day); color: #333;
+      background:var(--btn-day); color:#333;
     }
     body.night .buttons button:hover {
-      background: var(--btn-night); color: #333;
+      background:var(--btn-night); color:#333;
     }
 
+    /* Subscribe Bar */
     .subscribe-bar {
-      position: absolute; bottom: 40px; left: 50%;
-      transform: translateX(-50%);
-      display: flex; width: 80%; max-width: 500px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-      z-index: 1;
+      position:absolute; bottom:40px; left:50%;
+      transform:translateX(-50%);
+      display:flex; width:80%; max-width:500px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.4);
+      z-index:1;
     }
     .subscribe-bar input {
-      flex: 1; padding: .75em; border: none; font-size: 1rem;
-      border-radius: 5px 0 0 5px;
+      flex:1; padding:.75em; border:none; font-size:1rem;
+      border-radius:5px 0 0 5px;
     }
     .subscribe-bar button {
-      padding: .75em 1em; border: none;
-      background: var(--btn-day); color: #333;
-      font-weight: bold; border-radius: 0 5px 5px 0;
-      cursor: pointer; transition: background .3s;
+      padding:.75em 1em; border:none;
+      background:var(--btn-day); color:#333;
+      font-weight:bold; border-radius:0 5px 5px 0;
+      cursor:pointer; transition:background .3s;
     }
-    body.night .subscribe-bar button { background: var(--btn-night); }
+    body.night .subscribe-bar button { background:var(--btn-night) }
 
   </style>
 </head>
 <body>
 
-  <!-- Bird containers -->
-  <div class="bird-container bird-container-one">
-    <div class="bird bird-one"></div>
-  </div>
-  <div class="bird-container bird-container-two">
-    <div class="bird bird-two"></div>
-  </div>
-  <div class="bird-container bird-container-three">
-    <div class="bird bird-three"></div>
-  </div>
-  <div class="bird-container bird-container-four">
-    <div class="bird bird-four"></div>
-  </div>
+  <!-- Birds -->
+  <div class="bird-container bird-container-one"><div class="bird bird-one"></div></div>
+  <div class="bird-container bird-container-two"><div class="bird bird-two"></div></div>
+  <div class="bird-container bird-container-three"><div class="bird bird-three"></div></div>
+  <div class="bird-container bird-container-four"><div class="bird bird-four"></div></div>
 
   <header>
     <div class="logo"><img src="Livebyquran Logo.PNG" alt="Live by Quran"></div>
@@ -209,12 +199,13 @@
     <h1>Live by Quran</h1>
     <div class="tagline">Learn. Reflect. Transform.</div>
     <div class="ayah" id="ayah">Loading Ayah…</div>
-    <div class="buttons">
-      <button onclick="location.href='books.html'">Explore Books</button>
-      <button onclick="location.href='lectures.html'">Listen to Lectures</button>
-      <button onclick="location.href='articles.html'">Read Articles</button>
-      <button onclick="location.href='qa.html'">Q&A</button>
-    </div>
+  </div>
+
+  <div class="buttons">
+    <button onclick="location.href='books.html'">Explore Books</button>
+    <button onclick="location.href='lectures.html'">Listen to Lectures</button>
+    <button onclick="location.href='articles.html'">Read Articles</button>
+    <button onclick="location.href='qa.html'">Q&A</button>
   </div>
 
   <div class="subscribe-bar">
@@ -225,16 +216,16 @@
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
   <script>
-    // Day/Night
-    function applyTheme(){
-      const h=new Date().getHours();
-      document.body.classList.toggle('night', h<6 || h>=18);
+    // 1) Day/Night
+    function applyTheme() {
+      const h = new Date().getHours();
+      document.body.classList.toggle('night', h < 6 || h >= 18);
     }
-    applyTheme(); setInterval(applyTheme,60000);
+    applyTheme(); setInterval(applyTheme, 60000);
 
-    // Dates
+    // 2) Dates
     function showDates(){
-      const n=new Date();
+      const n = new Date();
       document.querySelector('.greg').textContent =
         new Intl.DateTimeFormat('en-US',{
           weekday:'long', day:'numeric', month:'long', year:'numeric'
@@ -244,23 +235,22 @@
           day:'numeric', month:'long', year:'numeric'
         }).format(n) + ' AH';
     }
-    showDates(); setInterval(showDates,3600000);
+    showDates(); setInterval(showDates, 3600000);
 
-    // Ayah of the Day
-    Papa.parse('ayahs.csv',{
+    // 3) Ayah-of-the-Day
+    Papa.parse('ayahs.csv', {
       download:true, header:true, skipEmptyLines:true,
       complete(r){
-        const a=r.data.filter(x=>x.surah&&x.translation);
-        const today=new Date(), start=new Date(today.getFullYear(),0,0);
-        const idx=Math.floor((today-start)/(1000*60*60*24))%a.length, v=a[idx];
-        if(v){
-          document.getElementById('ayah').innerHTML =
-            `<strong>${v.surah} — Verse ${v.verse}</strong>
-             <div class="arabic">${v.arabic}</div>
-             <div>${v.translation}</div>`;
-        }
+        const list = r.data.filter(x=>x.surah && x.translation);
+        const today = new Date(), start = new Date(today.getFullYear(),0,0);
+        const idx = Math.floor((today - start)/(1000*60*60*24)) % list.length;
+        const v = list[idx];
+        if(v) document.getElementById('ayah').innerHTML =
+          `<strong>${v.surah} — Verse ${v.verse}</strong>
+           <div class="arabic">${v.arabic}</div>
+           <div>${v.translation}</div>`;
       },
-      error(){ document.getElementById('ayah').textContent='Error loading Ayah.';}
+      error(){ document.getElementById('ayah').textContent='Error loading Ayah.'; }
     });
   </script>
 </body>
