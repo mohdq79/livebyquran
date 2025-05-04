@@ -32,8 +32,7 @@
       padding: 0.75rem 2rem;
       background: rgba(255,255,255,0.9);
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      position: sticky;
-      top: 0; z-index: 10;
+      position: sticky; top: 0; z-index: 10;
     }
     .header-left {
       display: flex; align-items:center;
@@ -174,11 +173,17 @@
         const books = data.filter(b => b.cover && b.title);
         if (!books.length) return;
 
-        // Most recent is last in CSV
+        // Last row is the most recent
         const featuredIdx = books.length - 1;
-        const container = document.getElementById('books-grid');
+        const container  = document.getElementById('books-grid');
 
         books.forEach((book, i) => {
+          // ensure exactly one "assets/" prefix
+          const pdfPath = book.pdf.startsWith('assets/')
+            ? book.pdf
+            : `assets/books/pdfs/${book.pdf}`;
+          const readerUrl = `reader.html?file=${encodeURIComponent(pdfPath)}`;
+
           const card = document.createElement('div');
           card.className = 'card' + (i === featuredIdx ? ' featured' : '');
           card.innerHTML = `
@@ -188,8 +193,8 @@
               <p>${book.description || ''}</p>
             </div>
             <div class="actions">
-              <a href="reader.html?file=assets/books/pdfs/${book.pdf}" target="_blank">Read</a>
-              <a href="assets/books/pdfs/${book.pdf}" download>Download</a>
+              <a href="${readerUrl}"   target="_blank">Read</a>
+              <a href="${pdfPath}"      download>Download</a>
               <a href="${book.order || '#'}" target="_blank">Order Print</a>
             </div>`;
           container.appendChild(card);
