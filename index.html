@@ -4,8 +4,10 @@
   <meta charset="utf-8">
   <title>Live by Quran</title>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Scheherazade+New&family=Calibri&display=swap" rel="stylesheet">
   <style>
+    /* Reset & Vars */
     * { margin:0; padding:0; box-sizing:border-box }
     html, body { height:100%; overflow:hidden; position:relative; }
     :root {
@@ -17,6 +19,8 @@
       --btn-night: #bfa76d;
       --nav-gap: 140px;
     }
+
+    /* Background & Day/Night */
     body {
       font-family:Calibri, sans-serif;
       background: url('quran_background.png') center bottom/cover no-repeat;
@@ -33,9 +37,7 @@
     body.night::before { background: var(--night-overlay); }
 
     /* Birds */
-    .bird-container { position:absolute; top:0; left:-15%; z-index:0;
-      animation: fly-path 30s linear infinite;
-    }
+    .bird-container { position:absolute; top:0; left:-15%; z-index:0; animation: fly-path 30s linear infinite; }
     .bird-container-two   { animation-duration:28s; animation-delay:-3s; }
     .bird-container-three { animation-duration:32s; animation-delay:-7s; }
     .bird-container-four  { animation-duration:26s; animation-delay:-2s; }
@@ -59,7 +61,7 @@
       100% { transform:translateX(115vw) translateY(10vh) scale(.6) }
     }
 
-    /* Header */
+    /* Header & Nav */
     header {
       position:absolute; top:20px; left:20px; right:20px;
       display:flex; justify-content:space-between; align-items:center;
@@ -72,15 +74,15 @@
     }
     nav a:hover { opacity:1 }
 
-    /* Dates */
+    /* Date Display */
     #date-display {
-      position:absolute; top:90px; right:30px; text-align:right;
-      line-height:1.2; z-index:1;
+      position:absolute; top:90px; right:30px;
+      text-align:right; line-height:1.2; z-index:1;
     }
     .isl { font-size:1.3rem; display:block }
     .greg { font-size:1rem; font-weight:bold; display:block }
 
-    /* Main */
+    /* Main Content */
     .main {
       position:absolute; top:15%; left:50%;
       transform:translate(-50%,-10%);
@@ -110,26 +112,6 @@
     }
     .ayah > div:not(.arabic) {
       color:#fff; text-shadow:1px 1px 6px rgba(0,0,0,0.75);
-    }
-
-    /* Ayah Nav */
-    .ayah-nav {
-      position:fixed; bottom:20px; right:20px; z-index:2;
-      display:inline-flex; gap:.5em;
-    }
-    .ayah-nav button {
-      width:36px; height:36px;
-      border:2px solid var(--btn-day);
-      background:transparent; border-radius:50%;
-      font-size:1.2rem; color:inherit; cursor:pointer;
-      transition:background .3s;
-    }
-    body.night .ayah-nav button { border-color:var(--btn-night) }
-    .ayah-nav button:hover {
-      background:var(--btn-day); color:#333;
-    }
-    body.night .ayah-nav button:hover {
-      background:var(--btn-night); color:#333;
     }
 
     /* Continue Reading */
@@ -183,10 +165,35 @@
       background:var(--btn-night);
     }
 
+    /* Ayah Nav */
+    .ayah-nav {
+      position:fixed; bottom:20px; right:20px; z-index:2;
+      display:inline-flex; gap:.5em;
+    }
+    .ayah-nav button {
+      width:36px; height:36px;
+      border:2px solid var(--btn-day);
+      background:transparent; border-radius:50%;
+      font-size:1.2rem; color:inherit; cursor:pointer;
+      transition:background .3s;
+    }
+    body.night .ayah-nav button { border-color:var(--btn-night) }
+    .ayah-nav button:hover {
+      background:var(--btn-day); color:#333;
+    }
+    body.night .ayah-nav button:hover {
+      background:var(--btn-night); color:#333;
+    }
+
     /* Day/Night Switch */
     .container {
-      position:fixed; bottom:20px; right:80px;
+      position:fixed; bottom:20px; left:20px;
       z-index:2;
+    }
+    .toggle-label {
+      position:fixed; bottom:65px; left:20px;
+      color:#fff; font-size:.85rem; z-index:2;
+      text-shadow:1px 1px 2px rgba(0,0,0,0.4);
     }
     .switch {
       position:relative; width:80px; height:40px;
@@ -226,21 +233,12 @@
     input:checked + .slider .sun { left:-40px; transform:scale(0) }
     input:checked + .slider .moon { right:5px; transform:scale(1) }
     input:checked + .slider .cloud { transform:translateX(80px) scale(0) }
-    input:checked + .slider .star {
-      opacity:1; transform:scale(1.2); animation: twinkle 2s infinite;
-    }
+    input:checked + .slider .star { opacity:1; transform:scale(1.2); animation:twinkle 2s infinite }
     @keyframes twinkle { 0%,100%{opacity:1}50%{opacity:0.5} }
 
-    /* Label */
-    .toggle-label {
-      position:fixed; bottom:10px; right:87px;
-      color:#fff; font-size:.85rem; z-index:2;
-      text-shadow:1px 1px 2px rgba(0,0,0,0.4);
-    }
   </style>
 </head>
 <body>
-
   <!-- Birds -->
   <div class="bird-container bird-container-one"><div class="bird bird-one"></div></div>
   <div class="bird-container bird-container-two"><div class="bird bird-two"></div></div>
@@ -322,6 +320,7 @@
       }
     }
     applyTheme(); setInterval(()=>applyTheme(),60000);
+
     toggle.addEventListener('change',()=>{
       document.body.classList.toggle('night', toggle.checked);
     });
@@ -342,16 +341,17 @@
         `<strong>${v.surah} — Verse ${v.verse}</strong>
          <div class="arabic">${v.arabic}</div>
          <div>${v.translation}</div>`;
-      // link both surah number & verse
-      const sn = v.surahNumber||v.surah.match(/\d+/)[0]||1;
-      document.getElementById('continue').href =
-        `https://quran.com/${sn}/${v.verse}`;
+      // correct continue link
+      const sn = v.surahNumber || (v.surah.match(/\d+/)||[])[0] || '1';
+      document.getElementById('continue').setAttribute(
+        'href',
+        `https://quran.com/${sn}/${v.verse}`
+      );
     }
 
     // Load CSV
     Papa.parse('ayahs.csv',{download:true,header:true,skipEmptyLines:true,complete(r){
       ayahList = r.data.filter(a=>a.surah&&a.verse&&a.translation);
-      // default = today
       const t=new Date(), s=new Date(t.getFullYear(),0,0);
       idx = Math.floor((t-s)/86400000)%ayahList.length;
       history=[idx];
