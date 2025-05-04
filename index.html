@@ -162,9 +162,13 @@
     .continue {
       position:fixed; bottom:calc(var(--nav-gap)+20px);
       left:50%; transform:translateX(-50%);
-      color:#ffe; text-decoration:underline; font-size:1rem; z-index:2;
+      color:#ffe !important;        /* always bright */
+      text-decoration:underline; font-size:1rem;
+      z-index:3;                    /* above everything */
     }
-    body.night .continue { color:#fff }
+    body.night .continue {
+      color:#fff !important;        /* white at night */
+    }
 
     /*───────────────────────────────────────────────
       Page Buttons
@@ -178,10 +182,14 @@
       padding:.75em 1.5em; border:2px solid var(--btn-day);
       background:transparent; border-radius:5px;
       font-weight:bold; cursor:pointer; transition:background .3s;
+      color: var(--text-day);           /* default text */
     }
-    body.night .buttons button { border-color:var(--btn-night) }
     .buttons button:hover {
       background:var(--btn-day); color:#333;
+    }
+    body.night .buttons button {
+      border-color:var(--btn-night);
+      color: #fff !important;           /* force white */
     }
     body.night .buttons button:hover {
       background:var(--btn-night); color:#333;
@@ -279,7 +287,6 @@
     input:checked + .slider .cloud  { transform:translateX(80px) scale(0) }
     input:checked + .slider .star   { opacity:1; transform:scale(1.2); animation:twinkle 2s infinite }
     @keyframes twinkle { 0%,100%{opacity:1}50%{opacity:0.5} }
-
   </style>
 </head>
 <body>
