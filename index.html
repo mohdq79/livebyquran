@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <title>Live by Quran</title>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <link rel="preload" href="night background/BG1.jpg" as="image">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Scheherazade+New&family=Calibri&display=swap" rel="stylesheet">
   <style>
     /*───────────────────────────────────────────────
@@ -22,19 +23,22 @@
     }
 
     /*───────────────────────────────────────────────
-      Background & Day/Night Overlay
+      Background & Day/Night Swap
     ───────────────────────────────────────────────*/
     body {
       font-family:Calibri, sans-serif;
       background: url('quran_background.png') center bottom/cover no-repeat;
       color: var(--text-day);
-      transition: color .5s;
+      transition: background .5s ease, color .5s ease;
     }
     body::before {
       content:''; position:absolute; inset:0;
-      background: var(--day-overlay); transition: background .5s; z-index:0;
+      background: var(--day-overlay);
+      transition: background .5s;
+      z-index:0;
     }
     body.night {
+      background: url('night background/BG1.jpg') center bottom/cover no-repeat;
       color: var(--text-night);
     }
     body.night::before {
@@ -94,7 +98,7 @@
     .greg { font-size:1rem; font-weight:bold; display:block }
 
     /*───────────────────────────────────────────────
-      Hero & Flare Overlay (Option 1)
+      Hero & Flare Overlay
     ───────────────────────────────────────────────*/
     .main {
       position:absolute; top:15%; left:50%;
@@ -103,13 +107,10 @@
       z-index:1; padding-bottom:calc(var(--nav-gap)+1.5em);
     }
     .main::before {
-      content:'';
-      position:absolute; top:0; left:0; right:0; bottom:0;
+      content:''; position:absolute; top:0; left:0; right:0; bottom:0;
       background: url('day-flare.png') no-repeat 70% 10%;
-      background-size:400px 400px;    /* <-- enlarged flare */
-      opacity:0.6;
-      pointer-events:none;
-      z-index:0;
+      background-size:400px 400px;
+      opacity:0.6; pointer-events:none; z-index:0;
       transition: background-image .5s, opacity .5s;
     }
     body.night .main::before {
@@ -118,7 +119,7 @@
     }
 
     /*───────────────────────────────────────────────
-      Title (sun/moon removed)
+      Title & Tagline
     ───────────────────────────────────────────────*/
     h1 {
       font-family:'Playfair Display',serif;
@@ -126,31 +127,14 @@
       text-shadow:2px 2px 8px rgba(0,0,0,0.6);
       z-index:1;
     }
-    /* (All h1::before / ::after rules removed) */
-
-    /*───────────────────────────────────────────────
-      Night Stars behind text
-    ───────────────────────────────────────────────*/
-    body.night .main::after {
-      content:'';
-      position:absolute; inset:0; z-index:0;
-      background:
-        radial-gradient(circle at 20% 30%, #fff 2%, transparent 0),
-        radial-gradient(circle at 80% 20%, #fff 1.5%, transparent 0),
-        radial-gradient(circle at 50% 70%, #fff 1.8%, transparent 0);
-      background-size:100px 100px;
-      opacity:.6; pointer-events:none;
-      animation:stars-twinkle 3s ease-in-out infinite alternate;
-    }
-    @keyframes stars-twinkle { to { opacity:.2 } }
-
-    /*───────────────────────────────────────────────
-      Tagline & Ayah
-    ───────────────────────────────────────────────*/
     .tagline {
       font-style:italic; font-size:1.2rem; margin-bottom:1em;
       text-shadow:1px 1px 6px rgba(0,0,0,0.6); z-index:1;
     }
+
+    /*───────────────────────────────────────────────
+      Ayah
+    ───────────────────────────────────────────────*/
     .ayah {
       margin:2em 0; line-height:1.6; text-shadow:1px 1px 6px rgba(0,0,0,0.6);
       z-index:1;
@@ -163,7 +147,7 @@
       font-size:2rem; direction:rtl; margin-bottom:.5em;
       color:#fff; text-shadow:2px 2px 8px rgba(0,0,0,0.75);
     }
-    .ayah div:not(.arabic)) {
+    .ayah div:not(.arabic) {
       color:#fff; text-shadow:1px 1px 6px rgba(0,0,0,0.75);
     }
 
@@ -261,8 +245,7 @@
     .switch input { opacity:0; width:0; height:0 }
     .slider { position:absolute; inset:0; transition:1s }
     .sun, .moon {
-      position:absolute; width:30px; height:30px;
-      border-radius:50%; top:5px; transition:1s;
+      position:absolute; width:30px; height:30px; border-radius:50%; top:5px; transition:1s;
     }
     .sun {
       background:radial-gradient(circle,#ffd700 30%,#ffa500 70%);
