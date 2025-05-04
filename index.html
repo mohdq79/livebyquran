@@ -42,7 +42,7 @@
     }
 
     /*───────────────────────────────────────────────
-      Bird animation (slower, smooth)
+      Birds (slower, smoother)
     ───────────────────────────────────────────────*/
     .bird-container { position:absolute; top:0; left:-15%; z-index:0; animation:fly-path 30s linear infinite; }
     .bird-container-two   { animation-duration:28s; animation-delay:-3s; }
@@ -60,7 +60,7 @@
     .bird-three { animation-delay:-0.7s }
     .bird-four  { animation-delay:-0.9s }
 
-    @keyframes flap { 100% { background-position:-900px 0 } }
+    @keyframes flap     { 100% { background-position:-900px 0 } }
     @keyframes fly-path {
       0%   { transform:translateX(-15vw) translateY(10vh) scale(.4) }
       25%  { transform:translateX(25vw)  translateY(6vh)  scale(.45) }
@@ -102,13 +102,11 @@
       width:90%; max-width:800px; text-align:center;
       z-index:1; padding-bottom:calc(var(--nav-gap)+1.5em);
     }
-    /* use real PNG overlays */
     .main::before {
       content:'';
-      position:absolute;
-      top:0; left:0; right:0; bottom:0;
+      position:absolute; top:0; left:0; right:0; bottom:0;
       background: url('day-flare.png') no-repeat 70% 10%;
-      background-size:300px 300px;
+      background-size:400px 400px;    /* <-- enlarged flare */
       opacity:0.6;
       pointer-events:none;
       z-index:0;
@@ -120,52 +118,18 @@
     }
 
     /*───────────────────────────────────────────────
-      Title Sun/Moon & Rays
+      Title (sun/moon removed)
     ───────────────────────────────────────────────*/
     h1 {
-      position:relative;
       font-family:'Playfair Display',serif;
       font-size:3.2rem; margin-bottom:.3em;
       text-shadow:2px 2px 8px rgba(0,0,0,0.6);
       z-index:1;
     }
-    h1::before {
-      content:'';
-      position:absolute; left:-60px; top:0;
-      width:40px; height:40px; border-radius:50%;
-      background:radial-gradient(circle at center,#ffeb3b 40%,#fbc02d 100%);
-      box-shadow:0 0 20px rgba(255,235,59,0.6);
-      animation:sun-pulse 5s ease-in-out infinite alternate;
-      z-index:1;
-    }
-    h1::after {
-      content:'';
-      position:absolute; left:-72px; top:-12px;
-      width:64px; height:64px; border-radius:50%;
-      box-shadow:
-        0 -30px 0 -2px rgba(255,235,59,0.4),
-        0  30px 0 -2px rgba(255,235,59,0.4),
-       -30px 0   0 -2px rgba(255,235,59,0.4),
-        30px 0   0 -2px rgba(255,235,59,0.4);
-      filter:blur(2px); opacity:.5;
-      animation:rays-rotate 20s linear infinite;
-      z-index:1;
-    }
-    body.night h1::before {
-      background:none; box-shadow:none;
-      width:32px; height:32px; left:-60px; top:0;
-      background:#f4f4f4; box-shadow:-8px 0 0 #16213e;
-      transform:rotate(15deg);
-      animation:moon-sway 4s ease-in-out infinite alternate;
-    }
-    body.night h1::after { display:none; }
-
-    @keyframes sun-pulse   { to { transform:scale(1.1); box-shadow:0 0 30px rgba(255,235,59,0.8) } }
-    @keyframes rays-rotate { 100% { transform:rotate(360deg) } }
-    @keyframes moon-sway   { to { transform:rotate(20deg) translateY(-2px) } }
+    /* (All h1::before / ::after rules removed) */
 
     /*───────────────────────────────────────────────
-      Stars behind text (night)
+      Night Stars behind text
     ───────────────────────────────────────────────*/
     body.night .main::after {
       content:'';
@@ -199,7 +163,7 @@
       font-size:2rem; direction:rtl; margin-bottom:.5em;
       color:#fff; text-shadow:2px 2px 8px rgba(0,0,0,0.75);
     }
-    .ayah div:not(.arabic) {
+    .ayah div:not(.arabic)) {
       color:#fff; text-shadow:1px 1px 6px rgba(0,0,0,0.75);
     }
 
@@ -277,7 +241,7 @@
     }
 
     /*───────────────────────────────────────────────
-      Day/Night Switch (bottom-left)
+      Day/Night Switch
     ───────────────────────────────────────────────*/
     .container {
       position:fixed; bottom:20px; left:40px; z-index:2;
