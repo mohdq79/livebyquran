@@ -6,8 +6,11 @@
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Scheherazade+New&family=Calibri&display=swap" rel="stylesheet">
   <style>
+    /*───────────────────────────────────────────────
+      Reset & CSS Variables
+    ───────────────────────────────────────────────*/
     * { margin:0; padding:0; box-sizing:border-box }
-    html, body { height:100%; width:100%; overflow:hidden; position:relative; }
+    html, body { width:100%; height:100%; overflow:hidden; position:relative; }
     :root {
       --day-overlay: rgba(255,255,255,0);
       --night-overlay: rgba(0,0,0,0.2);
@@ -17,6 +20,10 @@
       --btn-night: #bfa76d;
       --nav-gap: 140px;
     }
+
+    /*───────────────────────────────────────────────
+      Background & Day/Night Overlay
+    ───────────────────────────────────────────────*/
     body {
       font-family:Calibri, sans-serif;
       background: url('quran_background.png') center bottom/cover no-repeat;
@@ -25,18 +32,19 @@
     }
     body::before {
       content:''; position:absolute; inset:0;
-      background: var(--day-overlay);
-      transition: background .5s;
-      z-index:0;
+      background: var(--day-overlay); transition: background .5s; z-index:0;
     }
     body.night { color: var(--text-night); }
     body.night::before { background: var(--night-overlay); }
 
-    /* Birds */
+    /*───────────────────────────────────────────────
+      Birds Animation (Slowed & Smooth Path)
+    ───────────────────────────────────────────────*/
     .bird-container { position:absolute; top:0; left:-15%; z-index:0; animation:fly-path 30s linear infinite; }
     .bird-container-two   { animation-duration:28s; animation-delay:-3s; }
     .bird-container-three { animation-duration:32s; animation-delay:-7s; }
     .bird-container-four  { animation-duration:26s; animation-delay:-2s; }
+
     .bird {
       width:88px; height:125px;
       background:url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/174479/bird-cells-new.svg') 0 0 no-repeat;
@@ -48,20 +56,22 @@
     .bird-two   { animation-delay:-1.4s }
     .bird-three { animation-delay:-0.7s }
     .bird-four  { animation-delay:-0.9s }
+
     @keyframes flap { 100% { background-position:-900px 0 } }
     @keyframes fly-path {
       0%   { transform:translateX(-15vw) translateY(10vh) scale(.4) }
-      25%  { transform:translateX(25vw) translateY(6vh)  scale(.45) }
-      50%  { transform:translateX(55vw) translateY(12vh) scale(.5) }
-      75%  { transform:translateX(85vw) translateY(8vh)  scale(.55) }
-      100% { transform:translateX(115vw)translateY(10vh) scale(.6) }
+      25%  { transform:translateX(25vw)  translateY(6vh)  scale(.45) }
+      50%  { transform:translateX(55vw)  translateY(12vh) scale(.5) }
+      75%  { transform:translateX(85vw)  translateY(8vh)  scale(.55) }
+      100% { transform:translateX(115vw) translateY(10vh) scale(.6) }
     }
 
-    /* Header */
+    /*───────────────────────────────────────────────
+      Header & Navigation
+    ───────────────────────────────────────────────*/
     header {
       position:absolute; top:20px; left:20px; right:20px;
-      display:flex; justify-content:space-between; align-items:center;
-      z-index:1;
+      display:flex; justify-content:space-between; align-items:center; z-index:1;
     }
     .logo img { height:50px }
     nav a {
@@ -70,7 +80,9 @@
     }
     nav a:hover { opacity:1 }
 
-    /* Dates */
+    /*───────────────────────────────────────────────
+      Date Display
+    ───────────────────────────────────────────────*/
     #date-display {
       position:absolute; top:90px; right:30px; text-align:right;
       line-height:1.2; z-index:1;
@@ -78,12 +90,13 @@
     .isl { font-size:1.3rem; display:block }
     .greg { font-size:1rem; font-weight:bold; display:block }
 
-    /* Main content */
+    /*───────────────────────────────────────────────
+      Main Ayah Section
+    ───────────────────────────────────────────────*/
     .main {
       position:absolute; top:15%; left:50%;
       transform:translate(-50%,-10%);
-      text-align:center; width:90%; max-width:800px;
-      z-index:1;
+      text-align:center; width:90%; max-width:800px; z-index:1;
       padding-bottom: calc(var(--nav-gap) + 1.5em);
     }
     h1 {
@@ -107,22 +120,25 @@
       font-size:2rem; direction:rtl; margin-bottom:.5em;
       color:#fff; text-shadow:2px 2px 8px rgba(0,0,0,0.75);
     }
-    .ayah > div:not(.arabic) {
+    .ayah div:not(.arabic) {
       color:#fff; text-shadow:1px 1px 6px rgba(0,0,0,0.75);
     }
 
-    /* Continue Reading (fixed above nav) */
+    /*───────────────────────────────────────────────
+      Continue Reading (Fixed Above Nav)
+    ───────────────────────────────────────────────*/
     .continue {
       position:fixed;
       bottom: calc(var(--nav-gap) + 20px);
-      left:50%;
-      transform:translateX(-50%);
+      left:50%; transform:translateX(-50%);
       color:#ffe; text-decoration:underline;
       font-size:1rem; z-index:2;
     }
     body.night .continue { color:#fff }
 
-    /* Page buttons */
+    /*───────────────────────────────────────────────
+      Page Buttons
+    ───────────────────────────────────────────────*/
     .buttons {
       position:absolute; bottom:var(--nav-gap); left:50%;
       transform:translateX(-50%); display:flex; gap:1em; z-index:1;
@@ -140,12 +156,14 @@
       background:var(--btn-night); color:#333;
     }
 
-    /* Subscribe bar */
+    /*───────────────────────────────────────────────
+      Subscribe Bar
+    ───────────────────────────────────────────────*/
     .subscribe-bar {
       position:absolute; bottom:40px; left:50%;
-      transform:translateX(-50%); display:flex;
-      width:80%; max-width:500px; box-shadow:0 4px 12px rgba(0,0,0,0.4);
-      z-index:1;
+      transform:translateX(-50%);
+      display:flex; width:80%; max-width:500px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.4); z-index:1;
     }
     .subscribe-bar input {
       flex:1; padding:.75em; border:none; font-size:1rem;
@@ -154,11 +172,14 @@
     .subscribe-bar button {
       padding:.75em 1em; border:none;
       background:var(--btn-day); color:#333;
-      border-radius:0 5px 5px 0; cursor:pointer; transition:background .3s;
+      border-radius:0 5px 5px 0;
+      cursor:pointer; transition:background .3s;
     }
     body.night .subscribe-bar button { background:var(--btn-night) }
 
-    /* Ayah nav arrows + label */
+    /*───────────────────────────────────────────────
+      Ayah Nav Arrows & Label (Bottom Right)
+    ───────────────────────────────────────────────*/
     .ayah-nav-label {
       position:fixed; bottom:64px; right:20px; z-index:2;
       color:#fff; font-size:.9rem; text-align:center;
@@ -168,21 +189,23 @@
       display:inline-flex; gap:.5em;
     }
     .ayah-nav button {
-      width:36px; height:36px; border:3px solid #fff;
-      background:rgba(0,0,0,0.2); border-radius:50%;
-      color:#fff; font-size:1.2rem; line-height:1;
+      width:36px; height:36px;
+      border:3px solid #fff; background:rgba(0,0,0,0.2);
+      color:#fff; font-size:1.2rem; border-radius:50%;
       cursor:pointer; transition:background .3s;
     }
     .ayah-nav button:hover {
       background:rgba(255,255,255,0.8); color:#333;
     }
 
-    /* Day/Night switch bottom-left */
+    /*───────────────────────────────────────────────
+      Day/Night Switch (Bottom Left)
+    ───────────────────────────────────────────────*/
     .container {
-      position:fixed; bottom:20px; left:20px; z-index:2;
+      position:fixed; bottom:20px; left:40px; z-index:2;
     }
     .toggle-label {
-      position:fixed; bottom:65px; left:20px; z-index:2;
+      position:fixed; bottom:65px; left:40px; z-index:2;
       color:#fff; font-size:.85rem;
       text-shadow:1px 1px 2px rgba(0,0,0,0.4);
     }
@@ -230,13 +253,13 @@
 </head>
 <body>
 
-  <!-- birds -->
+  <!-- Birds -->
   <div class="bird-container bird-container-one"><div class="bird bird-one"></div></div>
   <div class="bird-container bird-container-two"><div class="bird bird-two"></div></div>
   <div class="bird-container bird-container-three"><div class="bird bird-three"></div></div>
   <div class="bird-container bird-container-four"><div class="bird bird-four"></div></div>
 
-  <!-- header/nav -->
+  <!-- Header / Logo / Nav -->
   <header>
     <div class="logo"><img src="Livebyquran Logo.PNG" alt="Live by Quran"></div>
     <nav>
@@ -249,13 +272,13 @@
     </nav>
   </header>
 
-  <!-- dates -->
+  <!-- Dates -->
   <div id="date-display">
     <span class="isl">Loading Islamic date…</span>
     <span class="greg">Loading Gregorian date…</span>
   </div>
 
-  <!-- main -->
+  <!-- Main Ayah -->
   <div class="main">
     <h1>Live by Quran</h1>
     <div class="tagline">Learn. Reflect. Transform.</div>
@@ -263,7 +286,7 @@
   </div>
   <a id="continue" class="continue" href="#" target="_blank">Continue Reading →</a>
 
-  <!-- page buttons -->
+  <!-- Page Buttons -->
   <div class="buttons">
     <button onclick="location.href='books.html'">Explore Books</button>
     <button onclick="location.href='lectures.html'">Listen to Lectures</button>
@@ -271,20 +294,20 @@
     <button onclick="location.href='qa.html'">Q&A</button>
   </div>
 
-  <!-- subscribe -->
+  <!-- Subscribe -->
   <div class="subscribe-bar">
     <input type="email" id="email-input" placeholder="Email address">
     <button id="subscribe-btn">Subscribe</button>
   </div>
 
-  <!-- ayah nav + label -->
+  <!-- Ayah Nav + Label -->
   <div class="ayah-nav-label">Read another Ayah</div>
   <div class="ayah-nav">
     <button id="prev-ayah" title="Previous Ayah">‹</button>
     <button id="next-ayah" title="Next Ayah">›</button>
   </div>
 
-  <!-- day/night switch -->
+  <!-- Day / Night Switch -->
   <div class="container">
     <label class="switch">
       <input type="checkbox" id="toggleSwitch">
@@ -303,34 +326,32 @@
   </div>
   <div class="toggle-label">Day / Night</div>
 
-  <!-- scripts -->
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
   <script>
-    let ayahList = [], history = [], idx = -1;
+    let ayahList=[], history=[], idx=-1;
+    const toggle=document.getElementById('toggleSwitch');
 
-    // day/night auto/manual
-    const toggle = document.getElementById('toggleSwitch');
+    // Day/Night auto + manual
     function applyTheme(auto=true){
       if(auto){
         const h=new Date().getHours();
-        document.body.classList.toggle('night', h<6||h>=18);
-        toggle.checked = document.body.classList.contains('night');
+        document.body.classList.toggle('night',h<6||h>=18);
+        toggle.checked=document.body.classList.contains('night');
       }
     }
     applyTheme();
-    setInterval(applyTheme,60000);
-    toggle.addEventListener('change',()=>{
-      document.body.classList.toggle('night', toggle.checked);
-    });
+    setInterval(()=>applyTheme(),60000);
+    toggle.addEventListener('change',()=>document.body.classList.toggle('night',toggle.checked));
 
-    // dates
+    // Show dates
     function showDates(){
       const n=new Date();
-      document.querySelector('.greg').textContent =
+      document.querySelector('.greg').textContent=
         new Intl.DateTimeFormat('en-US',{
           weekday:'long',day:'numeric',month:'long',year:'numeric'
         }).format(n);
-      document.querySelector('.isl').textContent =
+      document.querySelector('.isl').textContent=
         new Intl.DateTimeFormat('en-GB-u-ca-islamic',{
           day:'numeric',month:'long',year:'numeric'
         }).format(n);
@@ -338,52 +359,49 @@
     showDates();
     setInterval(showDates,3600000);
 
-    // render Ayah
+    // Render ayah
     function renderAyah(v){
-      document.getElementById('ayah').innerHTML =
+      document.getElementById('ayah').innerHTML=
         `<strong>${v.surah} — Verse ${v.verse}</strong>
          <div class="arabic">${v.arabic}</div>
          <div>${v.translation}</div>`;
-      const sn = v.surahNumber|| (v.surah.match(/\d+/)||[])[0]|| '';
-      const cont = document.getElementById('continue');
+      const sn=v.surahNumber||(v.surah.match(/\d+/)||[])[0]||'';
+      const c=document.getElementById('continue');
       if(sn){
-        cont.style.display = 'inline-block';
-        cont.setAttribute('href', `https://quran.com/${sn}/${v.verse}`);
-      } else cont.style.display='none';
+        c.style.display='inline-block';
+        c.href=`https://quran.com/${sn}/${v.verse}`;
+      } else c.style.display='none';
     }
 
-    // load CSV
-    Papa.parse('ayahs.csv',{
-      download:true,header:true,skipEmptyLines:true,
-      complete(r){
-        ayahList = r.data.filter(a=>a.surah&&a.verse&&a.translation);
-        const t=new Date(), s=new Date(t.getFullYear(),0,0);
-        idx = Math.floor((t-s)/86400000)%ayahList.length;
-        history=[idx];
-        renderAyah(ayahList[idx]);
-      }
-    });
+    // Load CSV
+    Papa.parse('ayahs.csv',{download:true,header:true,skipEmptyLines:true,complete(r){
+      ayahList=r.data.filter(a=>a.surah&&a.verse&&a.translation);
+      const t=new Date(),s=new Date(t.getFullYear(),0,0);
+      idx=Math.floor((t-s)/86400000)%ayahList.length;
+      history=[idx];
+      renderAyah(ayahList[idx]);
+    }});
 
-    // next/prev
-    document.getElementById('next-ayah').onclick = ()=>{
-      idx = Math.floor(Math.random()*ayahList.length);
+    // Next / Prev
+    document.getElementById('next-ayah').onclick=()=>{
+      idx=Math.floor(Math.random()*ayahList.length);
       history.push(idx);
       renderAyah(ayahList[idx]);
     };
-    document.getElementById('prev-ayah').onclick = ()=>{
+    document.getElementById('prev-ayah').onclick=()=>{
       if(history.length>1){
         history.pop();
-        idx = history[history.length-1];
+        idx=history[history.length-1];
         renderAyah(ayahList[idx]);
       }
     };
 
-    // subscribe stub
-    document.getElementById('subscribe-btn').onclick = ()=>{
-      const email=document.getElementById('email-input').value.trim();
+    // Subscribe stub
+    document.getElementById('subscribe-btn').onclick=()=>{
+      const e=document.getElementById('email-input').value.trim();
       const re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if(!re.test(email)){ alert('Enter valid email.'); return; }
-      alert(`Thanks for subscribing, ${email}!`);
+      if(!re.test(e)){ return alert('Enter valid email.'); }
+      alert(`Thanks for subscribing, ${e}!`);
       document.getElementById('email-input').value='';
     };
   </script>
