@@ -4,10 +4,8 @@
   <meta charset="utf-8">
   <title>Live by Quran</title>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Scheherazade+New&family=Calibri&display=swap" rel="stylesheet">
   <style>
-    /* Reset & Vars */
     * { margin:0; padding:0; box-sizing:border-box }
     html, body { height:100%; overflow:hidden; position:relative; }
     :root {
@@ -17,10 +15,8 @@
       --text-night: #f2f2f2;
       --btn-day: #ffe58a;
       --btn-night: #bfa76d;
-      --nav-gap: 120px;               /* space between nav buttons and subscribe */
+      --nav-gap: 140px;
     }
-
-    /* Background & Day/Night */
     body {
       font-family:Calibri, sans-serif;
       background: url('quran_background.png') center bottom/cover no-repeat;
@@ -33,23 +29,16 @@
       transition: background .5s;
       z-index:0;
     }
-    body.night {
-      color: var(--text-night);
-    }
-    body.night::before {
-      background: var(--night-overlay);
-    }
+    body.night { color: var(--text-night); }
+    body.night::before { background: var(--night-overlay); }
 
-    /* Birds: slower flap */
-    .bird-container {
-      position:absolute; top:0; left:-15%; z-index:0;
-      animation-timing-function: linear;
-      animation-iteration-count: infinite;
+    /* Birds */
+    .bird-container { position:absolute; top:0; left:-15%; z-index:0;
+      animation: fly-path 30s linear infinite;
     }
-    .bird-container-one   { animation: fly-path 30s linear -5s infinite; }
-    .bird-container-two   { animation: fly-path 28s linear -3s infinite; }
-    .bird-container-three { animation: fly-path 32s linear -7s infinite; }
-    .bird-container-four  { animation: fly-path 26s linear -2s infinite; }
+    .bird-container-two   { animation-duration:28s; animation-delay:-3s; }
+    .bird-container-three { animation-duration:32s; animation-delay:-7s; }
+    .bird-container-four  { animation-duration:26s; animation-delay:-2s; }
     .bird {
       width:88px; height:125px;
       background:url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/174479/bird-cells-new.svg') 0 0 no-repeat;
@@ -58,20 +47,19 @@
       filter: invert(34%) sepia(55%) saturate(427%) hue-rotate(141deg)
               brightness(93%) contrast(91%);
     }
-    .bird-one   { animation-delay: -1s; }
-    .bird-two   { animation-delay: -1.4s; }
-    .bird-three { animation-delay: -0.7s; }
-    .bird-four  { animation-delay: -0.9s; }
-    @keyframes flap { 100% { background-position: -900px 0 } }
+    .bird-two   { animation-delay:-1.4s }
+    .bird-three { animation-delay:-0.7s }
+    .bird-four  { animation-delay:-0.9s }
+    @keyframes flap { 100% { background-position:-900px 0 } }
     @keyframes fly-path {
-      0%   { transform: translateX(-15vw) translateY(10vh) scale(0.4); }
-      25%  { transform: translateX(25vw)  translateY(6vh)  scale(0.45); }
-      50%  { transform: translateX(55vw)  translateY(12vh) scale(0.5); }
-      75%  { transform: translateX(85vw)  translateY(8vh)  scale(0.55); }
-      100% { transform: translateX(115vw) translateY(10vh) scale(0.6); }
+      0%   { transform:translateX(-15vw) translateY(10vh) scale(.4) }
+      25%  { transform:translateX(25vw)  translateY(6vh)  scale(.45) }
+      50%  { transform:translateX(55vw)  translateY(12vh) scale(.5) }
+      75%  { transform:translateX(85vw)  translateY(8vh)  scale(.55) }
+      100% { transform:translateX(115vw) translateY(10vh) scale(.6) }
     }
 
-    /* Header & Nav */
+    /* Header */
     header {
       position:absolute; top:20px; left:20px; right:20px;
       display:flex; justify-content:space-between; align-items:center;
@@ -84,15 +72,15 @@
     }
     nav a:hover { opacity:1 }
 
-    /* Date Display */
+    /* Dates */
     #date-display {
-      position:absolute; top:90px; right:30px;
-      text-align:right; line-height:1.2; z-index:1;
+      position:absolute; top:90px; right:30px; text-align:right;
+      line-height:1.2; z-index:1;
     }
-    #date-display .isl { font-size:1.3rem; display:block }
-    #date-display .greg { font-size:1rem; font-weight:bold; display:block }
+    .isl { font-size:1.3rem; display:block }
+    .greg { font-size:1rem; font-weight:bold; display:block }
 
-    /* Main Content */
+    /* Main */
     .main {
       position:absolute; top:15%; left:50%;
       transform:translate(-50%,-10%);
@@ -124,19 +112,17 @@
       color:#fff; text-shadow:1px 1px 6px rgba(0,0,0,0.75);
     }
 
-    /* Ayah Nav Buttons */
+    /* Ayah Nav */
     .ayah-nav {
-      margin-top:1em;
-      display:inline-flex;
-      gap:.5em;
+      position:fixed; bottom:20px; right:20px; z-index:2;
+      display:inline-flex; gap:.5em;
     }
     .ayah-nav button {
       width:36px; height:36px;
       border:2px solid var(--btn-day);
       background:transparent; border-radius:50%;
-      font-size:1.2rem; line-height:1;
-      color:inherit; cursor:pointer;
-      transition:background .3s,color .3s;
+      font-size:1.2rem; color:inherit; cursor:pointer;
+      transition:background .3s;
     }
     body.night .ayah-nav button { border-color:var(--btn-night) }
     .ayah-nav button:hover {
@@ -146,11 +132,11 @@
       background:var(--btn-night); color:#333;
     }
 
-    /* Continue Reading link */
+    /* Continue Reading */
     .continue {
-      display:block; margin-top:.75em;
-      color: #ffe; text-decoration:underline;
-      cursor:pointer;
+      margin-top:1em; display:inline-block;
+      color:#ffe; text-decoration:underline;
+      font-size:1rem;
     }
     body.night .continue { color:#fff }
 
@@ -161,10 +147,11 @@
       display:flex; gap:1em; z-index:1;
     }
     .buttons button {
-      padding:.75em 1.5em; border:2px solid var(--btn-day);
+      padding:.75em 1.5em;
+      border:2px solid var(--btn-day);
       background:transparent; border-radius:5px;
       font-weight:bold; cursor:pointer;
-      transition:background .3s,color .3s;
+      transition:background .3s;
     }
     body.night .buttons button { border-color:var(--btn-night) }
     .buttons button:hover {
@@ -177,8 +164,8 @@
     /* Subscribe Bar */
     .subscribe-bar {
       position:absolute; bottom:40px; left:50%;
-      transform:translateX(-50%);
-      display:flex; width:80%; max-width:500px;
+      transform:translateX(-50%); display:flex;
+      width:80%; max-width:500px;
       box-shadow:0 4px 12px rgba(0,0,0,0.4);
       z-index:1;
     }
@@ -189,25 +176,30 @@
     .subscribe-bar button {
       padding:.75em 1em; border:none;
       background:var(--btn-day); color:#333;
-      font-weight:bold; border-radius:0 5px 5px 0;
+      border-radius:0 5px 5px 0;
       cursor:pointer; transition:background .3s;
     }
-    body.night .subscribe-bar button { background:var(--btn-night) }
+    body.night .subscribe-bar button {
+      background:var(--btn-night);
+    }
 
-    /* Day/Night Switch from CodePen */
-    .container { position:fixed; bottom:20px; left:20px; z-index:1 }
+    /* Day/Night Switch */
+    .container {
+      position:fixed; bottom:20px; right:80px;
+      z-index:2;
+    }
     .switch {
-      position: relative; width:80px; height:40px;
-      background: linear-gradient(0deg,#87ceeb,#e0f6ff);
+      position:relative; width:80px; height:40px;
+      background:linear-gradient(0deg,#87ceeb,#e0f6ff);
       border-radius:20px; cursor:pointer;
-      transition: all 1s cubic-bezier(0.68,-0.55,0.27,1.55);
+      transition:all 1s cubic-bezier(0.68,-0.55,0.27,1.55);
       overflow:hidden; border:2px solid #fff;
     }
-    .switch input { opacity:0; width:0; height:0; }
-    .slider { position:absolute; inset:0; transition:1s; }
+    .switch input { opacity:0; width:0; height:0 }
+    .slider { position:absolute; inset:0; transition:1s }
     .sun, .moon {
-      position:absolute; width:30px; height:30px; border-radius:50%;
-      top:5px; transition:1s;
+      position:absolute; width:30px; height:30px;
+      border-radius:50%; top:5px; transition:1s;
     }
     .sun {
       background:radial-gradient(circle,#ffd700 30%,#ffa500 70%);
@@ -217,42 +209,34 @@
       background:radial-gradient(circle,#f4f4f4 30%,#e0e0e0 70%);
       right:-40px; box-shadow:0 0 10px #f4f4f4; transform:scale(0);
     }
-    .cloud {
-      background:#fff; border-radius:50px; position:absolute;
-      transition:1s;
-    }
-    .cloud1 { width:30px; height:12px; top:8px; left:30px; }
-    .cloud2 { width:20px; height:8px; top:22px; left:50px; }
+    .cloud { background:#fff; border-radius:50px; position:absolute; transition:1s }
+    .cloud1 { width:30px; height:12px; top:8px; left:30px }
+    .cloud2 { width:20px; height:8px; top:22px; left:50px }
     .star {
       position:absolute; background:#fff;
       clip-path:polygon(50% 0%,61%35%,98%35%,68%57%,79%91%,50%70%,21%91%,32%57%,2%35%,39%35%);
       opacity:0; transition:1s; transform:scale(0);
     }
-    .star1 { width:6px; height:6px; top:5px; left:15px; }
-    .star2 { width:5px; height:5px; top:15px; left:60px; }
-    .star3 { width:4px; height:4px; top:10px; left:70px; }
-    .star4 { width:5px; height:5px; top:20px; left:10px; }
-    .star5 { width:4px; height:4px; top:28px; left:40px; }
-
-    input:checked + .slider { background:linear-gradient(0deg,#1a1a2e,#16213e); }
-    input:checked + .slider .sun { left:-40px; transform:scale(0); }
-    input:checked + .slider .moon { right:5px; transform:scale(1); }
-    input:checked + .slider .cloud { transform:translateX(80px) scale(0); }
+    .star1 { width:6px; height:6px; top:5px; left:15px }
+    .star2 { width:5px; height:5px; top:15px; left:60px }
+    .star3 { width:4px; height:4px; top:10px; left:70px }
+    .star4 { width:5px; height:5px; top:20px; left:10px }
+    .star5 { width:4px; height:4px; top:28px; left:40px }
+    input:checked + .slider { background:linear-gradient(0deg,#1a1a2e,#16213e) }
+    input:checked + .slider .sun { left:-40px; transform:scale(0) }
+    input:checked + .slider .moon { right:5px; transform:scale(1) }
+    input:checked + .slider .cloud { transform:translateX(80px) scale(0) }
     input:checked + .slider .star {
-      opacity:1; transform:scale(1.2); animation:twinkle 2s infinite;
+      opacity:1; transform:scale(1.2); animation: twinkle 2s infinite;
     }
-    @keyframes twinkle {
-      0%,100%{opacity:1}50%{opacity:0.5}
-    }
+    @keyframes twinkle { 0%,100%{opacity:1}50%{opacity:0.5} }
 
-    /* Random Ayah toggle bottom-right */
-    #another-ayah {
-      position:fixed; bottom:20px; right:20px; z-index:1;
-      padding:.5em 1em; border:none; background:rgba(0,0,0,0.3);
-      color:#fff; border-radius:4px; cursor:pointer;
-      font-size:.9rem; backdrop-filter:blur(5px);
+    /* Label */
+    .toggle-label {
+      position:fixed; bottom:10px; right:87px;
+      color:#fff; font-size:.85rem; z-index:2;
+      text-shadow:1px 1px 2px rgba(0,0,0,0.4);
     }
-    #another-ayah:hover { background:rgba(0,0,0,0.5) }
   </style>
 </head>
 <body>
@@ -284,10 +268,6 @@
     <h1>Live by Quran</h1>
     <div class="tagline">Learn. Reflect. Transform.</div>
     <div class="ayah" id="ayah">Loading Ayah…</div>
-    <div class="ayah-nav">
-      <button id="prev-ayah" title="Previous Ayah">‹</button>
-      <button id="next-ayah" title="Next Ayah">›</button>
-    </div>
     <a id="continue" class="continue" href="#" target="_blank">Continue Reading →</a>
   </div>
 
@@ -301,6 +281,12 @@
   <div class="subscribe-bar">
     <input type="email" id="email-input" placeholder="Email address">
     <button id="subscribe-btn">Subscribe</button>
+  </div>
+
+  <!-- Ayah Nav -->
+  <div class="ayah-nav">
+    <button id="prev-ayah" title="Previous Ayah">‹</button>
+    <button id="next-ayah" title="Next Ayah">›</button>
   </div>
 
   <!-- Day/Night Switch -->
@@ -320,16 +306,13 @@
       </div>
     </label>
   </div>
+  <div class="toggle-label">Day / Night</div>
 
-  <!-- Random Ayah Toggle -->
-  <button id="another-ayah">Random Ayah</button>
-
-  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
   <script>
     let ayahList = [], history = [], idx = -1;
 
-    // Day/Night auto + manual switch
+    // Day/Night auto + manual
     const toggle = document.getElementById('toggleSwitch');
     function applyTheme(auto=true){
       if(auto){
@@ -339,7 +322,6 @@
       }
     }
     applyTheme(); setInterval(()=>applyTheme(),60000);
-
     toggle.addEventListener('change',()=>{
       document.body.classList.toggle('night', toggle.checked);
     });
@@ -348,41 +330,35 @@
     function showDates(){
       const n=new Date();
       document.querySelector('.greg').textContent =
-        new Intl.DateTimeFormat('en-US',{
-          weekday:'long',day:'numeric',month:'long',year:'numeric'
-        }).format(n);
+        new Intl.DateTimeFormat('en-US',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(n);
       document.querySelector('.isl').textContent =
-        new Intl.DateTimeFormat('en-GB-u-ca-islamic',{
-          day:'numeric',month:'long',year:'numeric'
-        }).format(n);
+        new Intl.DateTimeFormat('en-GB-u-ca-islamic',{day:'numeric',month:'long',year:'numeric'}).format(n);
     }
     showDates(); setInterval(showDates,3600000);
 
-    // Render function
+    // Render
     function renderAyah(v){
       document.getElementById('ayah').innerHTML =
         `<strong>${v.surah} — Verse ${v.verse}</strong>
          <div class="arabic">${v.arabic}</div>
          <div>${v.translation}</div>`;
-      // Continue Reading link to Quran.com
+      // link both surah number & verse
+      const sn = v.surahNumber||v.surah.match(/\d+/)[0]||1;
       document.getElementById('continue').href =
-        `https://quran.com/${v.surah.replace(/[^0-9]/g,'')}/${v.verse}`;
+        `https://quran.com/${sn}/${v.verse}`;
     }
 
     // Load CSV
-    Papa.parse('ayahs.csv',{ download:true, header:true, skipEmptyLines:true,
-      complete(r){
-        ayahList = r.data.filter(a=>a.surah&&a.translation);
-        // default = today
-        const t=new Date(), s=new Date(t.getFullYear(),0,0);
-        idx = Math.floor((t-s)/86400000) % ayahList.length;
-        history = [idx];
-        renderAyah(ayahList[idx]);
-      },
-      error(){ document.getElementById('ayah').textContent='Error loading Ayah.'; }
-    });
+    Papa.parse('ayahs.csv',{download:true,header:true,skipEmptyLines:true,complete(r){
+      ayahList = r.data.filter(a=>a.surah&&a.verse&&a.translation);
+      // default = today
+      const t=new Date(), s=new Date(t.getFullYear(),0,0);
+      idx = Math.floor((t-s)/86400000)%ayahList.length;
+      history=[idx];
+      renderAyah(ayahList[idx]);
+    }});
 
-    // Next / Previous
+    // Next / Prev
     document.getElementById('next-ayah').onclick = ()=>{
       idx = Math.floor(Math.random()*ayahList.length);
       history.push(idx);
@@ -396,17 +372,10 @@
       }
     };
 
-    // Random toggle
-    document.getElementById('another-ayah').onclick = ()=>{
-      idx = Math.floor(Math.random()*ayahList.length);
-      history.push(idx);
-      renderAyah(ayahList[idx]);
-    };
-
-    // Subscribe stub
+    // Subscribe
     document.getElementById('subscribe-btn').onclick = ()=>{
       const email = document.getElementById('email-input').value.trim();
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if(!re.test(email)){ alert('Enter valid email.'); return; }
       alert(`Thanks for subscribing, ${email}!`);
       document.getElementById('email-input').value='';
