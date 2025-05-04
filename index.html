@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <title>Live by Quran</title>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <!-- Fonts -->
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Scheherazade+New&family=Calibri&display=swap" rel="stylesheet">
   <style>
-    /* Reset & Vars */
+    /* Reset & Variables */
     * { margin:0; padding:0; box-sizing:border-box }
-    html, body { height:100%; overflow:hidden; position:relative; }
+    html, body { width:100%; height:100%; overflow:hidden; position:relative; }
     :root {
       --day-overlay: rgba(255,255,255,0);
       --night-overlay: rgba(0,0,0,0.2);
@@ -20,7 +20,7 @@
       --nav-gap: 140px;
     }
 
-    /* Background & Day/Night */
+    /* Background & Day/Night overlay */
     body {
       font-family:Calibri, sans-serif;
       background: url('quran_background.png') center bottom/cover no-repeat;
@@ -36,8 +36,8 @@
     body.night { color: var(--text-night); }
     body.night::before { background: var(--night-overlay); }
 
-    /* Birds */
-    .bird-container { position:absolute; top:0; left:-15%; z-index:0; animation: fly-path 30s linear infinite; }
+    /* Birds animation */
+    .bird-container { position:absolute; top:0; left:-15%; z-index:0; animation:fly-path 30s linear infinite; }
     .bird-container-two   { animation-duration:28s; animation-delay:-3s; }
     .bird-container-three { animation-duration:32s; animation-delay:-7s; }
     .bird-container-four  { animation-duration:26s; animation-delay:-2s; }
@@ -45,7 +45,7 @@
       width:88px; height:125px;
       background:url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/174479/bird-cells-new.svg') 0 0 no-repeat;
       background-size:auto 100%;
-      animation: flap 2s steps(10) infinite;
+      animation:flap 2s steps(10) infinite;
       filter: invert(34%) sepia(55%) saturate(427%) hue-rotate(141deg)
               brightness(93%) contrast(91%);
     }
@@ -64,8 +64,7 @@
     /* Header & Nav */
     header {
       position:absolute; top:20px; left:20px; right:20px;
-      display:flex; justify-content:space-between; align-items:center;
-      z-index:1;
+      display:flex; justify-content:space-between; align-items:center; z-index:1;
     }
     .logo img { height:50px }
     nav a {
@@ -74,20 +73,21 @@
     }
     nav a:hover { opacity:1 }
 
-    /* Date Display */
+    /* Date box */
     #date-display {
-      position:absolute; top:90px; right:30px;
-      text-align:right; line-height:1.2; z-index:1;
+      position:absolute; top:90px; right:30px; text-align:right;
+      line-height:1.2; z-index:1;
     }
     .isl { font-size:1.3rem; display:block }
     .greg { font-size:1rem; font-weight:bold; display:block }
 
-    /* Main Content */
+    /* Main content */
     .main {
       position:absolute; top:15%; left:50%;
-      transform:translate(-50%,-10%);
-      text-align:center; width:90%; max-width:800px;
-      z-index:1;
+      transform:translate(-50%,-10%); text-align:center;
+      width:90%; max-width:800px; z-index:1;
+      /* bottom padding to keep Continue above nav */
+      padding-bottom: calc(var(--nav-gap) + 1.5em);
     }
     h1 {
       font-family:'Playfair Display',serif;
@@ -113,27 +113,23 @@
     .ayah > div:not(.arabic) {
       color:#fff; text-shadow:1px 1px 6px rgba(0,0,0,0.75);
     }
-
-    /* Continue Reading */
+    /* Continue Reading link */
     .continue {
-      margin-top:1em; display:inline-block;
-      color:#ffe; text-decoration:underline;
-      font-size:1rem;
+      display:inline-block; margin-top:.75em;
+      color:#ffe; text-decoration:underline; font-size:1rem;
+      z-index:1;
     }
     body.night .continue { color:#fff }
 
-    /* Nav Buttons */
+    /* Page nav buttons */
     .buttons {
       position:absolute; bottom:var(--nav-gap); left:50%;
-      transform:translateX(-50%);
-      display:flex; gap:1em; z-index:1;
+      transform:translateX(-50%); display:flex; gap:1em; z-index:1;
     }
     .buttons button {
-      padding:.75em 1.5em;
-      border:2px solid var(--btn-day);
+      padding:.75em 1.5em; border:2px solid var(--btn-day);
       background:transparent; border-radius:5px;
-      font-weight:bold; cursor:pointer;
-      transition:background .3s;
+      font-weight:bold; cursor:pointer; transition:background .3s;
     }
     body.night .buttons button { border-color:var(--btn-night) }
     .buttons button:hover {
@@ -143,12 +139,11 @@
       background:var(--btn-night); color:#333;
     }
 
-    /* Subscribe Bar */
+    /* Subscribe bar */
     .subscribe-bar {
       position:absolute; bottom:40px; left:50%;
       transform:translateX(-50%); display:flex;
-      width:80%; max-width:500px;
-      box-shadow:0 4px 12px rgba(0,0,0,0.4);
+      width:80%; max-width:500px; box-shadow:0 4px 12px rgba(0,0,0,0.4);
       z-index:1;
     }
     .subscribe-bar input {
@@ -161,11 +156,9 @@
       border-radius:0 5px 5px 0;
       cursor:pointer; transition:background .3s;
     }
-    body.night .subscribe-bar button {
-      background:var(--btn-night);
-    }
+    body.night .subscribe-bar button { background:var(--btn-night) }
 
-    /* Ayah Nav */
+    /* Ayah ‹ › nav */
     .ayah-nav {
       position:fixed; bottom:20px; right:20px; z-index:2;
       display:inline-flex; gap:.5em;
@@ -185,14 +178,13 @@
       background:var(--btn-night); color:#333;
     }
 
-    /* Day/Night Switch */
+    /* Day/Night switch (bottom-left) */
     .container {
-      position:fixed; bottom:20px; left:20px;
-      z-index:2;
+      position:fixed; bottom:20px; left:10px; z-index:2;
     }
     .toggle-label {
-      position:fixed; bottom:65px; left:20px;
-      color:#fff; font-size:.85rem; z-index:2;
+      position:fixed; bottom:65px; left:10px; z-index:2;
+      color:#fff; font-size:.85rem;
       text-shadow:1px 1px 2px rgba(0,0,0,0.4);
     }
     .switch {
@@ -235,16 +227,17 @@
     input:checked + .slider .cloud { transform:translateX(80px) scale(0) }
     input:checked + .slider .star { opacity:1; transform:scale(1.2); animation:twinkle 2s infinite }
     @keyframes twinkle { 0%,100%{opacity:1}50%{opacity:0.5} }
-
   </style>
 </head>
 <body>
+
   <!-- Birds -->
   <div class="bird-container bird-container-one"><div class="bird bird-one"></div></div>
   <div class="bird-container bird-container-two"><div class="bird bird-two"></div></div>
   <div class="bird-container bird-container-three"><div class="bird bird-three"></div></div>
   <div class="bird-container bird-container-four"><div class="bird bird-four"></div></div>
 
+  <!-- Header -->
   <header>
     <div class="logo"><img src="Livebyquran Logo.PNG" alt="Live by Quran"></div>
     <nav>
@@ -257,11 +250,13 @@
     </nav>
   </header>
 
+  <!-- Dates -->
   <div id="date-display">
     <span class="isl">Loading Islamic date…</span>
     <span class="greg">Loading Gregorian date…</span>
   </div>
 
+  <!-- Main Ayah Section -->
   <div class="main">
     <h1>Live by Quran</h1>
     <div class="tagline">Learn. Reflect. Transform.</div>
@@ -269,6 +264,7 @@
     <a id="continue" class="continue" href="#" target="_blank">Continue Reading →</a>
   </div>
 
+  <!-- Page Buttons -->
   <div class="buttons">
     <button onclick="location.href='books.html'">Explore Books</button>
     <button onclick="location.href='lectures.html'">Listen to Lectures</button>
@@ -276,12 +272,13 @@
     <button onclick="location.href='qa.html'">Q&A</button>
   </div>
 
+  <!-- Subscribe Bar -->
   <div class="subscribe-bar">
     <input type="email" id="email-input" placeholder="Email address">
     <button id="subscribe-btn">Subscribe</button>
   </div>
 
-  <!-- Ayah Nav -->
+  <!-- Ayah Navigation Arrows -->
   <div class="ayah-nav">
     <button id="prev-ayah" title="Previous Ayah">‹</button>
     <button id="next-ayah" title="Next Ayah">›</button>
@@ -306,79 +303,95 @@
   </div>
   <div class="toggle-label">Day / Night</div>
 
+  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
   <script>
     let ayahList = [], history = [], idx = -1;
 
     // Day/Night auto + manual
     const toggle = document.getElementById('toggleSwitch');
-    function applyTheme(auto=true){
-      if(auto){
-        const h=new Date().getHours();
-        document.body.classList.toggle('night', h<6||h>=18);
+    function applyTheme(auto = true) {
+      if (auto) {
+        const h = new Date().getHours();
+        document.body.classList.toggle('night', h < 6 || h >= 18);
         toggle.checked = document.body.classList.contains('night');
       }
     }
-    applyTheme(); setInterval(()=>applyTheme(),60000);
-
-    toggle.addEventListener('change',()=>{
+    applyTheme();
+    setInterval(() => applyTheme(), 60000);
+    toggle.addEventListener('change', () => {
       document.body.classList.toggle('night', toggle.checked);
     });
 
-    // Dates
-    function showDates(){
-      const n=new Date();
+    // Show Dates
+    function showDates() {
+      const now = new Date();
       document.querySelector('.greg').textContent =
-        new Intl.DateTimeFormat('en-US',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(n);
+        new Intl.DateTimeFormat('en-US', {
+          weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+        }).format(now);
       document.querySelector('.isl').textContent =
-        new Intl.DateTimeFormat('en-GB-u-ca-islamic',{day:'numeric',month:'long',year:'numeric'}).format(n);
+        new Intl.DateTimeFormat('en-GB-u-ca-islamic', {
+          day: 'numeric', month: 'long', year: 'numeric'
+        }).format(now);
     }
-    showDates(); setInterval(showDates,3600000);
+    showDates();
+    setInterval(showDates, 3600000);
 
-    // Render
-    function renderAyah(v){
+    // Render Ayah
+    function renderAyah(v) {
       document.getElementById('ayah').innerHTML =
         `<strong>${v.surah} — Verse ${v.verse}</strong>
          <div class="arabic">${v.arabic}</div>
          <div>${v.translation}</div>`;
-      // correct continue link
-      const sn = v.surahNumber || (v.surah.match(/\d+/)||[])[0] || '1';
-      document.getElementById('continue').setAttribute(
-        'href',
-        `https://quran.com/${sn}/${v.verse}`
-      );
+      // requires CSV column "surahNumber"
+      const sn = v.surahNumber || (v.surah.match(/\d+/) || [])[0] || '';
+      const cont = document.getElementById('continue');
+      if (sn) {
+        cont.style.display = 'inline-block';
+        cont.setAttribute('href', `https://quran.com/${sn}/${v.verse}`);
+      } else {
+        cont.style.display = 'none';
+      }
     }
 
     // Load CSV
-    Papa.parse('ayahs.csv',{download:true,header:true,skipEmptyLines:true,complete(r){
-      ayahList = r.data.filter(a=>a.surah&&a.verse&&a.translation);
-      const t=new Date(), s=new Date(t.getFullYear(),0,0);
-      idx = Math.floor((t-s)/86400000)%ayahList.length;
-      history=[idx];
-      renderAyah(ayahList[idx]);
-    }});
+    Papa.parse('ayahs.csv', {
+      download: true, header: true, skipEmptyLines: true,
+      complete(r) {
+        ayahList = r.data.filter(a => a.surah && a.verse && a.translation);
+        const today = new Date();
+        const start = new Date(today.getFullYear(), 0, 0);
+        idx = Math.floor((today - start) / 86400000) % ayahList.length;
+        history = [idx];
+        renderAyah(ayahList[idx]);
+      }
+    });
 
-    // Next / Prev
-    document.getElementById('next-ayah').onclick = ()=>{
-      idx = Math.floor(Math.random()*ayahList.length);
+    // Ayah Prev/Next
+    document.getElementById('next-ayah').onclick = () => {
+      idx = Math.floor(Math.random() * ayahList.length);
       history.push(idx);
       renderAyah(ayahList[idx]);
     };
-    document.getElementById('prev-ayah').onclick = ()=>{
-      if(history.length>1){
+    document.getElementById('prev-ayah').onclick = () => {
+      if (history.length > 1) {
         history.pop();
-        idx = history[history.length-1];
+        idx = history[history.length - 1];
         renderAyah(ayahList[idx]);
       }
     };
 
-    // Subscribe
-    document.getElementById('subscribe-btn').onclick = ()=>{
+    // Subscribe button stub
+    document.getElementById('subscribe-btn').onclick = () => {
       const email = document.getElementById('email-input').value.trim();
-      const re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if(!re.test(email)){ alert('Enter valid email.'); return; }
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!re.test(email)) {
+        alert('Enter a valid email address.');
+        return;
+      }
       alert(`Thanks for subscribing, ${email}!`);
-      document.getElementById('email-input').value='';
+      document.getElementById('email-input').value = '';
     };
   </script>
 </body>
