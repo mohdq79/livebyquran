@@ -4,136 +4,54 @@
   <meta charset="UTF-8" />
   <title>Live by the Qur’an</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <!-- Scheherazade New for Arabic, Calibri for translation -->
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New&family=Calibri&display=swap" rel="stylesheet">
   <style>
-    /* Reset and CSS Variables */
+    /* Reset & vars (unchanged) */
     * { margin:0; padding:0; box-sizing:border-box; }
     html, body { height:100%; overflow:hidden; }
     :root {
       --day-bg: linear-gradient(to top, #dceeff, #eaf7ff);
       --night-bg: linear-gradient(to top, #1b2735, #090a0f);
-      --text-day: #222;
-      --text-night: #f2f2f2;
-      --button-day: #ffe58a;
-      --button-night: #bfa76d;
+      --text-day: #222; --text-night: #f2f2f2;
+      --button-day: #ffe58a; --button-night: #bfa76d;
     }
     body {
-      font-family: 'Calibri', sans-serif;
-      background: var(--day-bg);
-      color: var(--text-day);
-      transition: background 1s, color 1s;
-      position: relative;
+      font-family:'Calibri',sans-serif;
+      background:var(--day-bg);
+      color:var(--text-day);
+      transition:background 1s,color 1s;
+      position:relative;
     }
     body.night {
-      background: var(--night-bg);
-      color: var(--text-night);
+      background:var(--night-bg);
+      color:var(--text-night);
     }
 
-    /* Header & Navigation */
-    header {
-      position:absolute; top:20px; left:20px; right:20px;
-      display:flex; justify-content:space-between; align-items:center;
-    }
-    .logo img { height:50px; }
-    nav a {
-      margin-left:20px; text-decoration:none;
-      color:inherit; opacity:0.9; transition: opacity .2s;
-    }
-    nav a:hover { opacity:1; }
-
-    /* Date Display */
-    #date-display {
-      position:absolute; top:90px; right:30px;
-      font-size:0.9rem; opacity:0.8;
+    /* Canvas covers entire screen, behind everything */
+    #flock {
+      position:absolute; top:0; left:0;
+      width:100%; height:100%;
+      z-index:0;
     }
 
-    /* Main Content */
-    .main {
-      position:absolute; top:35%; left:50%; transform:translate(-50%,-40%);
-      text-align:center; width:90%; max-width:800px;
+    /* All your existing styles need z-index:1 to sit above */
+    header, #date-display, .main, .subscribe-bar {
+      position:relative; z-index:1;
     }
-    h1 {
-      font-family:'Scheherazade New', serif;
-      font-size:3rem; text-shadow:2px 2px 8px rgba(0,0,0,0.6);
-    }
-    .tagline {
-      margin-top:8px; font-size:1.2rem; font-style:italic;
-      text-shadow:1px 1px 6px rgba(0,0,0,0.6);
-    }
+    header { top:20px; left:20px; right:20px; /* …rest unchanged… */ }
 
-    /* Ayah of the Day */
-    .ayah {
-      margin:2rem 0; line-height:1.6;
-      text-shadow:1px 1px 6px rgba(0,0,0,0.6);
-    }
-    .ayah .arabic {
-      font-family:'Scheherazade New', serif;
-      font-size:1.6rem; direction:rtl; margin:0.5rem 0;
-    }
+    /* (Keep all other CSS from your prior index.html) */
 
-    /* Buttons */
-    .buttons {
-      display:flex; justify-content:center; gap:16px; flex-wrap:wrap;
-      margin-top:1rem;
-    }
-    .buttons button {
-      padding:0.75rem 1.5rem; border:2px solid var(--button-day);
-      background:transparent; color:inherit; border-radius:5px;
-      font-weight:bold; cursor:pointer;
-      transition:background .3s, color .3s;
-    }
-    body.night .buttons button { border-color:var(--button-night); }
-    .buttons button:hover {
-      background:var(--button-day); color:#333;
-    }
-    body.night .buttons button:hover {
-      background:var(--button-night); color:#333;
-    }
-
-    /* Subscribe Bar */
-    .subscribe-bar {
-      position:absolute; bottom:40px; left:50%; transform:translateX(-50%);
-      display:flex; width:80%; max-width:500px;
-      box-shadow:0 4px 12px rgba(0,0,0,0.4);
-    }
-    .subscribe-bar input {
-      flex:1; padding:12px 16px; border:none; font-size:1rem;
-      border-radius:5px 0 0 5px;
-    }
-    .subscribe-bar button {
-      padding:12px 16px; border:none;
-      background:var(--button-day); color:#333;
-      font-weight:bold; font-size:1rem; cursor:pointer;
-      border-radius:0 5px 5px 0;
-      transition:background .3s;
-    }
-    body.night .subscribe-bar button { background:var(--button-night); }
-
-    /* Flying Birds Animation */
-    @keyframes fly {
-      0%   { transform: translateX(-50px)   translateY(0)      scale(0.8); opacity:0.7; }
-      50%  { opacity:1; }
-      100% { transform: translateX(100vw)   translateY(-30px)  scale(1);   opacity:0.7; }
-    }
-    .bird {
-      position:absolute; width:40px; height:25px;
-      animation:fly linear infinite;
-      pointer-events:none;
-    }
   </style>
 </head>
 <body>
 
-  <!-- SVG Template for Birds -->
-  <svg id="bird-template" width="40" height="25" viewBox="0 0 40 25" style="display:none;">
-    <path d="M2 12c5-10 10 0 20-2c8-1 12 8 16 2" fill="none" stroke="currentColor" stroke-width="2"/>
-  </svg>
+  <!-- Minimalist flock canvas -->
+  <canvas id="flock"></canvas>
 
   <header>
-    <div class="logo">
-      <img src="Livebyquran Logo.PNG" alt="Live by Quran">
-    </div>
+    <div class="logo"><img src="Livebyquran Logo.PNG" alt="Logo"></div>
     <nav>
       <a href="index.html">Home</a>
       <a href="books.html">Books</a>
@@ -151,7 +69,6 @@
     <div class="tagline">Learn. Reflect. Transform.</div>
     <div class="ayah" id="ayah">Loading…</div>
     <div class="buttons">
-      <!-- Use onclick to navigate -->
       <button onclick="location.href='books.html'">Explore Books</button>
       <button onclick="location.href='lectures.html'">Listen to Lectures</button>
       <button onclick="location.href='articles.html'">Read Articles</button>
@@ -164,60 +81,69 @@
     <button>Subscribe</button>
   </div>
 
-  <!-- Dependencies -->
+  <!-- CSV parser & other scripts (unchanged) -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
   <script>
-    // Day/Night Theme
-    function applyTheme() {
-      const hr = new Date().getHours();
-      document.body.classList.toggle('night', hr < 6 || hr >= 18);
-    }
-    applyTheme(); setInterval(applyTheme, 60_000);
+    // Day/Night, Dates, Ayah-of-the-Day (same as before) …
+    // [omitted here for brevity; keep your existing JS for theme, date, ayah]
 
-    // Date Display (Islamic + Gregorian)
-    function showDates() {
-      const now = new Date();
-      const greg = new Intl.DateTimeFormat('en-US', {
-        weekday:'long', day:'numeric', month:'long', year:'numeric'
-      }).format(now);
-      const isl = new Intl.DateTimeFormat('en-GB-u-ca-islamic', {
-        day:'numeric', month:'long', year:'numeric'
-      }).format(now) + ' AH';
-      document.getElementById('date-display').textContent = isl + ' • ' + greg;
-    }
-    showDates(); setInterval(showDates, 3_600_000);
+    // --------------------
+    // Minimalist Flock Effect
+    // --------------------
+    const canvas = document.getElementById('flock');
+    const ctx    = canvas.getContext('2d');
+    let W = canvas.width = innerWidth;
+    let H = canvas.height = innerHeight;
 
-    // Ayah of the Day
-    Papa.parse('ayahs.csv', {
-      download: true, header: true, skipEmptyLines: true,
-      complete(res) {
-        const list = res.data.filter(a => a.surah && a.translation);
-        const now = new Date(), start = new Date(now.getFullYear(),0,0);
-        const doy = Math.floor((now-start)/(1000*60*60*24));
-        const verse = list[doy % list.length];
-        if (verse) {
-          document.getElementById('ayah').innerHTML = `
-            <strong>${verse.surah} — Verse ${verse.verse}</strong>
-            <div class="arabic">${verse.arabic}</div>
-            <div>${verse.translation}</div>`;
-        }
-      },
-      error() { document.getElementById('ayah').textContent = 'Could not load Ayah.'; }
+    window.addEventListener('resize', () => {
+      W = canvas.width = innerWidth;
+      H = canvas.height = innerHeight;
     });
 
-    // Bird spawner
-    function spawnBird() {
-      const tpl = document.getElementById('bird-template'),
-            b = tpl.cloneNode(true);
-      b.removeAttribute('id'); b.style.display='block';
-      b.classList.add('bird');
-      b.style.top = (20 + Math.random()*60) + 'vh';
-      b.style.color = document.body.classList.contains('night') ? '#fff' : '#333';
-      b.style.animationDuration = (8 + Math.random()*5) + 's';
-      document.body.appendChild(b);
-      b.addEventListener('animationend', () => b.remove());
+    // Bird class from CodePen
+    class Bird {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * W;
+        this.y = Math.random() * H;
+        this.vx = (Math.random() * 0.5 + 0.2) * (Math.random()<0.5?-1:1);
+        this.vy = (Math.random() * 0.2 - 0.1);
+        this.size = Math.random() * 2 + 1;
+        this.alpha = Math.random() * 0.5 + 0.3;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < -50 || this.x > W + 50 || this.y < -50 || this.y > H + 50) {
+          this.reset();
+        }
+      }
+      draw() {
+        ctx.fillStyle = `rgba(255,255,255,${this.alpha})`;
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(this.x - this.size*2, this.y + this.size);
+        ctx.lineTo(this.x + this.size*2, this.y + this.size);
+        ctx.closePath();
+        ctx.fill();
+      }
     }
-    setInterval(spawnBird, 3000 + Math.random()*3000);
+
+    // Create a small flock
+    const flock = [];
+    for (let i=0; i<30; i++) flock.push(new Bird());
+
+    function animate() {
+      ctx.clearRect(0,0,W,H);
+      flock.forEach(b => {
+        b.update();
+        b.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
   </script>
 </body>
 </html>
