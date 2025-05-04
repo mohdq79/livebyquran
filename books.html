@@ -4,22 +4,22 @@
   <meta charset="utf-8">
   <title>Books · Live by Quran</title>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Scheherazade+New&family=Calibri&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Scheherazade+New&family=Calibri&display=swap"
+    rel="stylesheet"
+  >
   <style>
     /*──────────────── Reset & Root ────────────────*/
     * { margin:0; padding:0; box-sizing:border-box }
-    html, body { height:100%; }
+    html, body { height:100%; font-family:Calibri, sans-serif; }
     :root {
-      --overlay: rgba(255,255,255,0.6);
       --card-bg: #fafafa;
       --accent: #222;
     }
 
     /*──────────────── Background ────────────────*/
     body {
-      font-family:Calibri, sans-serif;
       background:
-        linear-gradient(var(--overlay),var(--overlay)),
         url('booksbg.png') center bottom/cover no-repeat;
       color: var(--accent);
     }
@@ -34,10 +34,10 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       position: sticky; top: 0; z-index: 10;
     }
-    .header-left img { height: 40px; }
-    .header-center h1 {
+    header .logo img { height: 40px; }
+    header .title {
       font-family:'Playfair Display', serif;
-      font-size:1.75rem;
+      font-size:1.5rem;
       color: var(--accent);
     }
     nav a {
@@ -137,12 +137,12 @@
 
   <!-- Header / Nav -->
   <header>
-    <div class="header-left">
-      <a href="index.html"><img src="Livebyquran Logo.PNG" alt="Live by Quran"></a>
+    <div class="logo">
+      <a href="index.html">
+        <img src="Livebyquran Logo.PNG" alt="Live by Quran">
+      </a>
     </div>
-    <div class="header-center">
-      <h1>Our Books</h1>
-    </div>
+    <div class="title">Our Books</div>
     <nav>
       <a href="index.html">Home</a>
       <a href="books.html">Books</a>
@@ -168,13 +168,15 @@
         const books = data.filter(b => b.cover && b.title);
         if (!books.length) return;
 
-        // last entry = featured
         const featuredIndex = books.length - 1;
         const grid = document.getElementById('books-grid');
 
         books.forEach((book, idx) => {
-          // ALWAYS extract filename, drop any folder
-          const filename = book.pdf.split('/').pop().trim();
+          // Strip any path, keep only the filename:
+          const raw = book.pdf || '';
+          const filename = raw.replace(/^.*[\\/]/, '').trim();
+
+          // Build a single assets/books/pdfs/ path
           const pdfPath  = `assets/books/pdfs/${filename}`;
           const readerUrl = `reader.html?file=${encodeURIComponent(pdfPath)}`;
 
