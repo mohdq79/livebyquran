@@ -6,111 +6,148 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Scheherazade+New&family=Calibri&display=swap" rel="stylesheet">
   <style>
-    /*──────────────── Reset & Background ────────────────*/
+    /*──────────────── Reset & Root ────────────────*/
     * { margin:0; padding:0; box-sizing:border-box }
+    html, body { height:100%; }
+    :root {
+      --overlay: rgba(255,255,255,0.6);
+      --card-bg: #fafafa;
+      --accent: #222;
+    }
+
+    /*──────────────── Background ────────────────*/
     body {
-      font-family:Calibri,sans-serif;
-      background: url('quran_background.png') center bottom/cover fixed no-repeat;
-      color: #222;
-      position: relative;
+      font-family:Calibri, sans-serif;
+      background:
+        linear-gradient(var(--overlay),var(--overlay)),
+        url('booksbg.png') center bottom/cover no-repeat;
+      color: var(--accent);
     }
-    body::before {
-      content:''; position:absolute; inset:0;
-      background: rgba(255,255,255,0.6);
-      pointer-events:none; z-index:0;
-    }
-    /*────────── Header & Nav ──────────*/
+
+    /*──────────────── Header ────────────────*/
     header {
-      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 2rem;
+      background: rgba(255,255,255,0.9);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0; z-index: 10;
+    }
+    .header-left {
       display: flex; align-items:center;
-      padding:1rem 2rem;
-      background: rgba(255,255,255,0.85);
-      box-shadow:0 2px 6px rgba(0,0,0,0.1);
-      z-index:1;
     }
-    .logo img { height:40px; }
-    nav { margin-left:auto; }
+    .header-left img {
+      height: 40px; margin-right: 1rem;
+    }
+    .header-center h1 {
+      font-family:'Playfair Display', serif;
+      font-size:1.75rem;
+      color: var(--accent);
+    }
     nav a {
-      margin-left:1.5rem;
-      color:#333; font-weight:600;
-      text-decoration:none;
-      transition:color .2s;
+      margin-left: 1.5rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color .2s;
     }
-    nav a:hover { color:#000; }
+    nav a:hover { color: #000; }
 
-    /*────────── Main ──────────*/
+    /*──────────────── Main ────────────────*/
     main {
-      position: relative; z-index:1;
-      padding:2rem;
-      max-width:1200px; margin:0 auto;
-    }
-    main h1 {
-      font-family:'Playfair Display',serif;
-      font-size:2.5rem; margin-bottom:1rem;
-      text-align:center;
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
     }
 
-    /* Featured Book */
-    .featured {
-      display:flex; justify-content:center; margin-bottom:2rem;
-    }
-    .featured .card { max-width:320px; }
-
-    /* Grid */
+    /*──────────────── Cards Grid ────────────────*/
     .grid {
-      display:grid;
-      grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
-      gap:1.5rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px,1fr));
+      gap: 1.5rem;
+    }
+    .card {
+      position: relative;
+      background: var(--card-bg);
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform .2s;
+    }
+    .card:hover { transform: translateY(-4px); }
+
+    /* Featured badge */
+    .card.featured::before {
+      content: 'Featured';
+      position: absolute;
+      top: 8px; left: 8px;
+      background: #d4af37;
+      color: #fff;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+      border-radius: 4px;
+      z-index: 2;
     }
 
-    /* Card */
-    .card {
-      background:#fafafa;
-      border-radius:8px;
-      box-shadow:0 2px 4px rgba(0,0,0,0.1);
-      overflow:hidden;
-      display:flex; flex-direction:column;
-    }
     .card img {
-      width:100%;
-      height:280px;
-      object-fit:cover;
+      width: 100%;
+      height: 320px;
+      object-fit: contain;
+      background: #fff;
     }
     .card-content {
-      padding:1rem; flex:1;
+      padding: 1rem;
+      flex: 1;
     }
     .card-content h3 {
-      font-size:1.3rem; margin-bottom:.5rem;
       font-family:'Playfair Display',serif;
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      color: var(--accent);
     }
     .card-content p {
-      font-size:.9rem; color:#555; margin-bottom:1rem;
+      font-size: 0.9rem;
+      color: #555;
+      margin-bottom: 1rem;
+      line-height: 1.4;
     }
 
     /* Actions */
     .actions {
-      display:flex; gap:.5rem;
-      padding:0 1rem 1rem;
+      display: flex;
+      gap: 0.5rem;
+      padding: 0 1rem 1rem;
     }
     .actions a {
-      flex:1; text-align:center;
-      padding:.5rem 0;
-      border:2px solid #222;
-      border-radius:4px;
-      color:#222; font-size:.9rem;
-      transition:background .2s,color .2s;
+      flex: 1;
+      text-align: center;
+      padding: 0.5rem 0;
+      border: 2px solid var(--accent);
+      border-radius: 4px;
+      color: var(--accent);
+      font-size: 0.9rem;
+      text-decoration: none;
+      transition: background .2s, color .2s;
     }
     .actions a:hover {
-      background:#222; color:#fff;
+      background: var(--accent);
+      color: #fff;
     }
   </style>
 </head>
 <body>
 
-  <!-- Header -->
+  <!-- Header / Nav -->
   <header>
-    <div class="logo">
+    <div class="header-left">
       <img src="Livebyquran Logo.PNG" alt="Live by Quran">
+    </div>
+    <div class="header-center">
+      <h1>Our Books</h1>
     </div>
     <nav>
       <a href="index.html">Home</a>
@@ -121,59 +158,42 @@
     </nav>
   </header>
 
-  <!-- Main -->
+  <!-- Book Cards -->
   <main>
-    <h1>Our Books</h1>
-
-    <!-- Featured Book (most recent) -->
-    <div class="featured" id="featured-book"></div>
-
-    <!-- Other titles -->
     <div class="grid" id="books-grid"></div>
   </main>
 
-  <!-- PapaParse to load CSV -->
+  <!-- CSV Loader -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
   <script>
     Papa.parse('assets/books/books.csv', {
       download: true,
       header: true,
       skipEmptyLines: true,
-      complete: ({data}) => {
-        // filter out any empty rows
+      complete: ({ data }) => {
         const books = data.filter(b => b.cover && b.title);
         if (!books.length) return;
 
-        // split featured and others
-        const featured = books[books.length - 1];
-        const others   = books.slice(0, books.length - 1);
+        // Most recent is last in CSV
+        const featuredIdx = books.length - 1;
+        const container = document.getElementById('books-grid');
 
-        // render a card element
-        function makeCard(book) {
-          const c = document.createElement('div');
-          c.className = 'card';
-          c.innerHTML = `
+        books.forEach((book, i) => {
+          const card = document.createElement('div');
+          card.className = 'card' + (i === featuredIdx ? ' featured' : '');
+          card.innerHTML = `
             <img src="assets/books/covers/${book.cover}" alt="${book.title}">
             <div class="card-content">
               <h3>${book.title}</h3>
-              <p>${book.description}</p>
+              <p>${book.description || ''}</p>
             </div>
             <div class="actions">
               <a href="reader.html?file=assets/books/pdfs/${book.pdf}" target="_blank">Read</a>
               <a href="assets/books/pdfs/${book.pdf}" download>Download</a>
-              <a href="${book.order}" target="_blank">Order Print</a>
+              <a href="${book.order || '#'}" target="_blank">Order Print</a>
             </div>`;
-          return c;
-        }
-
-        // inject featured
-        document
-          .getElementById('featured-book')
-          .appendChild(makeCard(featured));
-
-        // inject others
-        const grid = document.getElementById('books-grid');
-        others.forEach(b => grid.appendChild(makeCard(b)));
+          container.appendChild(card);
+        });
       }
     });
   </script>
