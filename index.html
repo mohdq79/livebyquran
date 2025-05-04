@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Scheherazade+New&family=Calibri&display=swap" rel="stylesheet">
   <style>
     /*───────────────────────────────────────────────
-      Reset & CSS Variables
+      Reset & Variables
     ───────────────────────────────────────────────*/
     * { margin:0; padding:0; box-sizing:border-box }
     html, body { width:100%; height:100%; overflow:hidden; position:relative; }
@@ -22,7 +22,7 @@
     }
 
     /*───────────────────────────────────────────────
-      Background & Day/Night Overlay
+      Background & Theme Overlay
     ───────────────────────────────────────────────*/
     body {
       font-family:Calibri, sans-serif;
@@ -38,20 +38,19 @@
     body.night::before { background: var(--night-overlay); }
 
     /*───────────────────────────────────────────────
-      Birds Animation (Slowed & Smooth Path)
+      Birds (smooth, slowed)
     ───────────────────────────────────────────────*/
     .bird-container { position:absolute; top:0; left:-15%; z-index:0; animation:fly-path 30s linear infinite; }
-    .bird-container-two   { animation-duration:28s; animation-delay:-3s; }
-    .bird-container-three { animation-duration:32s; animation-delay:-7s; }
-    .bird-container-four  { animation-duration:26s; animation-delay:-2s; }
+    .bird-container-two   { animation-duration:28s; animation-delay:-3s }
+    .bird-container-three { animation-duration:32s; animation-delay:-7s }
+    .bird-container-four  { animation-duration:26s; animation-delay:-2s }
 
     .bird {
       width:88px; height:125px;
       background:url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/174479/bird-cells-new.svg') 0 0 no-repeat;
       background-size:auto 100%;
       animation:flap 2s steps(10) infinite;
-      filter: invert(34%) sepia(55%) saturate(427%) hue-rotate(141deg)
-              brightness(93%) contrast(91%);
+      filter:invert(34%) sepia(55%) saturate(427%) hue-rotate(141deg) brightness(93%) contrast(91%);
     }
     .bird-two   { animation-delay:-1.4s }
     .bird-three { animation-delay:-0.7s }
@@ -59,11 +58,11 @@
 
     @keyframes flap { 100% { background-position:-900px 0 } }
     @keyframes fly-path {
-      0%   { transform:translateX(-15vw) translateY(10vh) scale(.4) }
-      25%  { transform:translateX(25vw)  translateY(6vh)  scale(.45) }
-      50%  { transform:translateX(55vw)  translateY(12vh) scale(.5) }
-      75%  { transform:translateX(85vw)  translateY(8vh)  scale(.55) }
-      100% { transform:translateX(115vw) translateY(10vh) scale(.6) }
+      0%{transform:translateX(-15vw) translateY(10vh) scale(.4)}
+      25%{transform:translateX(25vw)  translateY(6vh)  scale(.45)}
+      50%{transform:translateX(55vw)  translateY(12vh) scale(.5)}
+      75%{transform:translateX(85vw)  translateY(8vh)  scale(.55)}
+      100%{transform:translateX(115vw) translateY(10vh) scale(.6)}
     }
 
     /*───────────────────────────────────────────────
@@ -91,19 +90,84 @@
     .greg { font-size:1rem; font-weight:bold; display:block }
 
     /*───────────────────────────────────────────────
-      Main Ayah Section
+      Main Hero + Ayah
     ───────────────────────────────────────────────*/
     .main {
       position:absolute; top:15%; left:50%;
       transform:translate(-50%,-10%);
-      text-align:center; width:90%; max-width:800px; z-index:1;
-      padding-bottom: calc(var(--nav-gap) + 1.5em);
+      width:90%; max-width:800px; text-align:center;
+      z-index:1; padding-bottom:calc(var(--nav-gap)+1.5em);
+      position:relative; /* for stars */
     }
+
+    /* Sun & rays (day) and moon (night) on H1 */
     h1 {
+      position:relative; /* anchor pseudo */
       font-family:'Playfair Display',serif;
       font-size:3.2rem; margin-bottom:.3em;
       text-shadow:2px 2px 8px rgba(0,0,0,0.6);
     }
+    /* Day: sun orb + gentle glow */
+    h1::before {
+      content:''; position:absolute; left:-60px; top:0;
+      width:40px; height:40px; border-radius:50%;
+      background:radial-gradient(circle at center,#ffeb3b 40%,#fbc02d 100%);
+      box-shadow:0 0 20px rgba(255,235,59,0.6);
+      animation:sun-pulse 5s ease-in-out infinite alternate;
+    }
+    /* Day: subtle rotating rays */
+    h1::after {
+      content:''; position:absolute; left:-72px; top:-12px;
+      width:64px; height:64px; border-radius:50%;
+      box-shadow:
+        0 -30px 0 -2px rgba(255,235,59,0.4),
+        0  30px 0 -2px rgba(255,235,59,0.4),
+       -30px 0   0 -2px rgba(255,235,59,0.4),
+        30px 0   0 -2px rgba(255,235,59,0.4);
+      filter:blur(2px); opacity:.5;
+      animation:rays-rotate 20s linear infinite;
+    }
+
+    /* Night: replace sun with crescent + hide rays */
+    body.night h1::before {
+      background:none; box-shadow:none;
+      width:32px; height:32px; left:-60px; top:0;
+      background:#f4f4f4; box-shadow:-8px 0 0 #16213e;
+      transform:rotate(15deg);
+      animation:moon-sway 4s ease-in-out infinite alternate;
+    }
+    body.night h1::after {
+      display:none;
+    }
+
+    @keyframes sun-pulse {
+      to { transform:scale(1.1); box-shadow:0 0 30px rgba(255,235,59,0.8) }
+    }
+    @keyframes rays-rotate { 100% { transform:rotate(360deg) } }
+    @keyframes moon-sway {
+      to { transform:rotate(20deg) translateY(-2px) }
+    }
+
+    /*───────────────────────────────────────────────
+      Stars overlay in night mode
+    ───────────────────────────────────────────────*/
+    body.night .main::before {
+      content:''; position:absolute; inset:0; z-index:0;
+      background:
+        radial-gradient(circle at 20% 30%, #fff 2%, transparent 0),
+        radial-gradient(circle at 80% 20%, #fff 1.5%, transparent 0),
+        radial-gradient(circle at 50% 70%, #fff 1.8%, transparent 0);
+      background-size:100px 100px;
+      opacity:.6; pointer-events:none;
+      animation:stars-twinkle 3s ease-in-out infinite alternate;
+    }
+    @keyframes stars-twinkle {
+      to { opacity:.2 }
+    }
+
+    /*───────────────────────────────────────────────
+      Tagline & Ayah text
+    ───────────────────────────────────────────────*/
     .tagline {
       font-style:italic; font-size:1.2rem; margin-bottom:1em;
       text-shadow:1px 1px 6px rgba(0,0,0,0.6);
@@ -125,14 +189,13 @@
     }
 
     /*───────────────────────────────────────────────
-      Continue Reading (Fixed Above Nav)
+      Continue Reading (above nav)
     ───────────────────────────────────────────────*/
     .continue {
       position:fixed;
-      bottom: calc(var(--nav-gap) + 65px);
+      bottom:calc(var(--nav-gap)+20px);
       left:50%; transform:translateX(-50%);
-      color:#ffe; text-decoration:underline;
-      font-size:1rem; z-index:2;
+      color:#ffe; text-decoration:underline; font-size:1rem; z-index:2;
     }
     body.night .continue { color:#fff }
 
@@ -161,9 +224,9 @@
     ───────────────────────────────────────────────*/
     .subscribe-bar {
       position:absolute; bottom:40px; left:50%;
-      transform:translateX(-50%);
-      display:flex; width:80%; max-width:500px;
-      box-shadow:0 4px 12px rgba(0,0,0,0.4); z-index:1;
+      transform:translateX(-50%); display:flex;
+      width:80%; max-width:500px; box-shadow:0 4px 12px rgba(0,0,0,0.4);
+      z-index:1;
     }
     .subscribe-bar input {
       flex:1; padding:.75em; border:none; font-size:1rem;
@@ -172,13 +235,12 @@
     .subscribe-bar button {
       padding:.75em 1em; border:none;
       background:var(--btn-day); color:#333;
-      border-radius:0 5px 5px 0;
-      cursor:pointer; transition:background .3s;
+      border-radius:0 5px 5px 0; cursor:pointer; transition:background .3s;
     }
     body.night .subscribe-bar button { background:var(--btn-night) }
 
     /*───────────────────────────────────────────────
-      Ayah Nav Arrows & Label (Bottom Right)
+      Ayah Nav + Label
     ───────────────────────────────────────────────*/
     .ayah-nav-label {
       position:fixed; bottom:64px; right:20px; z-index:2;
@@ -199,7 +261,7 @@
     }
 
     /*───────────────────────────────────────────────
-      Day/Night Switch (Bottom Left)
+      Day/Night Switch (bottom-left)
     ───────────────────────────────────────────────*/
     .container {
       position:fixed; bottom:20px; left:40px; z-index:2;
@@ -249,6 +311,7 @@
     input:checked + .slider .cloud { transform:translateX(80px) scale(0) }
     input:checked + .slider .star { opacity:1; transform:scale(1.2); animation:twinkle 2s infinite }
     @keyframes twinkle { 0%,100%{opacity:1}50%{opacity:0.5} }
+
   </style>
 </head>
 <body>
@@ -307,7 +370,7 @@
     <button id="next-ayah" title="Next Ayah">›</button>
   </div>
 
-  <!-- Day / Night Switch -->
+  <!-- Day/Night Switch -->
   <div class="container">
     <label class="switch">
       <input type="checkbox" id="toggleSwitch">
@@ -344,22 +407,18 @@
     setInterval(()=>applyTheme(),60000);
     toggle.addEventListener('change',()=>document.body.classList.toggle('night',toggle.checked));
 
-    // Show dates
+    // Dates
     function showDates(){
       const n=new Date();
       document.querySelector('.greg').textContent=
-        new Intl.DateTimeFormat('en-US',{
-          weekday:'long',day:'numeric',month:'long',year:'numeric'
-        }).format(n);
+        new Intl.DateTimeFormat('en-US',{weekday:'long',day:'numeric',month:'long',year:'numeric'}).format(n);
       document.querySelector('.isl').textContent=
-        new Intl.DateTimeFormat('en-GB-u-ca-islamic',{
-          day:'numeric',month:'long',year:'numeric'
-        }).format(n);
+        new Intl.DateTimeFormat('en-GB-u-ca-islamic',{day:'numeric',month:'long',year:'numeric'}).format(n);
     }
     showDates();
     setInterval(showDates,3600000);
 
-    // Render ayah
+    // Render Ayah
     function renderAyah(v){
       document.getElementById('ayah').innerHTML=
         `<strong>${v.surah} — Verse ${v.verse}</strong>
@@ -376,13 +435,13 @@
     // Load CSV
     Papa.parse('ayahs.csv',{download:true,header:true,skipEmptyLines:true,complete(r){
       ayahList=r.data.filter(a=>a.surah&&a.verse&&a.translation);
-      const t=new Date(),s=new Date(t.getFullYear(),0,0);
+      const t=new Date(), s=new Date(t.getFullYear(),0,0);
       idx=Math.floor((t-s)/86400000)%ayahList.length;
       history=[idx];
       renderAyah(ayahList[idx]);
     }});
 
-    // Next / Prev
+    // Next / Prev Ayah
     document.getElementById('next-ayah').onclick=()=>{
       idx=Math.floor(Math.random()*ayahList.length);
       history.push(idx);
