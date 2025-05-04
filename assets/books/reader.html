@@ -4,73 +4,119 @@
   <meta charset="utf-8">
   <title>Read · Live by Quran</title>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <link rel="stylesheet" href="vendor/turnjs/turn.min.css">
+  
+  <!-- Fonts & Turn.js styles -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Scheherazade+New&family=Calibri&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/turn.js@4.1.0/turn.min.css">
+
   <style>
-    body { margin:0; padding:0; background:#333; }
+    /* Reset */
+    * { margin:0; padding:0; box-sizing:border-box }
+    body { font-family:Calibri,sans-serif; }
+    
+    /* Header */
+    header {
+      display:flex; align-items:center;
+      padding:1rem 2rem;
+      background:#fafafa;
+      box-shadow:0 2px 6px rgba(0,0,0,0.1);
+      position:sticky; top:0; z-index:2;
+    }
+    .logo img { height:40px; }
+    nav { margin-left:auto; }
+    nav a {
+      margin-left:1.5rem;
+      color:#333; font-weight:600;
+      text-decoration:none;
+      transition:color .2s;
+    }
+    nav a:hover { color:#000; }
+
+    /* Flipbook container */
     #flipbook {
-      width: 90vw; height: 80vh;
-      margin:2vh auto;
+      width:90vw; height:80vh;
+      margin:2rem auto;
       background:#888;
+      box-shadow:0 4px 12px rgba(0,0,0,0.3);
+      position:relative; z-index:1;
     }
     #flipbook .page {
       width:100%; height:100%;
       background:#fff; overflow:hidden;
     }
-    canvas { display:block; width:100%; height:100%; }
+    #flipbook canvas {
+      display:block; width:100%; height:100%;
+    }
   </style>
 </head>
 <body>
 
-  <div id="flipbook">
-    <!-- pages will be injected here -->
-  </div>
+  <!-- Header -->
+  <header>
+    <div class="logo"><img src="Livebyquran Logo.PNG" alt="Live by Quran"></div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="books.html">Books</a>
+      <a href="lectures.html">Lectures</a>
+      <a href="articles.html">Articles</a>
+      <a href="qa.html">Q&A</a>
+    </nav>
+  </header>
 
-  <script src="vendor/pdfjs/pdf.min.js"></script>
-  <script src="vendor/turnjs/turn.min.js"></script>
+  <!-- Flipbook -->
+  <div id="flipbook"></div>
+
+  <!-- PDF.js & Turn.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.min.js"></script>
   <script>
-    // configure PDF.js worker
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'vendor/pdfjs/pdf.worker.min.js';
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.14.305/pdf.worker.min.js';
+  </script>
+  <script src="https://unpkg.com/turn.js@4.1.0/turn.min.js"></script>
 
-    // parse file= query param
+  <script>
+    // get ?file=assets/books/pdfs/your.pdf
     const params = new URLSearchParams(location.search);
-    const file = params.get('file');
+    const file   = params.get('file');
     if (!file) {
-      document.body.innerHTML = '<p style="color:white;text-align:center;margin-top:2rem;">No PDF specified.</p>';
-      throw new Error('No file parameter');
+      document.body.innerHTML =
+        '<p style="padding:2rem;text-align:center;color:#333;">No PDF specified.</p>';
+      throw new Error('Missing file parameter');
     }
 
-    // initialize Turn.js
-    const flipbook = document.getElementById('flipbook');
-    $('#flipbook').turn({
-      width: flipbook.clientWidth,
-      height: flipbook.clientHeight,
+    // initialize flipbook
+    const flipEl = $('#flipbook').turn({
+      width: $('#flipbook').width(),
+      height: $('#flipbook').height(),
       autoCenter: true
     });
 
-    // load PDF
+    // load PDF and render pages
     pdfjsLib.getDocument(file).promise.then(pdf => {
-      const total = pdf.numPages;
-      for (let i = 1; i <= total; i++) {
-        // create container for each page
+      for (let i = 1; i <= pdf.numPages; i++) {
         const pageDiv = document.createElement('div');
         pageDiv.className = 'page';
-        const canvas = document.createElement('canvas');
+        const canvas  = document.createElement('canvas');
         pageDiv.appendChild(canvas);
-        $('#flipbook').turn('addPage', pageDiv, i);
+        flipEl.turn('addPage', pageDiv, i);
 
-        // render page
         pdf.getPage(i).then(page => {
           const viewport = page.getViewport({ scale: 1.5 });
           canvas.width  = viewport.width;
           canvas.height = viewport.height;
-          page.render({ canvasContext: canvas.getContext('2d'), viewport });
+          page.render({
+            canvasContext: canvas.getContext('2d'),
+            viewport: viewport
+          });
         });
       }
     }).catch(err => {
-      console.error(err);
       alert('Failed to load PDF: ' + err.message);
+      console.error(err);
     });
   </script>
 
+  <!-- jQuery (required by Turn.js) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>
