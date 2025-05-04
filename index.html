@@ -38,9 +38,12 @@
       background: var(--night-overlay);
     }
 
-    /* Birds (unchanged from before) */
-    .bird-container { position:absolute; top:0; left:-15%; z-index:0;
-      animation-timing-function: linear; animation-iteration-count: infinite;
+    /* Birds (flapping & drifting) */
+    .bird-container {
+      position:absolute; top:0; left:-15%;
+      transform-origin:center; z-index:0;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
     }
     .bird-container-one   { animation: fly-path 30s linear -5s infinite; }
     .bird-container-two   { animation: fly-path 28s linear -3s infinite; }
@@ -92,9 +95,9 @@
       font-size:1rem; font-weight:bold; display:block;
     }
 
-    /* Main Content (moved up) */
+    /* Main Content */
     .main {
-      position:absolute; top:10%; left:50%;
+      position:absolute; top:15%; left:50%;
       transform:translate(-50%,-10%);
       text-align:center; width:90%; max-width:800px;
       z-index:1;
@@ -120,10 +123,17 @@
       font-size:2rem; direction:rtl; margin-bottom:.5em;
     }
 
-    /* Navigation Buttons (inline under .main) */
+    /* 1) Ensure translation is always visible */
+    .ayah > div:not(.arabic) {
+      color: #fff;
+      text-shadow: 1px 1px 6px rgba(0,0,0,0.75);
+    }
+
+    /* Navigation Buttons (fixed above subscribe) */
     .buttons {
-      margin-top:7em; display:flex; justify-content:center; gap:1em;
-      z-index:1;
+      position:absolute; bottom:120px; left:50%;
+      transform:translateX(-50%);
+      display:flex; gap:1em; z-index:1;
     }
     .buttons button {
       padding:.75em 1.5em; border:2px solid var(--btn-day);
@@ -198,12 +208,13 @@
     <h1>Live by Quran</h1>
     <div class="tagline">Learn. Reflect. Transform.</div>
     <div class="ayah" id="ayah">Loading Ayah…</div>
-    <div class="buttons">
-      <button onclick="location.href='books.html'">Explore Books</button>
-      <button onclick="location.href='lectures.html'">Listen to Lectures</button>
-      <button onclick="location.href='articles.html'">Read Articles</button>
-      <button onclick="location.href='qa.html'">Q&A</button>
-    </div>
+  </div>
+
+  <div class="buttons">
+    <button onclick="location.href='books.html'">Explore Books</button>
+    <button onclick="location.href='lectures.html'">Listen to Lectures</button>
+    <button onclick="location.href='articles.html'">Read Articles</button>
+    <button onclick="location.href='qa.html'">Q&A</button>
   </div>
 
   <div class="subscribe-bar">
@@ -225,7 +236,6 @@
     }
     applyTheme();
     setInterval(()=>applyTheme(),60000);
-
     document.getElementById('theme-toggle').onclick = () => {
       document.body.classList.toggle('night');
     };
@@ -237,7 +247,6 @@
         new Intl.DateTimeFormat('en-US',{
           weekday:'long',day:'numeric',month:'long',year:'numeric'
         }).format(n);
-      // Islamic calendar already includes "AH"
       document.querySelector('.isl').textContent =
         new Intl.DateTimeFormat('en-GB-u-ca-islamic',{
           day:'numeric',month:'long',year:'numeric'
@@ -246,20 +255,17 @@
     showDates(); setInterval(showDates,3600000);
 
     // 3) Ayah-of-the-Day
-    Papa.parse('ayahs.csv',{
-      download:true,header:true,skipEmptyLines:true,
+    Papa.parse('ayahs.csv',{ download:true,header:true,skipEmptyLines:true,
       complete(r){
-        const arr=r.data.filter(a=>a.surah&&a.translation);
+        const arr=r.data.filter(x=>x.surah&&x.translation);
         const t=new Date(), s=new Date(t.getFullYear(),0,0);
         const idx=Math.floor((t-s)/(1000*60*60*24))%arr.length, v=arr[idx];
-        if(v){
-          document.getElementById('ayah').innerHTML =
-            `<strong>${v.surah} — Verse ${v.verse}</strong>
-             <div class="arabic">${v.arabic}</div>
-             <div>${v.translation}</div>`;
-        }
+        if(v) document.getElementById('ayah').innerHTML =
+          `<strong>${v.surah} — Verse ${v.verse}</strong>
+           <div class="arabic">${v.arabic}</div>
+           <div>${v.translation}</div>`;
       },
-      error(){ document.getElementById('ayah').textContent='Error loading Ayah.'; }
+      error(){ document.getElementById('ayah').textContent='Error loading Ayah.';}
     });
 
     // 4) Subscribe Handler
@@ -270,7 +276,6 @@
         alert('Please enter a valid email address.');
         return;
       }
-      // TODO: hook into your mailing service here
       alert(`Thank you for subscribing, ${email}!`);
       document.getElementById('email-input').value = '';
     };
