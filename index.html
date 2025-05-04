@@ -3,290 +3,217 @@
 <head>
   <meta charset="utf-8">
   <title>Live by Quran</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <link rel="preload" href="night background/BG1.jpg" as="image">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Scheherazade+New&family=Calibri&display=swap" rel="stylesheet">
   <style>
-    /*───────────────────────────────────────────────
-      Reset & Variables
-    ───────────────────────────────────────────────*/
-    * { margin:0; padding:0; box-sizing:border-box }
-    html, body { width:100%; height:100%; overflow:hidden; position:relative }
+    /* reset & vars */
+    *{margin:0;padding:0;box-sizing:border-box}
+    html,body{width:100%;height:100%;overflow:hidden;position:relative}
     :root {
-      --day-overlay: rgba(255,255,255,0);
-      --night-overlay: rgba(0,0,0,0.2);
-      --text-day: #222;
-      --text-night: #f2f2f2;
-      --btn-day: #ffe58a;
-      --btn-night: #bfa76d;
-      --nav-gap: 140px;
+      --day-overlay:rgba(255,255,255,0);
+      --night-overlay:rgba(0,0,0,0.2);
+      --text-day:#222; --text-night:#f2f2f2;
+      --btn-day:#ffe58a; --btn-night:#bfa76d;
+      --nav-gap:140px;
     }
-
-    /*───────────────────────────────────────────────
-      Background & Day/Night Swap
-    ───────────────────────────────────────────────*/
+    /* background */
     body {
-      font-family:Calibri, sans-serif;
-      background: url('quran_background.png') center bottom/cover no-repeat;
-      color: var(--text-day);
-      transition: background .5s ease, color .5s ease;
+      font-family:Calibri,sans-serif;
+      background:url('quran_background.png') bottom/cover no-repeat;
+      color:var(--text-day);
+      transition:background .5s,color .5s;
     }
     body::before {
-      content:''; position:absolute; inset:0;
-      background: var(--day-overlay);
-      transition: background .5s;
-      z-index:0;
+      content:'';position:absolute;inset:0;background:var(--day-overlay);
+      transition:background .5s;z-index:0;
     }
     body.night {
-      background: url('night background/BG1.jpg') center bottom/cover no-repeat;
-      color: var(--text-night);
+      background:url('night background/BG1.jpg') bottom/cover no-repeat;
+      color:var(--text-night);
     }
     body.night::before {
-      background: var(--night-overlay);
+      background:var(--night-overlay);
     }
-
-    /*───────────────────────────────────────────────
-      Birds (slower, smoother)
-    ───────────────────────────────────────────────*/
-    .bird-container { position:absolute; top:0; left:-15%; z-index:0; animation:fly-path 30s linear infinite; }
-    .bird-container-two   { animation-duration:28s; animation-delay:-3s; }
-    .bird-container-three { animation-duration:32s; animation-delay:-7s; }
-    .bird-container-four  { animation-duration:26s; animation-delay:-2s; }
-
-    .bird {
-      width:88px; height:125px;
-      background:url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/174479/bird-cells-new.svg') 0 0 no-repeat;
+    /* birds */
+    .bird-container{position:absolute;top:0;left:-15%;z-index:0;animation:fly-path 30s linear infinite}
+    .bird-container-two{animation-duration:28s;animation-delay:-3s}
+    .bird-container-three{animation-duration:32s;animation-delay:-7s}
+    .bird-container-four{animation-duration:26s;animation-delay:-2s}
+    .bird{
+      width:88px;height:125px;
+      background:url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/174479/bird-cells-new.svg')0 0 no-repeat;
       background-size:auto 100%;
       animation:flap 2s steps(10) infinite;
       filter:invert(34%) sepia(55%) saturate(427%) hue-rotate(141deg) brightness(93%) contrast(91%);
     }
-    .bird-two   { animation-delay:-1.4s }
-    .bird-three { animation-delay:-0.7s }
-    .bird-four  { animation-delay:-0.9s }
-
-    @keyframes flap     { 100% { background-position:-900px 0 } }
-    @keyframes fly-path {
-      0%   { transform:translateX(-15vw) translateY(10vh) scale(.4) }
-      25%  { transform:translateX(25vw)  translateY(6vh)  scale(.45) }
-      50%  { transform:translateX(55vw)  translateY(12vh) scale(.5) }
-      75%  { transform:translateX(85vw)  translateY(8vh)  scale(.55) }
-      100% { transform:translateX(115vw) translateY(10vh) scale(.6) }
+    .bird-two{animation-delay:-1.4s}
+    .bird-three{animation-delay:-0.7s}
+    .bird-four{animation-delay:-0.9s}
+    @keyframes flap{100%{background-position:-900px 0}}
+    @keyframes fly-path{
+      0%{transform:translateX(-15vw) translateY(10vh) scale(.4)}
+      25%{transform:translateX(25vw) translateY(6vh) scale(.45)}
+      50%{transform:translateX(55vw) translateY(12vh) scale(.5)}
+      75%{transform:translateX(85vw) translateY(8vh) scale(.55)}
+      100%{transform:translateX(115vw) translateY(10vh) scale(.6)}
     }
-
-    /*───────────────────────────────────────────────
-      Header & Nav
-    ───────────────────────────────────────────────*/
-    header {
-      position:absolute; top:20px; left:20px; right:20px;
-      display:flex; justify-content:space-between; align-items:center; z-index:1;
+    /* header/nav */
+    header{position:absolute;top:20px;left:20px;right:20px;display:flex;justify-content:space-between;align-items:center;z-index:1}
+    .logo img{height:50px}
+    nav a{margin-left:20px;color:inherit;text-decoration:none;opacity:.9;transition:opacity .2s}
+    nav a:hover{opacity:1}
+    body.night nav a{color:#fff!important}
+    /* dates */
+    #date-display{position:absolute;top:90px;right:30px;text-align:right;line-height:1.2;z-index:1}
+    .isl{font-size:1.3rem;display:block}
+    .greg{font-size:1rem;font-weight:bold;display:block}
+    /* hero & flare */
+    .main{
+      position:absolute;top:15%;left:50%;transform:translate(-50%,-10%);
+      width:90%;max-width:800px;text-align:center;z-index:1;
+      padding-bottom:calc(var(--nav-gap)+1.5em);
     }
-    .logo img { height:50px }
-    nav a {
-      margin-left:20px; color:inherit; text-decoration:none;
-      opacity:.9; transition:opacity .2s;
+    .main::before{
+      content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+      background:url('day-flare.png') no-repeat 70% 10%;
+      background-size:400px 400px;opacity:.6;pointer-events:none;z-index:0;
+      transition:background-image .5s,opacity .5s;
     }
-    nav a:hover { opacity:1 }
-
-    /* force white nav links in night mode */
-    body.night nav a {
-      color: #fff !important;
+    body.night .main::before{
+      background-image:url('night-flare.png');opacity:.5;
     }
-
-    /*───────────────────────────────────────────────
-      Date Display
-    ───────────────────────────────────────────────*/
-    #date-display {
-      position:absolute; top:90px; right:30px; text-align:right;
-      line-height:1.2; z-index:1;
-    }
-    .isl { font-size:1.3rem; display:block }
-    .greg { font-size:1rem; font-weight:bold; display:block }
-
-    /*───────────────────────────────────────────────
-      Hero & Flare Overlay
-    ───────────────────────────────────────────────*/
-    .main {
-      position:absolute; top:15%; left:50%;
-      transform:translate(-50%,-10%);
-      width:90%; max-width:800px; text-align:center;
-      z-index:1; padding-bottom:calc(var(--nav-gap)+1.5em);
-    }
-    .main::before {
-      content:''; position:absolute; top:0; left:0; right:0; bottom:0;
-      background: url('day-flare.png') no-repeat 70% 10%;
-      background-size:400px 400px;
-      opacity:0.6; pointer-events:none; z-index:0;
-      transition: background-image .5s, opacity .5s;
-    }
-    body.night .main::before {
-      background-image: url('night-flare.png');
-      opacity:0.5;
-    }
-
-    /*───────────────────────────────────────────────
-      Title & Tagline
-    ───────────────────────────────────────────────*/
-    h1 {
+    /* title/tagline */
+    h1{
       font-family:'Playfair Display',serif;
-      font-size:3.2rem; margin-bottom:.3em;
-      text-shadow:2px 2px 8px rgba(0,0,0,0.6);
-      z-index:1;
+      font-size:3.2rem;margin-bottom:.3em;
+      text-shadow:2px 2px 8px rgba(0,0,0,0.6);z-index:1;
     }
-    .tagline {
-      font-style:italic; font-size:1.2rem; margin-bottom:1em;
-      text-shadow:1px 1px 6px rgba(0,0,0,0.6); z-index:1;
+    .tagline{
+      font-style:italic;font-size:1.2rem;margin-bottom:1em;
+      text-shadow:1px 1px 6px rgba(0,0,0,0.6);z-index:1;
     }
-
-    /*───────────────────────────────────────────────
-      Ayah
-    ───────────────────────────────────────────────*/
-    .ayah {
-      margin:2em 0; line-height:1.6; text-shadow:1px 1px 6px rgba(0,0,0,0.6);
-      z-index:1;
+    /* ayah */
+    .ayah{
+      margin:2em 0;line-height:1.6;text-shadow:1px 1px 6px rgba(0,0,0,0.6);z-index:1;
     }
-    .ayah strong {
-      display:block; font-size:1.6rem; margin-bottom:.5em;
-    }
-    .ayah .arabic {
+    .ayah strong{display:block;font-size:1.6rem;margin-bottom:.5em}
+    .ayah .arabic{
       font-family:'Scheherazade New',serif;
-      font-size:2rem; direction:rtl; margin-bottom:.5em;
-      color:#fff; text-shadow:2px 2px 8px rgba(0,0,0,0.75);
+      font-size:2rem;direction:rtl;margin-bottom:.5em;
+      color:#fff;text-shadow:2px 2px 8px rgba(0,0,0,0.75);
     }
-    .ayah div:not(.arabic) {
-      color:#fff; text-shadow:1px 1px 6px rgba(0,0,0,0.75);
+    .ayah div:not(.arabic){
+      color:#fff;text-shadow:1px 1px 6px rgba(0,0,0,0.75);
     }
-
-    /*───────────────────────────────────────────────
-      Continue Reading
-    ───────────────────────────────────────────────*/
-    .continue {
-      position:fixed; bottom:calc(var(--nav-gap)+20px);
-      left:50%; transform:translateX(-50%);
-      color:#ffe !important;        /* always bright */
-      text-decoration:underline; font-size:1rem;
-      z-index:3;                    /* above everything */
+    /* continue reading */
+    .continue{
+      position:fixed;bottom:calc(var(--nav-gap)+20px);
+      left:50%;transform:translateX(-50%);
+      color:var(--text-day)!important;
+      text-decoration:underline;font-size:1rem;z-index:3;
     }
-    body.night .continue {
-      color:#fff !important;        /* white at night */
+    body.night .continue{color:var(--text-night)!important}
+    /* page buttons */
+    .buttons{
+      position:absolute;bottom:var(--nav-gap);
+      left:50%;transform:translateX(-50%);
+      display:flex;gap:1em;z-index:1;
     }
-
-    /*───────────────────────────────────────────────
-      Page Buttons
-    ───────────────────────────────────────────────*/
-    .buttons {
-      position:absolute; bottom:var(--nav-gap);
-      left:50%; transform:translateX(-50%);
-      display:flex; gap:1em; z-index:1;
+    .buttons button{
+      padding:.75em 1.5em;border:2px solid var(--btn-day);
+      background:transparent;border-radius:5px;
+      font-weight:bold;cursor:pointer;transition:background .3s;
+      color:var(--text-day);
     }
-    .buttons button {
-      padding:.75em 1.5em; border:2px solid var(--btn-day);
-      background:transparent; border-radius:5px;
-      font-weight:bold; cursor:pointer; transition:background .3s;
-      color: var(--text-day);           /* default text */
-    }
-    .buttons button:hover {
-      background:var(--btn-day); color:#333;
-    }
-    body.night .buttons button {
+    .buttons button:hover{background:var(--btn-day);color:#333}
+    body.night .buttons button{
       border-color:var(--btn-night);
-      color: #fff !important;           /* force white */
+      color:#fff!important;
     }
-    body.night .buttons button:hover {
-      background:var(--btn-night); color:#333;
-    }
-
-    /*───────────────────────────────────────────────
-      Subscribe Bar
-    ───────────────────────────────────────────────*/
-    .subscribe-bar {
-      position:absolute; bottom:40px; left:50%;
+    body.night .buttons button:hover{background:var(--btn-night);color:#333}
+    /* subscribe */
+    .subscribe-bar{
+      position:absolute;bottom:40px;left:50%;
       transform:translateX(-50%);
-      display:flex; width:80%; max-width:500px;
-      box-shadow:0 4px 12px rgba(0,0,0,0.4); z-index:1;
+      display:flex;width:80%;max-width:500px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.4);z-index:1;
     }
-    .subscribe-bar input {
-      flex:1; padding:.75em; border:none; font-size:1rem;
+    .subscribe-bar input{
+      flex:1;padding:.75em;border:none;font-size:1rem;
       border-radius:5px 0 0 5px;
     }
-    .subscribe-bar button {
-      padding:.75em 1em; border:none;
-      background:var(--btn-day); color:#333;
-      border-radius:0 5px 5px 0; cursor:pointer;
+    .subscribe-bar button{
+      padding:.75em 1em;border:none;
+      background:var(--btn-day);color:#333;
+      border-radius:0 5px 5px 0;cursor:pointer;
       transition:background .3s;
     }
-    body.night .subscribe-bar button { background:var(--btn-night) }
-
-    /*───────────────────────────────────────────────
-      Ayah Nav + Label
-    ───────────────────────────────────────────────*/
-    .ayah-nav-label {
-      position:fixed; bottom:64px; right:20px; z-index:2;
-      color:#fff; font-size:.9rem; text-align:center;
+    body.night .subscribe-bar button{background:var(--btn-night)}
+    /* ayah nav */
+    .ayah-nav-label{
+      position:fixed;bottom:64px;right:20px;z-index:2;
+      color:#fff;font-size:.9rem;text-align:center;
     }
-    .ayah-nav {
-      position:fixed; bottom:20px; right:20px; z-index:2;
-      display:inline-flex; gap:.5em;
+    .ayah-nav{
+      position:fixed;bottom:20px;right:20px;z-index:2;
+      display:inline-flex;gap:.5em;
     }
-    .ayah-nav button {
-      width:36px; height:36px;
-      border:3px solid #fff; background:rgba(0,0,0,0.2);
-      color:#fff; font-size:1.2rem; border-radius:50%;
-      cursor:pointer; transition:background .3s;
+    .ayah-nav button{
+      width:36px;height:36px;
+      border:3px solid #fff;background:rgba(0,0,0,0.2);
+      color:#fff;font-size:1.2rem;border-radius:50%;
+      cursor:pointer;transition:background .3s;
     }
-    .ayah-nav button:hover {
-      background:rgba(255,255,255,0.8); color:#333;
+    .ayah-nav button:hover{background:rgba(255,255,255,0.8);color:#333}
+    /* day/night switch */
+    .container{
+      position:fixed;bottom:20px;left:40px;z-index:2;
     }
-
-    /*───────────────────────────────────────────────
-      Day/Night Switch
-    ───────────────────────────────────────────────*/
-    .container {
-      position:fixed; bottom:20px; left:40px; z-index:2;
-    }
-    .toggle-label {
-      position:fixed; bottom:65px; left:40px; z-index:2;
-      color:#fff; font-size:.85rem;
+    .toggle-label{
+      position:fixed;bottom:65px;left:40px;z-index:2;
+      color:#fff;font-size:.85rem;
       text-shadow:1px 1px 2px rgba(0,0,0,0.4);
     }
-    .switch {
-      position:relative; width:80px; height:40px;
+    .switch{
+      position:relative;width:80px;height:40px;
       background:linear-gradient(0deg,#87ceeb,#e0f6ff);
-      border-radius:20px; cursor:pointer;
+      border-radius:20px;cursor:pointer;
       transition:all 1s cubic-bezier(0.68,-0.55,0.27,1.55);
-      overflow:hidden; border:2px solid #fff;
+      overflow:hidden;border:2px solid #fff;
     }
-    .switch input { opacity:0; width:0; height:0 }
-    .slider { position:absolute; inset:0; transition:1s }
-    .sun, .moon {
-      position:absolute; width:30px; height:30px; border-radius:50%; top:5px; transition:1s;
+    .switch input{opacity:0;width:0;height:0}
+    .slider{position:absolute;inset:0;transition:1s}
+    .sun,.moon{
+      position:absolute;width:30px;height:30px;border-radius:50%;top:5px;transition:1s;
     }
-    .sun {
+    .sun{
       background:radial-gradient(circle,#ffd700 30%,#ffa500 70%);
-      left:5px; box-shadow:0 0 10px #ffd700;
+      left:5px;box-shadow:0 0 10px #ffd700;
     }
-    .moon {
+    .moon{
       background:radial-gradient(circle,#f4f4f4 30%,#e0e0e0 70%);
-      right:-40px; box-shadow:0 0 10px #f4f4f4; transform:scale(0);
+      right:-40px;box-shadow:0 0 10px #f4f4f4;transform:scale(0);
     }
-    .cloud { background:#fff; border-radius:50px; position:absolute; transition:1s }
-    .cloud1 { width:30px; height:12px; top:8px; left:30px }
-    .cloud2 { width:20px; height:8px; top:22px; left:50px }
-    .star {
-      position:absolute; background:#fff;
+    .cloud{background:#fff;border-radius:50px;position:absolute;transition:1s}
+    .cloud1{width:30px;height:12px;top:8px;left:30px}
+    .cloud2{width:20px;height:8px;top:22px;left:50px}
+    .star{
+      position:absolute;background:#fff;
       clip-path:polygon(50% 0%,61%35%,98%35%,68%57%,79%91%,50%70%,21%91%,32%57%,2%35%,39%35%);
-      opacity:0; transition:1s; transform:scale(0);
+      opacity:0;transition:1s;transform:scale(0);
     }
-    .star1 { width:6px; height:6px; top:5px; left:15px }
-    .star2 { width:5px; height:5px; top:15px; left:60px }
-    .star3 { width:4px; height:4px; top:10px; left:70px }
-    .star4 { width:5px; height:5px; top:20px; left:10px }
-    .star5 { width:4px; height:4px; top:28px; left:40px }
-    input:checked + .slider { background:linear-gradient(0deg,#1a1a2e,#16213e) }
-    input:checked + .slider .sun    { left:-40px; transform:scale(0) }
-    input:checked + .slider .moon   { right:5px; transform:scale(1) }
-    input:checked + .slider .cloud  { transform:translateX(80px) scale(0) }
-    input:checked + .slider .star   { opacity:1; transform:scale(1.2); animation:twinkle 2s infinite }
-    @keyframes twinkle { 0%,100%{opacity:1}50%{opacity:0.5} }
+    .star1{width:6px;height:6px;top:5px;left:15px}
+    .star2{width:5px;height:5px;top:15px;left:60px}
+    .star3{width:4px;height:4px;top:10px;left:70px}
+    .star4{width:5px;height:5px;top:20px;left:10px}
+    .star5{width:4px;height:4px;top:28px;left:40px}
+    input:checked+.slider{background:linear-gradient(0deg,#1a1a2e,#16213e)}
+    input:checked+.slider .sun{left:-40px;transform:scale(0)}
+    input:checked+.slider .moon{right:5px;transform:scale(1)}
+    input:checked+.slider .cloud{transform:translateX(80px) scale(0)}
+    input:checked+.slider .star{opacity:1;transform:scale(1.2);animation:twinkle 2s infinite}
+    @keyframes twinkle{0%,100%{opacity:1}50%{opacity:0.5}}
   </style>
 </head>
 <body>
@@ -394,8 +321,7 @@
           day:'numeric',month:'long',year:'numeric'
         }).format(n);
     }
-    showDates();
-    setInterval(showDates,3600000);
+    showDates(); setInterval(showDates,3600000);
 
     // Render Ayah
     function renderAyah(v){
