@@ -34,12 +34,7 @@
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
       position: sticky; top: 0; z-index: 10;
     }
-    .header-left {
-      display: flex; align-items:center;
-    }
-    .header-left img {
-      height: 40px; margin-right: 1rem;
-    }
+    .header-left img { height: 40px; }
     .header-center h1 {
       font-family:'Playfair Display', serif;
       font-size:1.75rem;
@@ -143,7 +138,7 @@
   <!-- Header / Nav -->
   <header>
     <div class="header-left">
-      <img src="Livebyquran Logo.PNG" alt="Live by Quran">
+      <a href="index.html"><img src="Livebyquran Logo.PNG" alt="Live by Quran"></a>
     </div>
     <div class="header-center">
       <h1>Our Books</h1>
@@ -153,7 +148,7 @@
       <a href="books.html">Books</a>
       <a href="lectures.html">Lectures</a>
       <a href="articles.html">Articles</a>
-      <a href="qa.html">Q&A</a>
+      <a href="qa.html">Q&amp;A</a>
     </nav>
   </header>
 
@@ -162,7 +157,7 @@
     <div class="grid" id="books-grid"></div>
   </main>
 
-  <!-- CSV Loader -->
+  <!-- CSV + Card Builder -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
   <script>
     Papa.parse('assets/books/books.csv', {
@@ -173,19 +168,18 @@
         const books = data.filter(b => b.cover && b.title);
         if (!books.length) return;
 
-        // Last row is the most recent
-        const featuredIdx = books.length - 1;
-        const container  = document.getElementById('books-grid');
+        // last entry = featured
+        const featuredIndex = books.length - 1;
+        const grid = document.getElementById('books-grid');
 
-        books.forEach((book, i) => {
-          // ensure exactly one "assets/" prefix
-          const pdfPath = book.pdf.startsWith('assets/')
-            ? book.pdf
-            : `assets/books/pdfs/${book.pdf}`;
+        books.forEach((book, idx) => {
+          // ALWAYS extract filename, drop any folder
+          const filename = book.pdf.split('/').pop().trim();
+          const pdfPath  = `assets/books/pdfs/${filename}`;
           const readerUrl = `reader.html?file=${encodeURIComponent(pdfPath)}`;
 
           const card = document.createElement('div');
-          card.className = 'card' + (i === featuredIdx ? ' featured' : '');
+          card.className = 'card' + (idx === featuredIndex ? ' featured' : '');
           card.innerHTML = `
             <img src="assets/books/covers/${book.cover}" alt="${book.title}">
             <div class="card-content">
@@ -197,7 +191,8 @@
               <a href="${pdfPath}"      download>Download</a>
               <a href="${book.order || '#'}" target="_blank">Order Print</a>
             </div>`;
-          container.appendChild(card);
+          
+          grid.appendChild(card);
         });
       }
     });
