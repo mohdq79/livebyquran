@@ -4,11 +4,12 @@
   <meta charset="utf-8">
   <title>Live by Quran</title>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Scheherazade+New&family=Calibri&display=swap" rel="stylesheet">
   <style>
     /* Reset & Vars */
     * { margin:0; padding:0; box-sizing:border-box }
-    html, body { height:100%; overflow:hidden; position:relative }
+    html, body { height:100%; overflow:hidden; position:relative; }
     :root {
       --day-overlay: rgba(255,255,255,0);
       --night-overlay: rgba(0,0,0,0.2);
@@ -16,6 +17,7 @@
       --text-night: #f2f2f2;
       --btn-day: #ffe58a;
       --btn-night: #bfa76d;
+      --nav-gap: 120px;               /* space between nav buttons and subscribe */
     }
 
     /* Background & Day/Night */
@@ -23,18 +25,24 @@
       font-family:Calibri, sans-serif;
       background: url('quran_background.png') center bottom/cover no-repeat;
       color: var(--text-day);
+      transition: color .5s;
     }
     body::before {
       content:''; position:absolute; inset:0;
       background: var(--day-overlay);
-      transition: background 1s;
+      transition: background .5s;
       z-index:0;
     }
-    body.night { color: var(--text-night) }
-    body.night::before { background: var(--night-overlay) }
+    body.night {
+      color: var(--text-night);
+    }
+    body.night::before {
+      background: var(--night-overlay);
+    }
 
     /* Birds: slower flap */
-    .bird-container { position:absolute; top:0; left:-15%; z-index:0;
+    .bird-container {
+      position:absolute; top:0; left:-15%; z-index:0;
       animation-timing-function: linear;
       animation-iteration-count: infinite;
     }
@@ -46,11 +54,11 @@
       width:88px; height:125px;
       background:url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/174479/bird-cells-new.svg') 0 0 no-repeat;
       background-size:auto 100%;
-      animation: flap 2s steps(10) infinite;  /* doubled duration */
+      animation: flap 2s steps(10) infinite;
       filter: invert(34%) sepia(55%) saturate(427%) hue-rotate(141deg)
               brightness(93%) contrast(91%);
     }
-    .bird-one   { animation-delay: -1s;   }
+    .bird-one   { animation-delay: -1s; }
     .bird-two   { animation-delay: -1.4s; }
     .bird-three { animation-delay: -0.7s; }
     .bird-four  { animation-delay: -0.9s; }
@@ -110,19 +118,45 @@
     .ayah .arabic {
       font-family:'Scheherazade New',serif;
       font-size:2rem; direction:rtl; margin-bottom:.5em;
-      /* ensure full brightness */
-      color:#fff;
-      text-shadow:2px 2px 8px rgba(0,0,0,0.75);
+      color:#fff; text-shadow:2px 2px 8px rgba(0,0,0,0.75);
     }
-    /* translation always white */
     .ayah > div:not(.arabic) {
-      color:#fff;
-      text-shadow:1px 1px 6px rgba(0,0,0,0.75);
+      color:#fff; text-shadow:1px 1px 6px rgba(0,0,0,0.75);
     }
+
+    /* Ayah Nav Buttons */
+    .ayah-nav {
+      margin-top:1em;
+      display:inline-flex;
+      gap:.5em;
+    }
+    .ayah-nav button {
+      width:36px; height:36px;
+      border:2px solid var(--btn-day);
+      background:transparent; border-radius:50%;
+      font-size:1.2rem; line-height:1;
+      color:inherit; cursor:pointer;
+      transition:background .3s,color .3s;
+    }
+    body.night .ayah-nav button { border-color:var(--btn-night) }
+    .ayah-nav button:hover {
+      background:var(--btn-day); color:#333;
+    }
+    body.night .ayah-nav button:hover {
+      background:var(--btn-night); color:#333;
+    }
+
+    /* Continue Reading link */
+    .continue {
+      display:block; margin-top:.75em;
+      color: #ffe; text-decoration:underline;
+      cursor:pointer;
+    }
+    body.night .continue { color:#fff }
 
     /* Nav Buttons */
     .buttons {
-      position:absolute; bottom:120px; left:50%;
+      position:absolute; bottom:var(--nav-gap); left:50%;
       transform:translateX(-50%);
       display:flex; gap:1em; z-index:1;
     }
@@ -160,17 +194,65 @@
     }
     body.night .subscribe-bar button { background:var(--btn-night) }
 
-    /* Theme Toggle */
-    #theme-toggle, #another-ayah {
-      position:absolute; bottom:20px;
-      z-index:1; padding:.5em 1em; border:none;
-      background:rgba(0,0,0,0.3); color:#fff;
-      border-radius:4px; cursor:pointer;
+    /* Day/Night Switch from CodePen */
+    .container { position:fixed; bottom:20px; left:20px; z-index:1 }
+    .switch {
+      position: relative; width:80px; height:40px;
+      background: linear-gradient(0deg,#87ceeb,#e0f6ff);
+      border-radius:20px; cursor:pointer;
+      transition: all 1s cubic-bezier(0.68,-0.55,0.27,1.55);
+      overflow:hidden; border:2px solid #fff;
+    }
+    .switch input { opacity:0; width:0; height:0; }
+    .slider { position:absolute; inset:0; transition:1s; }
+    .sun, .moon {
+      position:absolute; width:30px; height:30px; border-radius:50%;
+      top:5px; transition:1s;
+    }
+    .sun {
+      background:radial-gradient(circle,#ffd700 30%,#ffa500 70%);
+      left:5px; box-shadow:0 0 10px #ffd700;
+    }
+    .moon {
+      background:radial-gradient(circle,#f4f4f4 30%,#e0e0e0 70%);
+      right:-40px; box-shadow:0 0 10px #f4f4f4; transform:scale(0);
+    }
+    .cloud {
+      background:#fff; border-radius:50px; position:absolute;
+      transition:1s;
+    }
+    .cloud1 { width:30px; height:12px; top:8px; left:30px; }
+    .cloud2 { width:20px; height:8px; top:22px; left:50px; }
+    .star {
+      position:absolute; background:#fff;
+      clip-path:polygon(50% 0%,61%35%,98%35%,68%57%,79%91%,50%70%,21%91%,32%57%,2%35%,39%35%);
+      opacity:0; transition:1s; transform:scale(0);
+    }
+    .star1 { width:6px; height:6px; top:5px; left:15px; }
+    .star2 { width:5px; height:5px; top:15px; left:60px; }
+    .star3 { width:4px; height:4px; top:10px; left:70px; }
+    .star4 { width:5px; height:5px; top:20px; left:10px; }
+    .star5 { width:4px; height:4px; top:28px; left:40px; }
+
+    input:checked + .slider { background:linear-gradient(0deg,#1a1a2e,#16213e); }
+    input:checked + .slider .sun { left:-40px; transform:scale(0); }
+    input:checked + .slider .moon { right:5px; transform:scale(1); }
+    input:checked + .slider .cloud { transform:translateX(80px) scale(0); }
+    input:checked + .slider .star {
+      opacity:1; transform:scale(1.2); animation:twinkle 2s infinite;
+    }
+    @keyframes twinkle {
+      0%,100%{opacity:1}50%{opacity:0.5}
+    }
+
+    /* Random Ayah toggle bottom-right */
+    #another-ayah {
+      position:fixed; bottom:20px; right:20px; z-index:1;
+      padding:.5em 1em; border:none; background:rgba(0,0,0,0.3);
+      color:#fff; border-radius:4px; cursor:pointer;
       font-size:.9rem; backdrop-filter:blur(5px);
     }
-    #theme-toggle { left:20px }
-    #another-ayah { left:140px }
-    #another-ayah:hover, #theme-toggle:hover { background:rgba(0,0,0,0.5) }
+    #another-ayah:hover { background:rgba(0,0,0,0.5) }
   </style>
 </head>
 <body>
@@ -202,6 +284,11 @@
     <h1>Live by Quran</h1>
     <div class="tagline">Learn. Reflect. Transform.</div>
     <div class="ayah" id="ayah">Loading Ayah…</div>
+    <div class="ayah-nav">
+      <button id="prev-ayah" title="Previous Ayah">‹</button>
+      <button id="next-ayah" title="Next Ayah">›</button>
+    </div>
+    <a id="continue" class="continue" href="#" target="_blank">Continue Reading →</a>
   </div>
 
   <div class="buttons">
@@ -216,25 +303,46 @@
     <button id="subscribe-btn">Subscribe</button>
   </div>
 
-  <button id="theme-toggle">Toggle Day/Night</button>
-  <button id="another-ayah">Another Ayah</button>
+  <!-- Day/Night Switch -->
+  <div class="container">
+    <label class="switch">
+      <input type="checkbox" id="toggleSwitch">
+      <div class="slider">
+        <div class="sun"></div>
+        <div class="moon"></div>
+        <div class="cloud cloud1"></div>
+        <div class="cloud cloud2"></div>
+        <div class="star star1"></div>
+        <div class="star star2"></div>
+        <div class="star star3"></div>
+        <div class="star star4"></div>
+        <div class="star star5"></div>
+      </div>
+    </label>
+  </div>
+
+  <!-- Random Ayah Toggle -->
+  <button id="another-ayah">Random Ayah</button>
 
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
   <script>
-    let ayahList = [];
+    let ayahList = [], history = [], idx = -1;
 
-    // Day/Night auto + manual
+    // Day/Night auto + manual switch
+    const toggle = document.getElementById('toggleSwitch');
     function applyTheme(auto=true){
       if(auto){
         const h=new Date().getHours();
         document.body.classList.toggle('night', h<6||h>=18);
+        toggle.checked = document.body.classList.contains('night');
       }
     }
     applyTheme(); setInterval(()=>applyTheme(),60000);
-    document.getElementById('theme-toggle').onclick = ()=>{
-      document.body.classList.toggle('night');
-    };
+
+    toggle.addEventListener('change',()=>{
+      document.body.classList.toggle('night', toggle.checked);
+    });
 
     // Dates
     function showDates(){
@@ -250,35 +358,55 @@
     }
     showDates(); setInterval(showDates,3600000);
 
-    // Ayah-of-the-Day + Random
+    // Render function
     function renderAyah(v){
       document.getElementById('ayah').innerHTML =
         `<strong>${v.surah} — Verse ${v.verse}</strong>
          <div class="arabic">${v.arabic}</div>
          <div>${v.translation}</div>`;
+      // Continue Reading link to Quran.com
+      document.getElementById('continue').href =
+        `https://quran.com/${v.surah.replace(/[^0-9]/g,'')}/${v.verse}`;
     }
 
-    Papa.parse('ayahs.csv',{download:true,header:true,skipEmptyLines:true,
+    // Load CSV
+    Papa.parse('ayahs.csv',{ download:true, header:true, skipEmptyLines:true,
       complete(r){
         ayahList = r.data.filter(a=>a.surah&&a.translation);
+        // default = today
         const t=new Date(), s=new Date(t.getFullYear(),0,0);
-        const idx=Math.floor((t-s)/86400000)%ayahList.length;
+        idx = Math.floor((t-s)/86400000) % ayahList.length;
+        history = [idx];
         renderAyah(ayahList[idx]);
       },
-      error(){document.getElementById('ayah').textContent='Error loading Ayah.';}
+      error(){ document.getElementById('ayah').textContent='Error loading Ayah.'; }
     });
 
-    document.getElementById('another-ayah').onclick = ()=>{
-      if(ayahList.length){
-        const v = ayahList[Math.floor(Math.random()*ayahList.length)];
-        renderAyah(v);
+    // Next / Previous
+    document.getElementById('next-ayah').onclick = ()=>{
+      idx = Math.floor(Math.random()*ayahList.length);
+      history.push(idx);
+      renderAyah(ayahList[idx]);
+    };
+    document.getElementById('prev-ayah').onclick = ()=>{
+      if(history.length>1){
+        history.pop();
+        idx = history[history.length-1];
+        renderAyah(ayahList[idx]);
       }
+    };
+
+    // Random toggle
+    document.getElementById('another-ayah').onclick = ()=>{
+      idx = Math.floor(Math.random()*ayahList.length);
+      history.push(idx);
+      renderAyah(ayahList[idx]);
     };
 
     // Subscribe stub
     document.getElementById('subscribe-btn').onclick = ()=>{
-      const email=document.getElementById('email-input').value.trim();
-      const re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const email = document.getElementById('email-input').value.trim();
+      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if(!re.test(email)){ alert('Enter valid email.'); return; }
       alert(`Thanks for subscribing, ${email}!`);
       document.getElementById('email-input').value='';
