@@ -7,10 +7,10 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Scheherazade+New&family=Calibri&display=swap" rel="stylesheet">
   <style>
     /*───────────────────────────────────────────────
-      Reset & CSS Variables
+      Reset & Variables
     ───────────────────────────────────────────────*/
     * { margin:0; padding:0; box-sizing:border-box }
-    html, body { width:100%; height:100%; overflow:hidden; position:relative; }
+    html, body { width:100%; height:100%; overflow:hidden; position:relative }
     :root {
       --day-overlay: rgba(255,255,255,0);
       --night-overlay: rgba(0,0,0,0.2);
@@ -22,7 +22,7 @@
     }
 
     /*───────────────────────────────────────────────
-      Background & Theme Overlay
+      Background & Day/Night Overlay
     ───────────────────────────────────────────────*/
     body {
       font-family:Calibri, sans-serif;
@@ -34,11 +34,15 @@
       content:''; position:absolute; inset:0;
       background: var(--day-overlay); transition: background .5s; z-index:0;
     }
-    body.night { color: var(--text-night); }
-    body.night::before { background: var(--night-overlay); }
+    body.night {
+      color: var(--text-night);
+    }
+    body.night::before {
+      background: var(--night-overlay);
+    }
 
     /*───────────────────────────────────────────────
-      Birds (slower, smoother)
+      Bird animation (slower, smooth)
     ───────────────────────────────────────────────*/
     .bird-container { position:absolute; top:0; left:-15%; z-index:0; animation:fly-path 30s linear infinite; }
     .bird-container-two   { animation-duration:28s; animation-delay:-3s; }
@@ -50,8 +54,7 @@
       background:url('https://s3-us-west-2.amazonaws.com/s.cdpn.io/174479/bird-cells-new.svg') 0 0 no-repeat;
       background-size:auto 100%;
       animation:flap 2s steps(10) infinite;
-      filter:invert(34%) sepia(55%) saturate(427%) hue-rotate(141deg)
-             brightness(93%) contrast(91%);
+      filter:invert(34%) sepia(55%) saturate(427%) hue-rotate(141deg) brightness(93%) contrast(91%);
     }
     .bird-two   { animation-delay:-1.4s }
     .bird-three { animation-delay:-0.7s }
@@ -67,7 +70,7 @@
     }
 
     /*───────────────────────────────────────────────
-      Header & Navigation
+      Header & Nav
     ───────────────────────────────────────────────*/
     header {
       position:absolute; top:20px; left:20px; right:20px;
@@ -81,7 +84,7 @@
     nav a:hover { opacity:1 }
 
     /*───────────────────────────────────────────────
-      Dates
+      Date Display
     ───────────────────────────────────────────────*/
     #date-display {
       position:absolute; top:90px; right:30px; text-align:right;
@@ -91,39 +94,33 @@
     .greg { font-size:1rem; font-weight:bold; display:block }
 
     /*───────────────────────────────────────────────
-      Hero (.main) & Flare Overlay
+      Hero & Flare Overlay (Option 1)
     ───────────────────────────────────────────────*/
     .main {
       position:absolute; top:15%; left:50%;
       transform:translate(-50%,-10%);
       width:90%; max-width:800px; text-align:center;
-      z-index:1;
-      padding-bottom:calc(var(--nav-gap)+1.5em);
+      z-index:1; padding-bottom:calc(var(--nav-gap)+1.5em);
     }
-    /* pure-CSS radial flare: day / night */
-    .flare {
-      position:absolute; top:10%; left:70%;
-      width:300px; height:300px; border-radius:50%;
-      background: radial-gradient(
-        circle at center,
-        rgba(255,250,230,0.8) 0%,
-        rgba(255,250,230,0) 70%
-      );
-      filter:blur(30px);
-      pointer-events:none; z-index:0;
-      transition: background .5s, filter .5s;
+    /* use real PNG overlays */
+    .main::before {
+      content:'';
+      position:absolute;
+      top:0; left:0; right:0; bottom:0;
+      background: url('day-flare.png') no-repeat 70% 10%;
+      background-size:300px 300px;
+      opacity:0.6;
+      pointer-events:none;
+      z-index:0;
+      transition: background-image .5s, opacity .5s;
     }
-    body.night .flare {
-      background: radial-gradient(
-        circle at center,
-        rgba(240,240,255,0.6) 0%,
-        rgba(240,240,255,0) 70%
-      );
-      filter:blur(40px) brightness(1.2);
+    body.night .main::before {
+      background-image: url('night-flare.png');
+      opacity:0.5;
     }
 
     /*───────────────────────────────────────────────
-      Sun & Rays (day) / Moon (night) on H1
+      Title Sun/Moon & Rays
     ───────────────────────────────────────────────*/
     h1 {
       position:relative;
@@ -132,9 +129,9 @@
       text-shadow:2px 2px 8px rgba(0,0,0,0.6);
       z-index:1;
     }
-    /* Day: gentle orb + rotating rays */
     h1::before {
-      content:''; position:absolute; left:-60px; top:0;
+      content:'';
+      position:absolute; left:-60px; top:0;
       width:40px; height:40px; border-radius:50%;
       background:radial-gradient(circle at center,#ffeb3b 40%,#fbc02d 100%);
       box-shadow:0 0 20px rgba(255,235,59,0.6);
@@ -142,13 +139,14 @@
       z-index:1;
     }
     h1::after {
-      content:''; position:absolute; left:-72px; top:-12px;
+      content:'';
+      position:absolute; left:-72px; top:-12px;
       width:64px; height:64px; border-radius:50%;
       box-shadow:
         0 -30px 0 -2px rgba(255,235,59,0.4),
-        0 30px 0 -2px rgba(255,235,59,0.4),
-        -30px 0 0 -2px rgba(255,235,59,0.4),
-        30px 0 0 -2px rgba(255,235,59,0.4);
+        0  30px 0 -2px rgba(255,235,59,0.4),
+       -30px 0   0 -2px rgba(255,235,59,0.4),
+        30px 0   0 -2px rgba(255,235,59,0.4);
       filter:blur(2px); opacity:.5;
       animation:rays-rotate 20s linear infinite;
       z-index:1;
@@ -167,10 +165,11 @@
     @keyframes moon-sway   { to { transform:rotate(20deg) translateY(-2px) } }
 
     /*───────────────────────────────────────────────
-      Stars (night) behind text
+      Stars behind text (night)
     ───────────────────────────────────────────────*/
-    body.night .main::before {
-      content:''; position:absolute; inset:0; z-index:0;
+    body.night .main::after {
+      content:'';
+      position:absolute; inset:0; z-index:0;
       background:
         radial-gradient(circle at 20% 30%, #fff 2%, transparent 0),
         radial-gradient(circle at 80% 20%, #fff 1.5%, transparent 0),
@@ -327,7 +326,7 @@
     input:checked + .slider .moon   { right:5px; transform:scale(1) }
     input:checked + .slider .cloud  { transform:translateX(80px) scale(0) }
     input:checked + .slider .star   { opacity:1; transform:scale(1.2); animation:twinkle 2s infinite }
-    @keyframes twinkle { 0%,100%{opacity:1} 50%{opacity:0.5} }
+    @keyframes twinkle { 0%,100%{opacity:1}50%{opacity:0.5} }
 
   </style>
 </head>
@@ -358,9 +357,8 @@
     <span class="greg">Loading Gregorian date…</span>
   </div>
 
-  <!-- Main Ayah + Flare element -->
+  <!-- Main Ayah + Flare -->
   <div class="main">
-    <div class="flare"></div>
     <h1>Live by Quran</h1>
     <div class="tagline">Learn. Reflect. Transform.</div>
     <div class="ayah" id="ayah">Loading Ayah…</div>
@@ -413,18 +411,19 @@
     let ayahList=[], history=[], idx=-1;
     const toggle=document.getElementById('toggleSwitch');
 
-    // Day/Night auto-detect + manual toggle
+    // Day/Night logic
     function applyTheme(auto=true){
       if(auto){
         const h=new Date().getHours();
-        document.body.classList.toggle('night', h<6||h>=18);
+        document.body.classList.toggle('night',h<6||h>=18);
         toggle.checked=document.body.classList.contains('night');
       }
     }
-    applyTheme(); setInterval(()=>applyTheme(),60000);
-    toggle.addEventListener('change', ()=>document.body.classList.toggle('night',toggle.checked));
+    applyTheme();
+    setInterval(()=>applyTheme(),60000);
+    toggle.addEventListener('change',()=>document.body.classList.toggle('night',toggle.checked));
 
-    // Date rendering
+    // Dates
     function showDates(){
       const n=new Date();
       document.querySelector('.greg').textContent=
@@ -436,15 +435,16 @@
           day:'numeric',month:'long',year:'numeric'
         }).format(n);
     }
-    showDates(); setInterval(showDates,3600000);
+    showDates();
+    setInterval(showDates,3600000);
 
-    // Ayah rendering
+    // Render Ayah
     function renderAyah(v){
       document.getElementById('ayah').innerHTML=
         `<strong>${v.surah} — Verse ${v.verse}</strong>
          <div class="arabic">${v.arabic}</div>
          <div>${v.translation}</div>`;
-      const sn=v.surahNumber||(v.surah.match(/\d+/)||[])[0]||'';
+      const sn=v.surah.match(/\d+/)?v.surah.match(/\d+/)[0]:'';
       const c=document.getElementById('continue');
       if(sn){
         c.style.display='inline-block';
@@ -452,7 +452,7 @@
       } else c.style.display='none';
     }
 
-    // Load CSV of ayahs
+    // Load CSV
     Papa.parse('ayahs.csv',{download:true,header:true,skipEmptyLines:true,complete(r){
       ayahList=r.data.filter(a=>a.surah&&a.verse&&a.translation);
       const t=new Date(), s=new Date(t.getFullYear(),0,0);
@@ -461,7 +461,7 @@
       renderAyah(ayahList[idx]);
     }});
 
-    // Next / Prev
+    // Ayah Nav
     document.getElementById('next-ayah').onclick=()=>{
       idx=Math.floor(Math.random()*ayahList.length);
       history.push(idx);
@@ -475,11 +475,11 @@
       }
     };
 
-    // Subscribe stub
+    // Subscribe
     document.getElementById('subscribe-btn').onclick=()=>{
       const e=document.getElementById('email-input').value.trim();
       const re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if(!re.test(e)){ return alert('Enter valid email.'); }
+      if(!re.test(e)) return alert('Enter a valid email.');
       alert(`Thanks for subscribing, ${e}!`);
       document.getElementById('email-input').value='';
     };
