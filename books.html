@@ -1,64 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Live by Quran - Books</title>
-  <link rel="stylesheet" href="books.css">
+  <meta charset="utf-8">
+  <title>Books · Live by Quran</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <link href="https://fonts.googleapis.com/css2?family=Calibri&family=Playfair+Display&display=swap" rel="stylesheet">
+  <style>
+    /* Basic reset */
+    * { margin:0; padding:0; box-sizing:border-box }
+    body { font-family: Calibri, sans-serif; line-height:1.4; }
+    a { text-decoration:none; }
+
+    /* Header & Nav */
+    header {
+      display:flex; align-items:center;
+      padding:1rem 2rem;
+      background:#fff; box-shadow:0 2px 6px rgba(0,0,0,0.1);
+    }
+    .logo img { height:40px; }
+    nav { margin-left:auto; }
+    nav a {
+      margin-left:1.5rem;
+      color:#333; font-weight:600;
+    }
+    nav a:hover { color:#000; }
+
+    /* Main */
+    main { padding:2rem; }
+    main h1 {
+      font-family:'Playfair Display', serif;
+      font-size:2.5rem; margin-bottom:1rem;
+    }
+
+    /* Grid */
+    .grid {
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+      gap:1.5rem;
+    }
+
+    /* Card */
+    .card {
+      background:#fafafa;
+      border-radius:8px;
+      box-shadow:0 2px 4px rgba(0,0,0,0.05);
+      overflow:hidden;
+      display:flex; flex-direction:column;
+    }
+    .card img {
+      width:100%; height:280px; object-fit:cover;
+    }
+    .card-content {
+      padding:1rem; flex:1;
+    }
+    .card-content h3 {
+      font-size:1.1rem; margin-bottom:0.5rem;
+    }
+    .card-content p {
+      font-size:0.9rem; color:#555;
+      margin-bottom:1rem;
+    }
+
+    /* Actions */
+    .actions {
+      display:flex; gap:0.5rem;
+      padding:0 1rem 1rem;
+    }
+    .actions a {
+      flex:1; text-align:center;
+      padding:0.5rem 0;
+      border:2px solid #222;
+      border-radius:4px;
+      color:#222; font-size:0.9rem;
+      transition:background 0.2s, color 0.2s;
+    }
+    .actions a:hover {
+      background:#222; color:#fff;
+    }
+  </style>
 </head>
 <body>
+
+  <!-- Header -->
   <header>
-    <h1>Books Collection</h1>
+    <div class="logo">
+      <img src="Livebyquran Logo.PNG" alt="Live by Quran">
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="books.html">Books</a>
+      <a href="lectures.html">Lectures</a>
+      <a href="articles.html">Articles</a>
+      <a href="qa.html">Q&A</a>
+    </nav>
   </header>
+
+  <!-- Main Content -->
   <main>
-    <section class="featured">
-      <h2>Featured Book</h2>
-      <div class="featured-card">
-        <img src="images/Fa Inni Qarib English 2nd Edition.png" alt="Fa Inni Qarib English 2nd Edition">
-        <div class="featured-info">
-          <h3>Fa Inni Qarib (English, 2nd Edition)</h3>
-          <p>Quranic Duas and Adhkar in the light of Hadith and stories of the Prophets.</p>
-          <div class="buttons">
-            <a href="#" class="btn">Learn More</a>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="book-grid">
-      <div class="book-card">
-        <img src="images/Fa Inni Qarib Urdu 3rd Edition.png" alt="Fa Inni Qarib Urdu 3rd Edition">
-        <div class="card-info">
-          <h4>Fa Inni Qarib (Urdu, 3rd Edition)</h4>
-          <div class="btn-group">
-            <a href="#" class="btn">View</a>
-            <a href="#" class="btn">Download</a>
-            <a href="#" class="btn">Order Print</a>
-          </div>
-        </div>
-      </div>
-      <div class="book-card">
-        <img src="images/Fa Inni Qarib English 2nd Edition.png" alt="Fa Inni Qarib English 2nd Edition">
-        <div class="card-info">
-          <h4>Fa Inni Qarib (English, 2nd Edition)</h4>
-          <div class="btn-group">
-            <a href="#" class="btn">View</a>
-            <a href="#" class="btn">Download</a>
-            <a href="#" class="btn">Order Print</a>
-          </div>
-        </div>
-      </div>
-      <div class="book-card">
-        <img src="images/Parables in Quran Urdu Edition.png" alt="Parables in Quran Urdu Edition">
-        <div class="card-info">
-          <h4>Parables in Quran (Urdu Edition)</h4>
-          <div class="btn-group">
-            <a href="#" class="btn">View</a>
-            <a href="#" class="btn">Download</a>
-            <a href="#" class="btn">Order Print</a>
-          </div>
-        </div>
-      </div>
-    </section>
+    <h1>Our Books</h1>
+    <div class="grid" id="books-grid">
+      <!-- JS will inject .card elements here -->
+    </div>
   </main>
+
+  <!-- PapaParse -->
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
+  <script>
+    Papa.parse('assets/books/books.csv', {
+      download: true,
+      header: true,
+      skipEmptyLines: true,
+      complete: results => {
+        const grid = document.getElementById('books-grid');
+        results.data.forEach(book => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <img src="assets/books/covers/${book.cover}" alt="${book.title}">
+            <div class="card-content">
+              <h3>${book.title}</h3>
+              <p>${book.description}</p>
+            </div>
+            <div class="actions">
+              <a href="${book.reader}" target="_blank">Read</a>
+              <a href="${book.pdf}" download>Download</a>
+              <a href="${book.order}" target="_blank">Order Print</a>
+            </div>`;
+          grid.appendChild(card);
+        });
+      }
+    });
+  </script>
+
 </body>
 </html>

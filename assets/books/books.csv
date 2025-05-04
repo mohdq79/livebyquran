@@ -1,0 +1,4 @@
+slug,title,author,cover,description,pdf,reader,order
+fa-inni-qarib-urdu,Fa Inni Qarib (Urdu),Sejil Muhammad,inni-qarib-urdu.png,"Quranic Duas and Adhkars in the light of hadeeth and stories of the prophets in urdu language","pdfs/inni-qarib-urdu.pdf","reader/inni-qarib-urdu.html","https://print-order.example.com/inni-qarib-urdu"
+fa-inni-qarib-eng,Fa Inni Qarib (English),Sejil Muhammad,inni-qarib-eng.png,"Quranic Duas and Adhkars in the light of hadeeth and stories of the prophets in english language","pdfs/inni-qarib-eng.pdf","reader/inni-qarib-eng.html","https://print-order.example.com/inni-qarib-eng"
+parables-urdu,Parables in Quran (Urdu),Sejil Muhammad,parables-urdu.png,"Beautiful Parables from Quran in Urdu.","pdfs/parables-urdu.pdf","reader/parables-urdu.html","https://print-order.example.com/parables-urdu"
