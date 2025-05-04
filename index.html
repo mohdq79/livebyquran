@@ -135,11 +135,11 @@
       <img src="Livebyquran Logo.PNG" alt="Live by Quran">
     </div>
     <nav>
-      <a href="#">Home</a>
-      <a href="#">Books</a>
-      <a href="#">Audio Lectures</a>
-      <a href="#">Articles</a>
-      <a href="#">Q&A</a>
+      <a href="index.html">Home</a>
+      <a href="books.html">Books</a>
+      <a href="lectures.html">Audio Lectures</a>
+      <a href="articles.html">Articles</a>
+      <a href="qa.html">Q&A</a>
       <a href="#"><img src="email-icon.png" alt="Contact" style="height:24px;"></a>
     </nav>
   </header>
@@ -151,10 +151,11 @@
     <div class="tagline">Learn. Reflect. Transform.</div>
     <div class="ayah" id="ayah">Loading…</div>
     <div class="buttons">
-      <button>Explore Books</button>
-      <button>Listen to Lectures</button>
-      <button>Read Articles</button>
-      <button>Q&A</button>
+      <!-- Use onclick to navigate -->
+      <button onclick="location.href='books.html'">Explore Books</button>
+      <button onclick="location.href='lectures.html'">Listen to Lectures</button>
+      <button onclick="location.href='articles.html'">Read Articles</button>
+      <button onclick="location.href='qa.html'">Q&A</button>
     </div>
   </div>
 
@@ -166,15 +167,14 @@
   <!-- Dependencies -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
   <script>
-    // 1) Day/Night Theme
+    // Day/Night Theme
     function applyTheme() {
       const hr = new Date().getHours();
       document.body.classList.toggle('night', hr < 6 || hr >= 18);
     }
-    applyTheme();
-    setInterval(applyTheme, 60_000);
+    applyTheme(); setInterval(applyTheme, 60_000);
 
-    // 2) Date Display (Islamic + Gregorian)
+    // Date Display (Islamic + Gregorian)
     function showDates() {
       const now = new Date();
       const greg = new Intl.DateTimeFormat('en-US', {
@@ -185,10 +185,9 @@
       }).format(now) + ' AH';
       document.getElementById('date-display').textContent = isl + ' • ' + greg;
     }
-    showDates();
-    setInterval(showDates, 3_600_000);
+    showDates(); setInterval(showDates, 3_600_000);
 
-    // 3) Ayah of the Day (from ayahs.csv)
+    // Ayah of the Day
     Papa.parse('ayahs.csv', {
       download: true, header: true, skipEmptyLines: true,
       complete(res) {
@@ -206,13 +205,12 @@
       error() { document.getElementById('ayah').textContent = 'Could not load Ayah.'; }
     });
 
-    // 4) Flying Birds Spawner
+    // Bird spawner
     function spawnBird() {
       const tpl = document.getElementById('bird-template'),
             b = tpl.cloneNode(true);
-      b.removeAttribute('id');
+      b.removeAttribute('id'); b.style.display='block';
       b.classList.add('bird');
-      b.style.display = 'block';
       b.style.top = (20 + Math.random()*60) + 'vh';
       b.style.color = document.body.classList.contains('night') ? '#fff' : '#333';
       b.style.animationDuration = (8 + Math.random()*5) + 's';
