@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <title>Live by Quran</title>
   <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-  <!-- Google Fonts -->
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Scheherazade+New&family=Calibri&display=swap" rel="stylesheet">
   <style>
-    /* Reset & Variables */
+    /* Reset & Vars */
     * { margin:0; padding:0; box-sizing:border-box }
-    html, body { width:100%; height:100%; overflow:hidden; position:relative; }
+    html, body { height:100%; overflow:hidden; position:relative; }
     :root {
       --day-overlay: rgba(255,255,255,0);
       --night-overlay: rgba(0,0,0,0.2);
@@ -20,7 +20,7 @@
       --nav-gap: 140px;
     }
 
-    /* Background & Day/Night overlay */
+    /* Full‐screen background + day/night overlay */
     body {
       font-family:Calibri, sans-serif;
       background: url('quran_background.png') center bottom/cover no-repeat;
@@ -36,7 +36,7 @@
     body.night { color: var(--text-night); }
     body.night::before { background: var(--night-overlay); }
 
-    /* Birds animation */
+    /* Bird animations (slowed, smooth path) */
     .bird-container { position:absolute; top:0; left:-15%; z-index:0; animation:fly-path 30s linear infinite; }
     .bird-container-two   { animation-duration:28s; animation-delay:-3s; }
     .bird-container-three { animation-duration:32s; animation-delay:-7s; }
@@ -61,7 +61,7 @@
       100% { transform:translateX(115vw) translateY(10vh) scale(.6) }
     }
 
-    /* Header & Nav */
+    /* Header & Navigation */
     header {
       position:absolute; top:20px; left:20px; right:20px;
       display:flex; justify-content:space-between; align-items:center; z-index:1;
@@ -73,7 +73,7 @@
     }
     nav a:hover { opacity:1 }
 
-    /* Date box */
+    /* Date Display */
     #date-display {
       position:absolute; top:90px; right:30px; text-align:right;
       line-height:1.2; z-index:1;
@@ -81,12 +81,12 @@
     .isl { font-size:1.3rem; display:block }
     .greg { font-size:1rem; font-weight:bold; display:block }
 
-    /* Main content */
+    /* Main Content */
     .main {
       position:absolute; top:15%; left:50%;
       transform:translate(-50%,-10%); text-align:center;
       width:90%; max-width:800px; z-index:1;
-      /* bottom padding to keep Continue above nav */
+      /* bottom padding keeps Continue Reading above nav */
       padding-bottom: calc(var(--nav-gap) + 1.5em);
     }
     h1 {
@@ -113,18 +113,19 @@
     .ayah > div:not(.arabic) {
       color:#fff; text-shadow:1px 1px 6px rgba(0,0,0,0.75);
     }
-    /* Continue Reading link */
+    /* Continue link now safely below the translation */
     .continue {
       display:inline-block; margin-top:.75em;
-      color:#ffe; text-decoration:underline; font-size:1rem;
-      z-index:1;
+      color:#ffe; text-decoration:underline;
+      font-size:1rem; z-index:1;
     }
     body.night .continue { color:#fff }
 
-    /* Page nav buttons */
+    /* Page Buttons */
     .buttons {
       position:absolute; bottom:var(--nav-gap); left:50%;
-      transform:translateX(-50%); display:flex; gap:1em; z-index:1;
+      transform:translateX(-50%);
+      display:flex; gap:1em; z-index:1;
     }
     .buttons button {
       padding:.75em 1.5em; border:2px solid var(--btn-day);
@@ -139,12 +140,12 @@
       background:var(--btn-night); color:#333;
     }
 
-    /* Subscribe bar */
+    /* Email Subscribe */
     .subscribe-bar {
       position:absolute; bottom:40px; left:50%;
       transform:translateX(-50%); display:flex;
-      width:80%; max-width:500px; box-shadow:0 4px 12px rgba(0,0,0,0.4);
-      z-index:1;
+      width:80%; max-width:500px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.4); z-index:1;
     }
     .subscribe-bar input {
       flex:1; padding:.75em; border:none; font-size:1rem;
@@ -156,9 +157,11 @@
       border-radius:0 5px 5px 0;
       cursor:pointer; transition:background .3s;
     }
-    body.night .subscribe-bar button { background:var(--btn-night) }
+    body.night .subscribe-bar button {
+      background:var(--btn-night);
+    }
 
-    /* Ayah ‹ › nav */
+    /* ‹ › Ayah Nav */
     .ayah-nav {
       position:fixed; bottom:20px; right:20px; z-index:2;
       display:inline-flex; gap:.5em;
@@ -178,7 +181,7 @@
       background:var(--btn-night); color:#333;
     }
 
-    /* Day/Night switch (bottom-left) */
+    /* Day / Night Switch (bottom-left) */
     .container {
       position:fixed; bottom:20px; left:10px; z-index:2;
     }
@@ -237,7 +240,6 @@
   <div class="bird-container bird-container-three"><div class="bird bird-three"></div></div>
   <div class="bird-container bird-container-four"><div class="bird bird-four"></div></div>
 
-  <!-- Header -->
   <header>
     <div class="logo"><img src="Livebyquran Logo.PNG" alt="Live by Quran"></div>
     <nav>
@@ -250,13 +252,11 @@
     </nav>
   </header>
 
-  <!-- Dates -->
   <div id="date-display">
     <span class="isl">Loading Islamic date…</span>
     <span class="greg">Loading Gregorian date…</span>
   </div>
 
-  <!-- Main Ayah Section -->
   <div class="main">
     <h1>Live by Quran</h1>
     <div class="tagline">Learn. Reflect. Transform.</div>
@@ -264,7 +264,6 @@
     <a id="continue" class="continue" href="#" target="_blank">Continue Reading →</a>
   </div>
 
-  <!-- Page Buttons -->
   <div class="buttons">
     <button onclick="location.href='books.html'">Explore Books</button>
     <button onclick="location.href='lectures.html'">Listen to Lectures</button>
@@ -272,19 +271,18 @@
     <button onclick="location.href='qa.html'">Q&A</button>
   </div>
 
-  <!-- Subscribe Bar -->
   <div class="subscribe-bar">
     <input type="email" id="email-input" placeholder="Email address">
     <button id="subscribe-btn">Subscribe</button>
   </div>
 
-  <!-- Ayah Navigation Arrows -->
+  <!-- ‹ › Ayah Nav -->
   <div class="ayah-nav">
     <button id="prev-ayah" title="Previous Ayah">‹</button>
     <button id="next-ayah" title="Next Ayah">›</button>
   </div>
 
-  <!-- Day/Night Switch -->
+  <!-- Day/Night -->
   <div class="container">
     <label class="switch">
       <input type="checkbox" id="toggleSwitch">
@@ -303,94 +301,86 @@
   </div>
   <div class="toggle-label">Day / Night</div>
 
-  <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
   <script>
     let ayahList = [], history = [], idx = -1;
 
     // Day/Night auto + manual
     const toggle = document.getElementById('toggleSwitch');
-    function applyTheme(auto = true) {
-      if (auto) {
-        const h = new Date().getHours();
-        document.body.classList.toggle('night', h < 6 || h >= 18);
+    function applyTheme(auto=true){
+      if(auto){
+        const h=new Date().getHours();
+        document.body.classList.toggle('night', h<6 || h>=18);
         toggle.checked = document.body.classList.contains('night');
       }
     }
-    applyTheme();
-    setInterval(() => applyTheme(), 60000);
+    applyTheme(); setInterval(() => applyTheme(), 60000);
     toggle.addEventListener('change', () => {
       document.body.classList.toggle('night', toggle.checked);
     });
 
-    // Show Dates
-    function showDates() {
-      const now = new Date();
+    // Dates
+    function showDates(){
+      const n=new Date();
       document.querySelector('.greg').textContent =
-        new Intl.DateTimeFormat('en-US', {
-          weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
-        }).format(now);
+        new Intl.DateTimeFormat('en-US',{
+          weekday:'long', day:'numeric', month:'long', year:'numeric'
+        }).format(n);
       document.querySelector('.isl').textContent =
-        new Intl.DateTimeFormat('en-GB-u-ca-islamic', {
-          day: 'numeric', month: 'long', year: 'numeric'
-        }).format(now);
+        new Intl.DateTimeFormat('en-GB-u-ca-islamic',{
+          day:'numeric', month:'long', year:'numeric'
+        }).format(n);
     }
-    showDates();
-    setInterval(showDates, 3600000);
+    showDates(); setInterval(showDates, 3600000);
 
     // Render Ayah
-    function renderAyah(v) {
+    function renderAyah(v){
       document.getElementById('ayah').innerHTML =
         `<strong>${v.surah} — Verse ${v.verse}</strong>
          <div class="arabic">${v.arabic}</div>
          <div>${v.translation}</div>`;
-      // requires CSV column "surahNumber"
-      const sn = v.surahNumber || (v.surah.match(/\d+/) || [])[0] || '';
-      const cont = document.getElementById('continue');
-      if (sn) {
-        cont.style.display = 'inline-block';
-        cont.setAttribute('href', `https://quran.com/${sn}/${v.verse}`);
+      // requires your CSV to have a "surahNumber" column
+      const sn = v.surahNumber || (v.surah.match(/\d+/)||[])[0] || '';
+      if(sn) {
+        document.getElementById('continue')
+                .setAttribute('href', `https://quran.com/${sn}/${v.verse}`);
+        document.getElementById('continue').style.display = 'inline-block';
       } else {
-        cont.style.display = 'none';
+        document.getElementById('continue').style.display = 'none';
       }
     }
 
     // Load CSV
-    Papa.parse('ayahs.csv', {
-      download: true, header: true, skipEmptyLines: true,
-      complete(r) {
-        ayahList = r.data.filter(a => a.surah && a.verse && a.translation);
-        const today = new Date();
-        const start = new Date(today.getFullYear(), 0, 0);
-        idx = Math.floor((today - start) / 86400000) % ayahList.length;
-        history = [idx];
+    Papa.parse('ayahs.csv',{download:true,header:true,skipEmptyLines:true,
+      complete(r){
+        ayahList = r.data.filter(a=>a.surah && a.verse && a.translation);
+        const t=new Date(), s=new Date(t.getFullYear(),0,0);
+        idx = Math.floor((t-s)/86400000) % ayahList.length;
+        history=[idx];
         renderAyah(ayahList[idx]);
       }
     });
 
-    // Ayah Prev/Next
-    document.getElementById('next-ayah').onclick = () => {
-      idx = Math.floor(Math.random() * ayahList.length);
+    // Prev / Next
+    document.getElementById('next-ayah').onclick = ()=>{
+      idx = Math.floor(Math.random()*ayahList.length);
       history.push(idx);
       renderAyah(ayahList[idx]);
     };
-    document.getElementById('prev-ayah').onclick = () => {
-      if (history.length > 1) {
+    document.getElementById('prev-ayah').onclick = ()=>{
+      if(history.length>1){
         history.pop();
-        idx = history[history.length - 1];
+        idx = history[history.length-1];
         renderAyah(ayahList[idx]);
       }
     };
 
-    // Subscribe button stub
-    document.getElementById('subscribe-btn').onclick = () => {
+    // Subscribe stub
+    document.getElementById('subscribe-btn').onclick = ()=>{
       const email = document.getElementById('email-input').value.trim();
       const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!re.test(email)) {
-        alert('Enter a valid email address.');
-        return;
-      }
-      alert(`Thanks for subscribing, ${email}!`);
+      if(!re.test(email)){ alert('Enter valid email'); return; }
+      alert(`Thank you for subscribing, ${email}!`);
       document.getElementById('email-input').value = '';
     };
   </script>
