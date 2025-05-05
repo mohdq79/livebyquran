@@ -1,147 +1,129 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>Live by Quran – Reader</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New&family=Playfair+Display&family=Calibri&display=swap" rel="stylesheet">
+  <meta charset="utf-8">
+  <title>Live by Quran — Reader</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <!-- Web fonts for English, Arabic & Urdu -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?
+      family=Playfair+Display:wght@700&
+      family=Scheherazade+New&
+      family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
+
   <style>
-    /* —— Reset —— */
+    /* reset */
     * { margin:0; padding:0; box-sizing:border-box }
-    html, body { height:100%; overflow-x:hidden }
+    body, html { height:100%; overflow-x:hidden; font-family:sans-serif; }
 
-    /* —— Parallax sections —— */
-    section.parallax {
-      position: relative;
-      width:100%;
-      height:100vh;
-      background-size: cover;
-      background-position: center;
-      background-attachment: fixed;
-    }
-    /* semi-transparent overlay so white text shows up */
-    section.parallax::before {
-      content:""; position:absolute;
-      inset:0;
-      background:rgba(0,0,0,0.4);
-    }
-
-    /* —— Text container —— */
-    .text {
-      position:absolute;
-      top:50%; left:50%;
-      transform:translate(-50%,-50%);
-      max-width:800px;
-      padding:2rem;
-      color:#fff;
-      font-family:Calibri, sans-serif;
-      line-height:1.6;
-      text-shadow:1px 1px 4px rgba(0,0,0,0.7);
-    }
-    .text h1 {
-      font-family:'Playfair Display',serif;
-      font-size:2.5rem; margin-bottom:1rem;
-    }
-    .text p {
-      margin-bottom:1rem;
-    }
-    .text .arabic {
-      font-family:'Scheherazade New',serif;
-      font-size:1.8rem;
-      margin-bottom:1rem;
-      text-align:right;
-      direction:rtl;
-    }
-
-    /* —— Back button —— */
+    /* fixed header */
     header {
-      position:fixed; top:0; left:0; width:100%;
-      padding:10px 20px; z-index:10;
-      display:flex; align-items:center;
+      position:fixed; top:0; left:0; right:0;
+      height:60px; background:rgba(255,255,255,0.85);
+      display:flex; align-items:center; padding:0 20px;
+      z-index:100;
+      font-family:'Playfair Display',serif;
+      box-shadow:0 2px 6px rgba(0,0,0,0.1);
+    }
+    header a { text-decoration:none; color:#333; margin-right:1em; }
+    header a.back { font-size:0.9rem; }
+    header .title { flex:1; text-align:center; font-size:1.1rem; }
+
+    /* parallax sections */
+    section.parallax {
+      position:relative;
+      width:100vw; min-height:100vh;
+      background-position:center;
+      background-size:cover;
+      background-attachment:fixed;
+      display:flex; align-items:center; justify-content:center;
+    }
+
+    /* overlay behind text */
+    .overlay {
       background:rgba(0,0,0,0.5);
+      padding:2rem;
+      border-radius:8px;
+      max-width:700px;
+      color:#fff;
+      line-height:1.6;
     }
-    header a {
-      color:#fff; font-size:1rem;
-      text-decoration:none; margin-right:1rem;
+    /* Arabic styling inside overlay */
+    .overlay .arabic {
+      font-family:'Scheherazade New',serif;
+      font-size:1.6rem;
+      direction:rtl;
+      margin-top:0.5rem;
     }
+    /* Urdu styling inside overlay */
+    .overlay .urdu {
+      font-family:'Noto Nastaliq Urdu',serif;
+      font-size:1.6rem;
+      direction:rtl;
+      margin-top:0.5rem;
+    }
+
+    /* scrollable container */
+    #reader { margin-top:60px; }
+
   </style>
 </head>
 <body>
 
   <header>
-    <a href="books.html">← Back to Books</a>
-    <span id="book-title" style="color:#fff; font-weight:bold;"></span>
+    <a href="books.html" class="back">← Back to Books</a>
+    <div class="title" id="book-title">Loading…</div>
   </header>
 
-  <div id="container"><!-- JS will inject sections here --></div>
+  <div id="reader"></div>
 
   <script>
-    // 1) read slug from query
-    const params = new URLSearchParams(location.search)
-    const slug = params.get('slug') || ''
-
-    // 2) map each slug to its chapter images
-     const chapters = {
-    'fa-inni-qarib-urdu': [
-      'chapter-1.jpg',
-      'chapter-2.jpg',
-      'chapter-3.jpg'
-    ],
-    'fa-inni-qarib-eng': [
-      'chapter-1.jpg',
-      'chapter-2.jpg',
-      'chapter-3.jpg'
-    ],
-    'parables-urdu': [
-      'chapter-1.jpg',
-      'chapter-2.jpg',
-      'chapter-3.jpg'
-    ]
-  }
-
-    // 3) load preface.txt + render first section
-    async function loadPreface() {
-      const txt = await fetch(`assets/books/${slug}/preface.txt`).then(r=>r.text())
-      renderSection({
-        bg:`assets/books/${slug}/cover.png`,
-        html:`<div class="text"><h1>${txt.split('\n')[0]}</h1>
-               ${txt.split('\n').slice(1).map(p=>`<p>${p}</p>`).join('')}
-             </div>`
-      })
-      document.getElementById('book-title').textContent = slug.replace(/-/g,' ')
+    // helper to fetch text
+    async function fetchText(url){
+      const r = await fetch(url);
+      if(!r.ok) throw new Error(url+' failed');
+      return r.text();
     }
 
-    // 4) render a parallax section
-    function renderSection({bg, html}) {
-      const sec = document.createElement('section')
-      sec.className = 'parallax'
-      sec.style.backgroundImage = `url('${bg}')`
-      sec.innerHTML = html
-      document.getElementById('container').appendChild(sec)
-    }
+    (async()=>{
+      // determine slug
+      const params = new URLSearchParams(location.search);
+      const slug   = params.get('file')?.split('/').slice(-2, -1)[0];
+      if(!slug) return alert('No slug in URL');
+      document.getElementById('book-title').textContent = slug.replace(/-/g,' ');
 
-    // 5) after preface, render each chapter image
-    async function loadChapters() {
-      const imgs = chapters[slug]||[]
-      for (let img of imgs) {
-        renderSection({
-          bg:`assets/books/${slug}/chapters/${img}`,
-          html:`<div class="text">
-                  <!-- you could also overlay a caption here -->
-                </div>`
-        })
-      }
-    }
+      // 1) fetch preface
+      const prefaceTxt = await fetchText(`assets/books/${slug}/preface.txt`);
 
-    // kick it off
-    loadPreface()
-      .then(loadChapters)
-      .catch(e=>{
-        document.body.innerHTML = `<p style="color:red; padding:2rem;">
-          Error loading book data. Make sure <code>assets/books/${slug}/</code> exists.
-        </p>`
-        console.error(e)
-      })
+      // 2) gather chapter image list: bg.jpg + chapter-*.jpg
+      //    adjust to match exactly your files
+      const chapters = ['bg.jpg', 'chapter-1.jpg', 'chapter-2.jpg', 'chapter-3.jpg'];
+
+      // 3) build DOM
+      const reader = document.getElementById('reader');
+      chapters.forEach((img, idx) => {
+        const sec = document.createElement('section');
+        sec.className = 'parallax';
+        sec.style.backgroundImage = `url("assets/books/${slug}/chapters/${img}")`;
+
+        // only first section gets the text overlay
+        if(idx === 0){
+          const ov = document.createElement('div');
+          ov.className = 'overlay';
+          ov.innerHTML = prefaceTxt
+            .replace(/\n{2,}/g,'</p><p>')   // paragraph break
+            .replace(/\n/g,'<br>');         // line break
+          sec.appendChild(ov);
+        }
+
+        reader.appendChild(sec);
+      });
+    })()
+    .catch(e=>{
+      console.error(e);
+      alert('Error loading reader: '+ e.message);
+    });
   </script>
 </body>
 </html>
