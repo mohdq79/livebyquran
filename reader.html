@@ -2,140 +2,146 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Live by Quran – Preview</title>
+  <title>Live by Quran – Reader</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New&family=Playfair+Display&family=Calibri&display=swap" rel="stylesheet">
   <style>
-    * { margin:0; padding:0; box-sizing:border-box; }
-    html,body { height:100%; overflow-x:hidden; }
-    body {
-      font-family:Arial,sans-serif;
-      color:#fff;
-      background:#000;
+    /* —— Reset —— */
+    * { margin:0; padding:0; box-sizing:border-box }
+    html, body { height:100%; overflow-x:hidden }
+
+    /* —— Parallax sections —— */
+    section.parallax {
+      position: relative;
+      width:100%;
+      height:100vh;
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
     }
-    header {
-      position:fixed; top:0; left:0; right:0;
-      background:rgba(0,0,0,0.6);
-      display:flex; align-items:center; gap:10px;
-      padding:10px 20px; z-index:10;
+    /* semi-transparent overlay so white text shows up */
+    section.parallax::before {
+      content:""; position:absolute;
+      inset:0;
+      background:rgba(0,0,0,0.4);
     }
-    header img { height:36px; }
-    header h1 {
-      font-size:1.2rem; font-weight:400;
-    }
-    .parallax {
-      position:relative; height:80vh;
-      background-attachment:fixed;
-      background-position:center;
-      background-size:cover;
-    }
-    .overlay {
-      position:absolute; inset:0;
-      background:rgba(0,0,0,0.3);
-    }
-    .text-block {
-      position:absolute; top:50%; left:50%;
+
+    /* —— Text container —— */
+    .text {
+      position:absolute;
+      top:50%; left:50%;
       transform:translate(-50%,-50%);
-      max-width:600px; padding:20px;
+      max-width:800px;
+      padding:2rem;
+      color:#fff;
+      font-family:Calibri, sans-serif;
+      line-height:1.6;
+      text-shadow:1px 1px 4px rgba(0,0,0,0.7);
+    }
+    .text h1 {
+      font-family:'Playfair Display',serif;
+      font-size:2.5rem; margin-bottom:1rem;
+    }
+    .text p {
+      margin-bottom:1rem;
+    }
+    .text .arabic {
+      font-family:'Scheherazade New',serif;
+      font-size:1.8rem;
+      margin-bottom:1rem;
+      text-align:right;
+      direction:rtl;
+    }
+
+    /* —— Back button —— */
+    header {
+      position:fixed; top:0; left:0; width:100%;
+      padding:10px 20px; z-index:10;
+      display:flex; align-items:center;
       background:rgba(0,0,0,0.5);
-      border-radius:6px;
-      line-height:1.5;
     }
-    .text-block h2 {
-      font-size:1.6rem; margin-bottom:.5em;
-      border-bottom:1px solid #fff; padding-bottom:.3em;
+    header a {
+      color:#fff; font-size:1rem;
+      text-decoration:none; margin-right:1rem;
     }
-    main { margin-top:56px; } /* header height */
   </style>
 </head>
 <body>
 
-  <header id="book-header">
-    <img id="book-cover" src="" alt="cover" />
-    <h1 id="book-title">Loading…</h1>
+  <header>
+    <a href="books.html">← Back to Books</a>
+    <span id="book-title" style="color:#fff; font-weight:bold;"></span>
   </header>
 
-  <main id="reader">
-    <!-- JS will inject: 
-         1) Preface section 
-         2) One .parallax per chapter image -->
-  </main>
+  <div id="container"><!-- JS will inject sections here --></div>
 
   <script>
-    // parse query string ?slug=...
-    const params = new URLSearchParams(location.search);
-    const slug = params.get('slug');
-    if(!slug){
-      document.body.innerHTML = '<p style="padding:20px;color:red;">No book specified.</p>';
-      throw '';
+    // 1) read slug from query
+    const params = new URLSearchParams(location.search)
+    const slug = params.get('slug') || ''
+
+    // 2) map each slug to its chapter images
+    const chapters = {
+      'fa-inni-qarib-urdu': [
+        'chap1.jpg',
+        'chap2.jpg',
+        'chap3.jpg'
+      ],
+      'fa-inni-qarib-eng': [
+        'eng1.jpg',
+        'eng2.jpg',
+        'eng3.jpg'
+      ],
+      'parables-urdu': [
+        'p1.jpg',
+        'p2.jpg',
+        'p3.jpg'
+      ]
     }
 
-    // helper: load text from file
-    async function loadText(path){
-      const r = await fetch(path);
-      if(!r.ok) throw new Error('not found');
-      return r.text();
+    // 3) load preface.txt + render first section
+    async function loadPreface() {
+      const txt = await fetch(`assets/books/${slug}/preface.txt`).then(r=>r.text())
+      renderSection({
+        bg:`assets/books/${slug}/cover.png`,
+        html:`<div class="text"><h1>${txt.split('\n')[0]}</h1>
+               ${txt.split('\n').slice(1).map(p=>`<p>${p}</p>`).join('')}
+             </div>`
+      })
+      document.getElementById('book-title').textContent = slug.replace(/-/g,' ')
     }
 
-    // 1) Load metadata from books.csv
-    async function loadCSV(){
-      const txt = await loadText('assets/books/books.csv');
-      const [head, ...rows] = txt.trim().split('\n');
-      const cols = head.split(',');
-      for(let r of rows){
-        const vals = r.split(',');
-        if(vals[0]===slug){
-          let obj = {};
-          cols.forEach((c,i)=>obj[c]=vals[i]);
-          return obj;
-        }
-      }
-      throw new Error('book not in CSV');
+    // 4) render a parallax section
+    function renderSection({bg, html}) {
+      const sec = document.createElement('section')
+      sec.className = 'parallax'
+      sec.style.backgroundImage = `url('${bg}')`
+      sec.innerHTML = html
+      document.getElementById('container').appendChild(sec)
     }
 
-    // 2) Render header & preface
-    async function init(){
-      try{
-        const book = await loadCSV();
-        document.getElementById('book-title').textContent = book.title;
-        document.getElementById('book-cover').src =
-          `assets/books/${slug}/${book.cover}`;
-
-        // preface.txt 
-        const preface = await loadText(`assets/books/${slug}/preface.txt`);
-        const preSec = document.createElement('section');
-        preSec.className = 'parallax';
-        preSec.style.backgroundImage = `url('assets/books/${slug}/chapters/bg.jpg')`;
-        preSec.innerHTML = `
-          <div class="overlay"></div>
-          <div class="text-block">
-            <h2>Preface</h2>
-            <div>${preface.replace(/\n/g,'<br>')}</div>
-          </div>`;
-        document.getElementById('reader').appendChild(preSec);
-
-        // chapter images list (manually enumerated here)
-        const chapters = [
-          'chapter1.jpg',
-          'chapter2.jpg',
-          'chapter3.jpg',
-          'chapter4.jpg'
-        ];
-        chapters.forEach(fn=>{
-          const sec = document.createElement('section');
-          sec.className = 'parallax';
-          sec.style.backgroundImage =
-            `url('assets/books/${slug}/chapters/${fn}')`;
-          document.getElementById('reader').appendChild(sec);
-        });
-
-      }catch(err){
-        console.error(err);
-        document.getElementById('reader').innerHTML =
-          '<p style="padding:20px;color:red;">Failed to load preview.</p>';
+    // 5) after preface, render each chapter image
+    async function loadChapters() {
+      const imgs = chapters[slug]||[]
+      for (let img of imgs) {
+        renderSection({
+          bg:`assets/books/${slug}/chapters/${img}`,
+          html:`<div class="text">
+                  <!-- you could also overlay a caption here -->
+                </div>`
+        })
       }
     }
-    init();
+
+    // kick it off
+    loadPreface()
+      .then(loadChapters)
+      .catch(e=>{
+        document.body.innerHTML = `<p style="color:red; padding:2rem;">
+          Error loading book data. Make sure <code>assets/books/${slug}/</code> exists.
+        </p>`
+        console.error(e)
+      })
   </script>
-
 </body>
 </html>
