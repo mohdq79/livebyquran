@@ -1,0 +1,11 @@
+{
+  "slug":        "parables-urdu",
+  "title":       "Parables in Quran (Urdu)",
+  "preface":     "preface.txt",
+  "chapters": [
+    { "image": "Picture1.jpg" },
+    { "image": "Picture2.jpg" },
+    { "image": "Picture3.jpg" },
+    { "image": "Picture4.jpg" }  
+]
+}
