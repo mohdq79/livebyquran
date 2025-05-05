@@ -1,203 +1,165 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Books · Live by Quran</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Scheherazade+New&family=Calibri&display=swap"
-    rel="stylesheet"
-  >
+  <meta charset="utf-8" />
+  <title>Live by Quran – Our Books</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Calibri&display=swap" rel="stylesheet">
   <style>
-    /*──────────────── Reset & Root ────────────────*/
-    * { margin:0; padding:0; box-sizing:border-box }
-    html, body { height:100%; font-family:Calibri, sans-serif; }
-    :root {
-      --card-bg: #fafafa;
-      --accent: #222;
-    }
-
-    /*──────────────── Background ────────────────*/
+    /* —— Reset & Vars —— */
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
-      background:
-        url('booksbg.png') center bottom/cover no-repeat;
-      color: var(--accent);
+      font-family:Calibri, sans-serif;
+      background: url('assets/booksbg.png') center top/cover no-repeat;
+      color:#222;
+      min-height:100vh;
     }
+    a { text-decoration:none; color:inherit; }
 
-    /*──────────────── Header ────────────────*/
+    /* —— Header —— */
     header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.75rem 2rem;
-      background: rgba(255,255,255,0.9);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      position: sticky; top: 0; z-index: 10;
+      position:sticky; top:0;
+      background:rgba(255,255,255,0.95);
+      display:flex; align-items:center; justify-content:space-between;
+      padding:10px 20px; box-shadow:0 2px 4px rgba(0,0,0,0.1);
+      z-index:10;
     }
-    header .logo img { height: 40px; }
-    header .title {
-      font-family:'Playfair Display', serif;
-      font-size:1.5rem;
-      color: var(--accent);
-    }
+    .logo img { height:40px; }
     nav a {
-      margin-left: 1.5rem;
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 600;
-      transition: color .2s;
+      margin-left:20px; font-weight:500; color:#222;
+      transition:color .2s;
     }
-    nav a:hover { color: #000; }
+    nav a:hover { color:#000; }
 
-    /*──────────────── Main ────────────────*/
-    main {
-      max-width: 1200px;
-      margin: 2rem auto;
-      padding: 0 1rem;
+    /* —— Page Title —— */
+    .page-title {
+      text-align:center;
+      font-family:'Playfair Display',serif;
+      font-size:2rem;
+      margin:30px 0 10px;
+      color:#222;
     }
 
-    /*──────────────── Cards Grid ────────────────*/
+    /* —— Book Grid —— */
     .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px,1fr));
-      gap: 1.5rem;
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
+      gap:1.5rem;
+      max-width:1200px; margin:0 auto;
+      padding:20px;
     }
     .card {
-      position: relative;
-      background: var(--card-bg);
-      border-radius: 8px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: transform .2s;
+      background:rgba(255,255,255,0.95);
+      border-radius:8px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.1);
+      overflow:hidden;
+      display:flex; flex-direction:column;
+      transition:transform .2s, box-shadow .2s;
     }
-    .card:hover { transform: translateY(-4px); }
-
-    /* Featured badge */
-    .card.featured::before {
-      content: 'Featured';
-      position: absolute;
-      top: 8px; left: 8px;
-      background: #d4af37;
-      color: #fff;
-      padding: 0.25rem 0.5rem;
-      font-size: 0.75rem;
-      border-radius: 4px;
-      z-index: 2;
+    .card:hover {
+      transform:translateY(-5px);
+      box-shadow:0 12px 24px rgba(0,0,0,0.15);
     }
-
     .card img {
-      width: 100%;
-      height: 320px;
-      object-fit: contain;
-      background: #fff;
+      width:100%; height:auto;
+      object-fit:cover;
+      background:#f5f5f5;
     }
     .card-content {
-      padding: 1rem;
-      flex: 1;
+      padding:15px;
+      flex:1;
+      display:flex; flex-direction:column;
     }
-    .card-content h3 {
+    .card-content h2 {
       font-family:'Playfair Display',serif;
-      font-size: 1.25rem;
-      margin-bottom: 0.5rem;
-      color: var(--accent);
+      font-size:1.2rem; margin-bottom:.5em;
+      color:#222;
     }
     .card-content p {
-      font-size: 0.9rem;
-      color: #555;
-      margin-bottom: 1rem;
-      line-height: 1.4;
+      flex:1; font-size:.9rem;
+      line-height:1.4; color:#555;
     }
-
-    /* Actions */
     .actions {
-      display: flex;
-      gap: 0.5rem;
-      padding: 0 1rem 1rem;
+      margin-top:1em;
+      display:flex; gap:.5em; justify-content:flex-end;
     }
     .actions a {
-      flex: 1;
-      text-align: center;
-      padding: 0.5rem 0;
-      border: 2px solid var(--accent);
-      border-radius: 4px;
-      color: var(--accent);
-      font-size: 0.9rem;
-      text-decoration: none;
-      transition: background .2s, color .2s;
+      padding:.5em 1em;
+      font-size:.85rem;
+      border:1px solid #bfa76d;
+      border-radius:4px;
+      color:#222;
+      transition:background .2s,color .2s;
     }
     .actions a:hover {
-      background: var(--accent);
-      color: #fff;
+      background:#bfa76d; color:#fff;
     }
   </style>
 </head>
 <body>
 
-  <!-- Header / Nav -->
+  <!-- Header -->
   <header>
     <div class="logo">
-      <a href="index.html">
-        <img src="Livebyquran Logo.PNG" alt="Live by Quran">
-      </a>
+      <img src="assets/Livebyquran Logo.PNG" alt="Live by Quran">
     </div>
-    <div class="title">Our Books</div>
     <nav>
       <a href="index.html">Home</a>
       <a href="books.html">Books</a>
       <a href="lectures.html">Lectures</a>
       <a href="articles.html">Articles</a>
-      <a href="qa.html">Q&amp;A</a>
+      <a href="qa.html">Q&A</a>
     </nav>
   </header>
 
-  <!-- Book Cards -->
-  <main>
-    <div class="grid" id="books-grid"></div>
-  </main>
+  <!-- Page Title -->
+  <h1 class="page-title">Our Books</h1>
 
-  <!-- CSV + Card Builder -->
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
-  <script>
-    Papa.parse('assets/books/books.csv', {
-      download: true,
-      header: true,
-      skipEmptyLines: true,
-      complete: ({ data }) => {
-        const books = data.filter(b => b.cover && b.title);
-        if (!books.length) return;
+  <!-- Static Book Grid -->
+  <section class="grid">
 
-        const featuredIndex = books.length - 1;
-        const grid = document.getElementById('books-grid');
+    <!-- BOOK 1 -->
+    <div class="card">
+      <img src="assets/books/fa-inni-qarib-urdu/inni-qarib-urdu.png" alt="Fa Inni Qarib (Urdu) cover">
+      <div class="card-content">
+        <h2>Fa Inni Qarib (Urdu)</h2>
+        <p>Quranic Duas and Adhkars in the light of hadeeth and stories of the prophets in Urdu language.</p>
+        <div class="actions">
+          <a href="reader.html?slug=fa-inni-qarib-urdu" target="_blank">Read</a>
+          <a href="assets/books/fa-inni-qarib-urdu/pdfs/inni-qarib-urdu.pdf" download>Download</a>
+          <a href="https://print-order.example.com/inni-qarib-urdu" target="_blank">Order Print</a>
+        </div>
+      </div>
+    </div>
 
-        books.forEach((book, idx) => {
-          // Strip any path, keep only the filename:
-          const raw = book.pdf || '';
-          const filename = raw.replace(/^.*[\\/]/, '').trim();
+    <!-- BOOK 2 -->
+    <div class="card">
+      <img src="assets/books/fa-inni-qarib-eng/inni-qarib-eng.png" alt="Fa Inni Qarib (English) cover">
+      <div class="card-content">
+        <h2>Fa Inni Qarib (English)</h2>
+        <p>Quranic Duas and Adhkars in the light of hadeeth and stories of the prophets in English language.</p>
+        <div class="actions">
+          <a href="reader.html?slug=fa-inni-qarib-eng" target="_blank">Read</a>
+          <a href="assets/books/fa-inni-qarib-eng/pdfs/inni-qarib-eng.pdf" download>Download</a>
+          <a href="https://print-order.example.com/inni-qarib-eng" target="_blank">Order Print</a>
+        </div>
+      </div>
+    </div>
 
-          // Build a single assets/books/pdfs/ path
-          const pdfPath  = `assets/books/pdfs/${filename}`;
-          const readerUrl = `reader.html?file=${encodeURIComponent(pdfPath)}`;
+    <!-- BOOK 3 -->
+    <div class="card">
+      <img src="assets/books/parables-urdu/parables-urdu.png" alt="Parables in Quran (Urdu) cover">
+      <div class="card-content">
+        <h2>Parables in Quran (Urdu)</h2>
+        <p>Beautiful parables from the Qur’an presented in Urdu.</p>
+        <div class="actions">
+          <a href="reader.html?slug=parables-urdu" target="_blank">Read</a>
+          <a href="assets/books/parables-urdu/pdfs/parables-urdu.pdf" download>Download</a>
+          <a href="https://print-order.example.com/parables-urdu" target="_blank">Order Print</a>
+        </div>
+      </div>
+    </div>
 
-          const card = document.createElement('div');
-          card.className = 'card' + (idx === featuredIndex ? ' featured' : '');
-          card.innerHTML = `
-            <img src="assets/books/covers/${book.cover}" alt="${book.title}">
-            <div class="card-content">
-              <h3>${book.title}</h3>
-              <p>${book.description || ''}</p>
-            </div>
-            <div class="actions">
-              <a href="${readerUrl}"   target="_blank">Read</a>
-              <a href="${pdfPath}"      download>Download</a>
-              <a href="${book.order || '#'}" target="_blank">Order Print</a>
-            </div>`;
-          
-          grid.appendChild(card);
-        });
-      }
-    });
-  </script>
+  </section>
 </body>
 </html>
