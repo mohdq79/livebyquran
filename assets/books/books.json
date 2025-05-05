@@ -1,0 +1,24 @@
+[
+  {
+    "slug":       "parables-urdu",
+    "title":      "Parables in Quran (Urdu)",
+    "description":"Beautiful parables from the Qur’an presented in Urdu.",
+    "cover":      "assets/books/parables-urdu/images/cover.jpg",
+    "pdf":        "assets/books/parables-urdu/parables-urdu.pdf"
+  },
+  {
+    "slug":       "fa-inni-qarib-urdu",
+    "title":      "Fa Inni Qarib (Urdu)",
+    "description":"Quranic Duas and Adhkar in the light of Hadith and Prophetic stories.",
+    "cover":      "assets/books/fa-inni-qarib-urdu/images/cover.jpg",
+    "pdf":        "assets/books/fa-inni-qarib-urdu/fa-inni-qarib-urdu.pdf"
+  },
+  {
+    "slug":       "fa-inni-qarib-english",
+    "title":      "Fa Inni Qarib (English)",
+    "description":"Quranic Duas and Adhkar in the light of Hadith and Prophetic stories.",
+    "cover":      "assets/books/fa-inni-qarib-english/images/cover.jpg",
+    "pdf":        "assets/books/fa-inni-qarib-english/fa-inni-qarib-english.pdf"
+  }
+  /* …and so on for each book… */
+]

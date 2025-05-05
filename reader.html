@@ -2,76 +2,128 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Quran Reader · Live by Quran</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Book Reader</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New&family=Playfair+Display&display=swap" rel="stylesheet">
   <style>
-    /* basic reset */
-    * { margin:0; padding:0; box-sizing:border-box; }
-    html, body { height:100%; width:100%; overflow:hidden; font-family:Calibri, sans-serif; }
-    /* header/nav */
-    header {
-      height:60px; background:#fff; box-shadow:0 2px 4px rgba(0,0,0,0.1);
-      display:flex; align-items:center; padding:0 1rem; position:fixed; top:0; left:0; right:0; z-index:10;
+    * { margin:0; padding:0; box-sizing:border-box }
+    body, html { height:100%; overflow-y:auto; font-family:Calibri,sans-serif; }
+    header { padding:1rem; background:#fff; box-shadow:0 2px 4px rgba(0,0,0,0.1); }
+    header a { margin-right:1rem; color:#333; text-decoration:none; font-weight:bold; }
+
+    main {
+      display: flex; height: calc(100% - 64px);
     }
-    header img { height:40px; }
-    header nav { margin-left:auto; }
-    header nav a {
-      color:#333; text-decoration:none; margin-left:1.5rem; font-weight:600;
+    .panels {
+      position: sticky; top:1rem;
+      width:40%; height: calc(100vh - 2rem);
+      overflow-y: auto; padding:1rem;
     }
-    /* viewer container */
-    #viewer {
-      position:fixed; top:60px; bottom:0; left:0; right:0;
-      background:#eee;
+    .panels .segment {
+      margin-bottom:2rem;
+      line-height:1.6;
     }
-    /* embed fallback message */
-    #error {
-      display:flex; align-items:center; justify-content:center;
-      height:100%; color:#666; font-size:1.2rem;
+    .panels .segment h2 {
+      font-family:'Playfair Display', serif;
+      margin-bottom:.5rem;
+      font-size:1.4rem;
+      border-bottom:1px solid #ddd;
+      padding-bottom:.3rem;
+    }
+
+    .bg-container {
+      position: fixed; top:64px; right:0;
+      width:60%; height: calc(100vh - 64px);
+      background-size: cover;
+      background-position: center;
+      transition: background-image .5s ease-in-out;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* small parallax tilt when scrolling */
+    .bg-container.parallax {
+      background-attachment: fixed;
     }
   </style>
 </head>
 <body>
+
   <header>
-    <a href="index.html"><img src="Livebyquran Logo.PNG" alt="Live by Quran"></a>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="books.html">Books</a>
-      <a href="lectures.html">Lectures</a>
-      <a href="articles.html">Articles</a>
-      <a href="qa.html">Q&A</a>
-    </nav>
+    <a href="index.html">← Home</a>
+    <a href="books.html">Books</a>
   </header>
 
-  <div id="viewer">
-    <!-- PDF object will be injected here -->
-  </div>
+  <main>
+    <div class="panels" id="panels">
+      <!-- segments will go here -->
+    </div>
+    <div class="bg-container parallax" id="bg"></div>
+  </main>
 
   <script>
-    // Parse ?file=... from URL
-    const params = new URLSearchParams(location.search);
-    const file = params.get('file');
-    const viewer = document.getElementById('viewer');
+    (async function(){
+      // 1) get the book slug from ?book=…
+      const params = new URLSearchParams(location.search);
+      const slug   = params.get('book');
+      if(!slug) {
+        document.getElementById('panels').innerHTML = '<p style="color:red;">No book specified.</p>';
+        return;
+      }
 
-    if (!file) {
-      // no file param: show error
-      viewer.innerHTML = '<div id="error">No PDF specified. Please go back and select a book.</div>';
-    } else {
-      // insert the PDF object/embed
-      // we URL-encode the file path to be safe
-      const src = decodeURIComponent(file);
-      viewer.innerHTML = `
-        <object 
-          data="${src}" 
-          type="application/pdf" 
-          width="100%" 
-          height="100%">
-          <div id="error">
-            Unable to display PDF.<br>
-            <a href="${src}" target="_blank">Download it instead.</a>
-          </div>
-        </object>
-      `;
-    }
+      // 2) fetch manifest
+      const manifest = await fetch(`assets/books/${slug}/manifest.json`)
+                             .then(r=>r.json());
+
+      // 3) fetch & split preface
+      const prefaceText = await fetch(`assets/books/${slug}/${manifest.preface}`)
+                              .then(r=>r.text());
+      const segments = prefaceText.trim()
+                                  .split(/\n\s*\n/)
+                                  .map((p,i)=> ({ title: i===0 ? 'Preface' : `Section ${i+1}`, text:p }) );
+
+      // 4) build left panels
+      const panels = document.getElementById('panels');
+      segments.forEach((seg,i)=>{
+        const sec = document.createElement('section');
+        sec.className = 'segment';
+        sec.id = `seg-${i}`;
+        sec.innerHTML = `<h2>${seg.title}</h2><p>${seg.text.replace(/\n/g,'<br>')}</p>`;
+        panels.appendChild(sec);
+      });
+
+      // 5) prepare backgrounds array
+      const chapters = manifest.chapters || [];
+      const bgEl     = document.getElementById('bg');
+      let currentIdx = -1;
+      function showBg(idx){
+        if(idx<0||idx>=chapters.length) return;
+        if(idx===currentIdx) return;
+        currentIdx = idx;
+        bgEl.style.backgroundImage = `url("assets/books/${slug}/${chapters[idx].image}")`;
+      }
+
+      // 6) on scroll → detect which segment is at top of panels
+      panels.addEventListener('scroll',()=>{
+        const segs = panels.querySelectorAll('.segment');
+        const scrollTop = panels.scrollTop;
+        let chosen = 0;
+        segs.forEach((s,i)=>{
+          if(s.offsetTop <= scrollTop + 20) chosen = i;
+        });
+        showBg(chosen);
+      });
+
+      // 7) initialize with first bg
+      showBg(0);
+
+      // optionally: scroll-to-chapter via hash
+      if(location.hash.startsWith('#seg-')) {
+        const target = document.querySelector(location.hash);
+        if(target) panels.scrollTop = target.offsetTop;
+      }
+    })();
   </script>
+
 </body>
 </html>

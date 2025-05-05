@@ -1,0 +1,10 @@
+{
+  "slug":    "fa-inni-qarib-urdu",
+  "title":   "Fa Inni Qarib (Urdu)",
+  "preface": "preface.txt",
+  "chapters": [
+    { "image": "images/chapter-1.jpg" },
+    { "image": "images/chapter-2.jpg" },
+    { "image": "images/chapter-3.jpg" }
+  ]
+}
