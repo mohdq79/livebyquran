@@ -1,128 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Book Reader</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <link href="https://fonts.googleapis.com/css2?family=Scheherazade+New&family=Playfair+Display&display=swap" rel="stylesheet">
+  <meta charset="utf-8" />
+  <title>Live by Quran – Preview</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <style>
-    * { margin:0; padding:0; box-sizing:border-box }
-    body, html { height:100%; overflow-y:auto; font-family:Calibri,sans-serif; }
-    header { padding:1rem; background:#fff; box-shadow:0 2px 4px rgba(0,0,0,0.1); }
-    header a { margin-right:1rem; color:#333; text-decoration:none; font-weight:bold; }
-
-    main {
-      display: flex; height: calc(100% - 64px);
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html,body { height:100%; overflow-x:hidden; }
+    body {
+      font-family:Arial,sans-serif;
+      color:#fff;
+      background:#000;
     }
-    .panels {
-      position: sticky; top:1rem;
-      width:40%; height: calc(100vh - 2rem);
-      overflow-y: auto; padding:1rem;
+    header {
+      position:fixed; top:0; left:0; right:0;
+      background:rgba(0,0,0,0.6);
+      display:flex; align-items:center; gap:10px;
+      padding:10px 20px; z-index:10;
     }
-    .panels .segment {
-      margin-bottom:2rem;
-      line-height:1.6;
+    header img { height:36px; }
+    header h1 {
+      font-size:1.2rem; font-weight:400;
     }
-    .panels .segment h2 {
-      font-family:'Playfair Display', serif;
-      margin-bottom:.5rem;
-      font-size:1.4rem;
-      border-bottom:1px solid #ddd;
-      padding-bottom:.3rem;
+    .parallax {
+      position:relative; height:80vh;
+      background-attachment:fixed;
+      background-position:center;
+      background-size:cover;
     }
-
-    .bg-container {
-      position: fixed; top:64px; right:0;
-      width:60%; height: calc(100vh - 64px);
-      background-size: cover;
-      background-position: center;
-      transition: background-image .5s ease-in-out;
-      pointer-events: none;
-      z-index: -1;
+    .overlay {
+      position:absolute; inset:0;
+      background:rgba(0,0,0,0.3);
     }
-
-    /* small parallax tilt when scrolling */
-    .bg-container.parallax {
-      background-attachment: fixed;
+    .text-block {
+      position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      max-width:600px; padding:20px;
+      background:rgba(0,0,0,0.5);
+      border-radius:6px;
+      line-height:1.5;
     }
+    .text-block h2 {
+      font-size:1.6rem; margin-bottom:.5em;
+      border-bottom:1px solid #fff; padding-bottom:.3em;
+    }
+    main { margin-top:56px; } /* header height */
   </style>
 </head>
 <body>
 
-  <header>
-    <a href="index.html">← Home</a>
-    <a href="books.html">Books</a>
+  <header id="book-header">
+    <img id="book-cover" src="" alt="cover" />
+    <h1 id="book-title">Loading…</h1>
   </header>
 
-  <main>
-    <div class="panels" id="panels">
-      <!-- segments will go here -->
-    </div>
-    <div class="bg-container parallax" id="bg"></div>
+  <main id="reader">
+    <!-- JS will inject: 
+         1) Preface section 
+         2) One .parallax per chapter image -->
   </main>
 
   <script>
-    (async function(){
-      // 1) get the book slug from ?book=…
-      const params = new URLSearchParams(location.search);
-      const slug   = params.get('book');
-      if(!slug) {
-        document.getElementById('panels').innerHTML = '<p style="color:red;">No book specified.</p>';
-        return;
+    // parse query string ?slug=...
+    const params = new URLSearchParams(location.search);
+    const slug = params.get('slug');
+    if(!slug){
+      document.body.innerHTML = '<p style="padding:20px;color:red;">No book specified.</p>';
+      throw '';
+    }
+
+    // helper: load text from file
+    async function loadText(path){
+      const r = await fetch(path);
+      if(!r.ok) throw new Error('not found');
+      return r.text();
+    }
+
+    // 1) Load metadata from books.csv
+    async function loadCSV(){
+      const txt = await loadText('assets/books/books.csv');
+      const [head, ...rows] = txt.trim().split('\n');
+      const cols = head.split(',');
+      for(let r of rows){
+        const vals = r.split(',');
+        if(vals[0]===slug){
+          let obj = {};
+          cols.forEach((c,i)=>obj[c]=vals[i]);
+          return obj;
+        }
       }
+      throw new Error('book not in CSV');
+    }
 
-      // 2) fetch manifest
-      const manifest = await fetch(`assets/books/${slug}/manifest.json`)
-                             .then(r=>r.json());
+    // 2) Render header & preface
+    async function init(){
+      try{
+        const book = await loadCSV();
+        document.getElementById('book-title').textContent = book.title;
+        document.getElementById('book-cover').src =
+          `assets/books/${slug}/${book.cover}`;
 
-      // 3) fetch & split preface
-      const prefaceText = await fetch(`assets/books/${slug}/${manifest.preface}`)
-                              .then(r=>r.text());
-      const segments = prefaceText.trim()
-                                  .split(/\n\s*\n/)
-                                  .map((p,i)=> ({ title: i===0 ? 'Preface' : `Section ${i+1}`, text:p }) );
+        // preface.txt 
+        const preface = await loadText(`assets/books/${slug}/preface.txt`);
+        const preSec = document.createElement('section');
+        preSec.className = 'parallax';
+        preSec.style.backgroundImage = `url('assets/books/${slug}/chapters/bg.jpg')`;
+        preSec.innerHTML = `
+          <div class="overlay"></div>
+          <div class="text-block">
+            <h2>Preface</h2>
+            <div>${preface.replace(/\n/g,'<br>')}</div>
+          </div>`;
+        document.getElementById('reader').appendChild(preSec);
 
-      // 4) build left panels
-      const panels = document.getElementById('panels');
-      segments.forEach((seg,i)=>{
-        const sec = document.createElement('section');
-        sec.className = 'segment';
-        sec.id = `seg-${i}`;
-        sec.innerHTML = `<h2>${seg.title}</h2><p>${seg.text.replace(/\n/g,'<br>')}</p>`;
-        panels.appendChild(sec);
-      });
-
-      // 5) prepare backgrounds array
-      const chapters = manifest.chapters || [];
-      const bgEl     = document.getElementById('bg');
-      let currentIdx = -1;
-      function showBg(idx){
-        if(idx<0||idx>=chapters.length) return;
-        if(idx===currentIdx) return;
-        currentIdx = idx;
-        bgEl.style.backgroundImage = `url("assets/books/${slug}/${chapters[idx].image}")`;
-      }
-
-      // 6) on scroll → detect which segment is at top of panels
-      panels.addEventListener('scroll',()=>{
-        const segs = panels.querySelectorAll('.segment');
-        const scrollTop = panels.scrollTop;
-        let chosen = 0;
-        segs.forEach((s,i)=>{
-          if(s.offsetTop <= scrollTop + 20) chosen = i;
+        // chapter images list (manually enumerated here)
+        const chapters = [
+          'chapter1.jpg',
+          'chapter2.jpg',
+          'chapter3.jpg',
+          'chapter4.jpg'
+        ];
+        chapters.forEach(fn=>{
+          const sec = document.createElement('section');
+          sec.className = 'parallax';
+          sec.style.backgroundImage =
+            `url('assets/books/${slug}/chapters/${fn}')`;
+          document.getElementById('reader').appendChild(sec);
         });
-        showBg(chosen);
-      });
 
-      // 7) initialize with first bg
-      showBg(0);
-
-      // optionally: scroll-to-chapter via hash
-      if(location.hash.startsWith('#seg-')) {
-        const target = document.querySelector(location.hash);
-        if(target) panels.scrollTop = target.offsetTop;
+      }catch(err){
+        console.error(err);
+        document.getElementById('reader').innerHTML =
+          '<p style="padding:20px;color:red;">Failed to load preview.</p>';
       }
-    })();
+    }
+    init();
   </script>
 
 </body>
