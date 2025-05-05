@@ -1,102 +1,100 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>Our Books — Live by Quran</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet" />
   <style>
     body {
-      margin:0;
-      font-family:Calibri, sans-serif;
+      margin: 0;
+      font-family: Calibri, sans-serif;
       background: url('booksbg.png') center/cover no-repeat;
-      color:#222;
+      color: #222;
     }
     header {
-      background:rgba(255,255,255,0.9);
-      padding:1rem 2rem;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      position:sticky;
-      top:0;
-      z-index:10;
-      box-shadow:0 2px 4px rgba(0,0,0,0.1);
+      background: rgba(255,255,255,0.9);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      z-index: 10;
     }
-    header .logo img { height:40px }
+    header .logo img { height: 40px }
     header nav a {
-      margin-left:1.5rem;
-      text-decoration:none;
-      color:#333;
-      font-weight:500;
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
     }
+    nav a[href="books.html"] { font-weight: 700 }
 
     h1.page-title {
-      text-align:center;
-      margin:2rem 0;
-      font-family:'Playfair Display', serif;
-      font-size:2.5rem;
+      text-align: center;
+      margin: 2rem 0;
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
     }
 
     #books-container {
-      display:grid;
-      grid-template-columns:repeat(auto-fill, minmax(240px,1fr));
-      gap:1.5rem;
-      padding:0 2rem 4rem;
-      max-width:1200px;
-      margin:0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px,1fr));
+      gap: 1.5rem;
+      padding: 0 2rem 4rem;
+      max-width: 1200px;
+      margin: 0 auto;
     }
     .book-card {
-      background:rgba(255,255,255,0.95);
-      border-radius:8px;
-      box-shadow:0 4px 12px rgba(0,0,0,0.1);
-      overflow:hidden;
-      display:flex;
-      flex-direction:column;
+      background: rgba(255,255,255,0.95);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
     .book-card img {
-      width:100%;
-      height:auto;
-      object-fit:contain;
-      background:#f8f8f8;
+      width: 100%;
+      object-fit: contain;
+      background: #f8f8f8;
     }
     .book-info {
-      padding:1rem;
-      flex:1;
-      display:flex;
-      flex-direction:column;
+      padding: 1rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
     }
     .book-info h3 {
-      margin:0 0 .5rem;
-      font-size:1.2rem;
-      font-weight:600;
-      color:#111;
+      margin: 0 0 .5rem;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #111;
     }
     .book-info p {
-      flex:1;
-      font-size:.95rem;
-      line-height:1.4;
-      color:#444;
-      margin-bottom:.75rem;
+      flex: 1;
+      font-size: .95rem;
+      line-height: 1.4;
+      color: #444;
+      margin-bottom: .75rem;
     }
     .book-info .actions {
-      display:flex;
-      justify-content:flex-start;
-      gap:.5rem;
+      display: flex;
+      gap: .5rem;
     }
     .book-info .actions a {
-      padding:.5em 1em;
-      font-size:.9rem;
-      text-decoration:none;
-      border:2px solid #bfa76d;
-      border-radius:4px;
-      background:transparent;
-      color:#333;
-      transition:background .2s,color .2s;
+      padding: .5em 1em;
+      font-size: .9rem;
+      text-decoration: none;
+      border: 2px solid #bfa76d;
+      border-radius: 4px;
+      color: #333;
+      transition: background .2s, color .2s;
     }
     .book-info .actions a:hover {
-      background:#bfa76d;
-      color:#fff;
+      background: #bfa76d;
+      color: #fff;
     }
   </style>
 </head>
@@ -110,7 +108,7 @@
     </div>
     <nav>
       <a href="index.html">Home</a>
-      <a href="books.html" style="font-weight:700">Books</a>
+      <a href="books.html">Books</a>
       <a href="lectures.html">Lectures</a>
       <a href="articles.html">Articles</a>
       <a href="qa.html">Q&A</a>
@@ -120,30 +118,44 @@
   <h1 class="page-title">Our Books</h1>
 
   <div id="books-container">
-    <!-- cards will go here -->
+    <!-- JavaScript will inject book cards here -->
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
   <script>
-    Papa.parse('books.csv', {
+    // **1)** Set this to wherever you put your CSV:
+    const CSV_PATH = 'books.csv';
+
+    Papa.parse(CSV_PATH, {
       header: true,
       download: true,
       skipEmptyLines: true,
-      complete: function(results) {
+      complete(results) {
+        // Log any CSV parse errors:
+        if (results.errors.length) {
+          console.error('CSV parsing errors:', results.errors);
+        }
         const books = results.data;
-        const container = document.getElementById('books-container');
+        if (!books.length) {
+          console.warn('No books found in CSV!');
+          return;
+        }
 
+        const container = document.getElementById('books-container');
         books.forEach(book => {
-          // root card element
+          const slug = book.slug;
+          // Build card
           const card = document.createElement('div');
           card.className = 'book-card';
 
-          // cover image
+          // Cover — if your CSV "cover" field is already a full path, it'll use it; else it pads into assets/books/<slug>/
           const img = document.createElement('img');
-          img.src = `assets/books/${book.slug}/${book.cover}`;
+          img.src = book.cover.match(/^(https?:|\/)/)
+            ? book.cover
+            : `assets/books/${slug}/${book.cover}`;
           img.alt = `${book.title} cover`;
 
-          // info wrapper
+          // Info wrapper
           const info = document.createElement('div');
           info.className = 'book-info';
 
@@ -156,18 +168,20 @@
           const actions = document.createElement('div');
           actions.className = 'actions';
 
-          // Read button → reader.html?slug=…
+          // Read → reader.html?slug=…
           const read = document.createElement('a');
-          read.href = `reader.html?slug=${book.slug}`;
+          read.href = `reader.html?slug=${encodeURIComponent(slug)}`;
           read.textContent = 'Read';
 
-          // Download button → direct PDF
+          // Download → either full path in CSV or assets/books/<slug>/<pdf>
           const dl = document.createElement('a');
-          dl.href = `assets/books/${book.slug}/${book.pdf}`;
+          dl.href = book.pdf.match(/^(https?:|\/)/)
+            ? book.pdf
+            : `assets/books/${slug}/${book.pdf}`;
           dl.textContent = 'Download';
           dl.setAttribute('download', '');
 
-          // Order button → external link
+          // Order Print → external link
           const order = document.createElement('a');
           order.href = book.order;
           order.textContent = 'Order Print';
@@ -178,6 +192,9 @@
           card.append(img, info);
           container.append(card);
         });
+      },
+      error(err) {
+        console.error('Failed to load CSV:', err);
       }
     });
   </script>
