@@ -123,39 +123,37 @@
 
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.3.2/papaparse.min.js"></script>
   <script>
-    // **1)** Set this to wherever you put your CSV:
-    const CSV_PATH = 'books.csv';
+    // ** Point this to your actual CSV location **
+    const CSV_PATH = 'assets/books/books.csv';
 
     Papa.parse(CSV_PATH, {
       header: true,
       download: true,
       skipEmptyLines: true,
       complete(results) {
-        // Log any CSV parse errors:
         if (results.errors.length) {
-          console.error('CSV parsing errors:', results.errors);
+          console.error('CSV parse errors:', results.errors);
+          return;
         }
         const books = results.data;
         if (!books.length) {
-          console.warn('No books found in CSV!');
+          console.warn('No entries found in CSV');
           return;
         }
 
         const container = document.getElementById('books-container');
         books.forEach(book => {
-          const slug = book.slug;
+          const slug = book.slug.trim();
           // Build card
           const card = document.createElement('div');
           card.className = 'book-card';
 
-          // Cover — if your CSV "cover" field is already a full path, it'll use it; else it pads into assets/books/<slug>/
+          // Cover image
           const img = document.createElement('img');
-          img.src = book.cover.match(/^(https?:|\/)/)
-            ? book.cover
-            : `assets/books/${slug}/${book.cover}`;
+          img.src = `assets/books/${slug}/${book.cover.trim()}`;
           img.alt = `${book.title} cover`;
 
-          // Info wrapper
+          // Info
           const info = document.createElement('div');
           info.className = 'book-info';
 
@@ -173,11 +171,9 @@
           read.href = `reader.html?slug=${encodeURIComponent(slug)}`;
           read.textContent = 'Read';
 
-          // Download → either full path in CSV or assets/books/<slug>/<pdf>
+          // Download → PDF path
           const dl = document.createElement('a');
-          dl.href = book.pdf.match(/^(https?:|\/)/)
-            ? book.pdf
-            : `assets/books/${slug}/${book.pdf}`;
+          dl.href = `assets/books/${slug}/${book.pdf.trim()}`;
           dl.textContent = 'Download';
           dl.setAttribute('download', '');
 
