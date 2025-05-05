@@ -81,23 +81,23 @@
     const slug = params.get('slug') || ''
 
     // 2) map each slug to its chapter images
-    const chapters = {
-      'fa-inni-qarib-urdu': [
-        'chap1.jpg',
-        'chap2.jpg',
-        'chap3.jpg'
-      ],
-      'fa-inni-qarib-eng': [
-        'eng1.jpg',
-        'eng2.jpg',
-        'eng3.jpg'
-      ],
-      'parables-urdu': [
-        'p1.jpg',
-        'p2.jpg',
-        'p3.jpg'
-      ]
-    }
+     const chapters = {
+    'fa-inni-qarib-urdu': [
+      'chapter-1.jpg',
+      'chapter-2.jpg',
+      'chapter-3.jpg'
+    ],
+    'fa-inni-qarib-eng': [
+      'chapter-1.jpg',
+      'chapter-2.jpg',
+      'chapter-3.jpg'
+    ],
+    'parables-urdu': [
+      'chapter-1.jpg',
+      'chapter-2.jpg',
+      'chapter-3.jpg'
+    ]
+  }
 
     // 3) load preface.txt + render first section
     async function loadPreface() {
