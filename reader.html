@@ -87,42 +87,66 @@
     }
 
     (async()=>{
-      // determine slug
+      // Read slug from ?slug= or fallback to file=
       const params = new URLSearchParams(location.search);
-      const slug   = params.get('file')?.split('/').slice(-2, -1)[0];
-      if(!slug) return alert('No slug in URL');
-      document.getElementById('book-title').textContent = slug.replace(/-/g,' ');
+      let slug = params.get('slug');
+      if(!slug && params.has('file')) {
+        // fallback: file=assets/books/SLUG/...
+        const parts = params.get('file').split('/');
+        // expect ["assets","books","<slug>","..."]
+        if(parts.length >= 3) slug = parts[2];
+      }
+      if(!slug) {
+        alert('No “slug” in URL');
+        return;
+      }
 
-      // 1) fetch preface
-      const prefaceTxt = await fetchText(`assets/books/${slug}/preface.txt`);
+      // display title
+      document.getElementById('book-title').textContent =
+        slug.replace(/-/g,' ').replace(/\b\w/g, c=>c.toUpperCase());
 
-      // 2) gather chapter image list: bg.jpg + chapter-*.jpg
-      //    adjust to match exactly your files
-      const chapters = ['bg.jpg', 'chapter-1.jpg', 'chapter-2.jpg', 'chapter-3.jpg'];
+      // fetch preface.txt
+      const prefaceTxt = await fetchText(
+        `assets/books/${slug}/preface.txt`
+      );
 
-      // 3) build DOM
+      // define your chapter images here (must match files on disk)
+      const chapters = [
+        'bg.jpg',
+        'chapter-1.jpg',
+        'chapter-2.jpg',
+        'chapter-3.jpg'
+      ];
+
+      // build the parallax reader
       const reader = document.getElementById('reader');
       chapters.forEach((img, idx) => {
         const sec = document.createElement('section');
         sec.className = 'parallax';
-        sec.style.backgroundImage = `url("assets/books/${slug}/chapters/${img}")`;
+        sec.style.backgroundImage =
+          `url("assets/books/${slug}/chapters/${img}")`;
 
-        // only first section gets the text overlay
+        // only first section shows preface overlay
         if(idx === 0){
           const ov = document.createElement('div');
           ov.className = 'overlay';
-          ov.innerHTML = prefaceTxt
-            .replace(/\n{2,}/g,'</p><p>')   // paragraph break
-            .replace(/\n/g,'<br>');         // line break
+          // convert lines+paragraphs
+          ov.innerHTML = '<p>' +
+            prefaceTxt.trim()
+              .replace(/\r\n/g,'\n')
+              .split(/\n{2,}/g)
+              .map(p=>p.replace(/\n/g,'<br>'))
+              .join('</p><p>')
+            + '</p>';
           sec.appendChild(ov);
         }
 
         reader.appendChild(sec);
       });
     })()
-    .catch(e=>{
-      console.error(e);
-      alert('Error loading reader: '+ e.message);
+    .catch(err=>{
+      console.error(err);
+      alert('Error loading reader: '+err.message);
     });
   </script>
 </body>
