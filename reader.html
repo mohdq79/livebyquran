@@ -1,152 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
+  <meta charset="utf-8" />
   <title>Live by Quran — Reader</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
 
-  <!-- Web fonts for English, Arabic & Urdu -->
-  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <!-- Load Google Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
   <link href="https://fonts.googleapis.com/css2?
       family=Playfair+Display:wght@700&
-      family=Scheherazade+New&
-      family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
+      family=Noto+Nastaliq+Urdu&display=swap"
+        rel="stylesheet" />
 
   <style>
-    /* reset */
+    /*── Reset & Base ──*/
     * { margin:0; padding:0; box-sizing:border-box }
-    body, html { height:100%; overflow-x:hidden; font-family:sans-serif; }
+    html, body { height:100%; overflow-x:hidden; font-family:Calibri,sans-serif; }
 
-    /* fixed header */
+    /*── Sticky Header ──*/
     header {
       position:fixed; top:0; left:0; right:0;
       height:60px; background:rgba(255,255,255,0.85);
       display:flex; align-items:center; padding:0 20px;
-      z-index:100;
       font-family:'Playfair Display',serif;
-      box-shadow:0 2px 6px rgba(0,0,0,0.1);
+      z-index:100; box-shadow:0 2px 6px rgba(0,0,0,0.1);
     }
     header a { text-decoration:none; color:#333; margin-right:1em; }
-    header a.back { font-size:0.9rem; }
     header .title { flex:1; text-align:center; font-size:1.1rem; }
 
-    /* parallax sections */
-    section.parallax {
-      position:relative;
-      width:100vw; min-height:100vh;
-      background-position:center;
-      background-size:cover;
-      background-attachment:fixed;
-      display:flex; align-items:center; justify-content:center;
+    /*── Parallax Background ──*/
+    #bg {
+      position:fixed; top:0; left:0; width:100%; height:100%;
+      background-size:cover; background-position:center;
+      will-change:transform; z-index:-1;
     }
 
-    /* overlay behind text */
-    .overlay {
-      background:rgba(0,0,0,0.5);
-      padding:2rem;
-      border-radius:8px;
-      max-width:700px;
+    /*── Content Container ──*/
+    #reader {
+      position:relative; margin-top:60px; /* allow for header */
+      padding:40px 20px; max-width:800px; margin-left:auto; margin-right:auto;
       color:#fff;
+    }
+
+    /*── Text Overlay Box ──*/
+    .overlay {
+      background:rgba(0,0,0,0.6);
+      padding:2rem; border-radius:8px;
       line-height:1.6;
     }
-    /* Arabic styling inside overlay */
-    .overlay .arabic {
-      font-family:'Scheherazade New',serif;
-      font-size:1.6rem;
-      direction:rtl;
-      margin-top:0.5rem;
+    .overlay h1 {
+      font-family:'Playfair Display',serif;
+      font-size:2.5rem; margin-bottom:1rem;
     }
-    /* Urdu styling inside overlay */
-    .overlay .urdu {
+    .overlay p {
       font-family:'Noto Nastaliq Urdu',serif;
-      font-size:1.6rem;
+      font-size:1.3rem;
+      margin-bottom:1rem;
+      text-align:right;
       direction:rtl;
-      margin-top:0.5rem;
     }
-
-    /* scrollable container */
-    #reader { margin-top:60px; }
-
   </style>
 </head>
-<body>
 
+<body>
   <header>
-    <a href="books.html" class="back">← Back to Books</a>
+    <a href="books.html">← Back to Books</a>
     <div class="title" id="book-title">Loading…</div>
   </header>
 
-  <div id="reader"></div>
+  <div id="bg"></div>
+  <div id="reader">
+    <div class="overlay" id="preface-container">
+      <!-- Preface text will inject here -->
+    </div>
+  </div>
 
   <script>
-    // helper to fetch text
-    async function fetchText(url){
-      const r = await fetch(url);
-      if(!r.ok) throw new Error(url+' failed');
-      return r.text();
-    }
-
     (async()=>{
-      // Read slug from ?slug= or fallback to file=
+      // 1. Grab the slug from the URL (?slug=parables-urdu)
       const params = new URLSearchParams(location.search);
-      let slug = params.get('slug');
-      if(!slug && params.has('file')) {
-        // fallback: file=assets/books/SLUG/...
-        const parts = params.get('file').split('/');
-        // expect ["assets","books","<slug>","..."]
-        if(parts.length >= 3) slug = parts[2];
-      }
+      const slug   = params.get('slug');
       if(!slug) {
-        alert('No “slug” in URL');
+        alert('Reader requires ?slug=<your-book-slug>');
         return;
       }
-
-      // display title
+      // 2. Set the header title
       document.getElementById('book-title').textContent =
-        slug.replace(/-/g,' ').replace(/\b\w/g, c=>c.toUpperCase());
+        slug.replace(/-/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
 
-      // fetch preface.txt
-      const prefaceTxt = await fetchText(
-        `assets/books/${slug}/preface.txt`
-      );
+      // 3. Point the background to your bg.jpg
+      const bg = document.getElementById('bg');
+      bg.style.backgroundImage =
+        `url("assets/books/${slug}/chapters/bg.jpg")`;
 
-      // define your chapter images here (must match files on disk)
-      const chapters = [
-        'bg.jpg',
-        'chapter-1.jpg',
-        'chapter-2.jpg',
-        'chapter-3.jpg'
-      ];
+      // 4. Load & render preface.txt
+      const raw = await fetch(`assets/books/${slug}/preface.txt`)
+                      .then(r=>r.text());
+      // Split on double-newlines, wrap each in <p>
+      const html = raw.trim()
+        .split(/\n\s*\n/)
+        .map(para =>
+          `<p>${para.trim().replace(/\n/g,'<br>')}</p>`
+        ).join('');
+      document.getElementById('preface-container').innerHTML =
+        `<h1>پیش لفظ</h1>${html}`;
 
-      // build the parallax reader
-      const reader = document.getElementById('reader');
-      chapters.forEach((img, idx) => {
-        const sec = document.createElement('section');
-        sec.className = 'parallax';
-        sec.style.backgroundImage =
-          `url("assets/books/${slug}/chapters/${img}")`;
-
-        // only first section shows preface overlay
-        if(idx === 0){
-          const ov = document.createElement('div');
-          ov.className = 'overlay';
-          // convert lines+paragraphs
-          ov.innerHTML = '<p>' +
-            prefaceTxt.trim()
-              .replace(/\r\n/g,'\n')
-              .split(/\n{2,}/g)
-              .map(p=>p.replace(/\n/g,'<br>'))
-              .join('</p><p>')
-            + '</p>';
-          sec.appendChild(ov);
-        }
-
-        reader.appendChild(sec);
+      // 5. Parallax scroll: bg moves at 30% of scroll speed
+      window.addEventListener('scroll',()=>{
+        const y = window.scrollY;
+        bg.style.transform = `translateY(${y*0.3}px)`;
       });
-    })()
-    .catch(err=>{
+    })().catch(err=>{
       console.error(err);
-      alert('Error loading reader: '+err.message);
+      alert('Error loading book preview: '+err.message);
     });
   </script>
 </body>
