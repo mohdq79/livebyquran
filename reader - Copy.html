@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Live by Quran — Reader</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?
+      family=Playfair+Display:wght@700&
+      family=Noto+Nastaliq+Urdu&display=swap"
+    rel="stylesheet"
+  />
+
+  <style>
+    /* ───── Reset & Base ───── */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html, body { height:100%; overflow-x:hidden; }
+    body {
+      font-family:'Noto Nastaliq Urdu', serif;
+      color:#222;
+    }
+    a { text-decoration:none; color:inherit; }
+
+    /* ───── Header / Nav ───── */
+    header {
+      position:fixed; top:0; left:0; right:0;
+      height:60px; background:rgba(255,255,255,0.95);
+      display:flex; align-items:center; padding:0 20px;
+      box-shadow:0 2px 4px rgba(0,0,0,0.1);
+      z-index:100;
+      font-family:'Playfair Display', serif;
+    }
+    header .logo img {
+      height:40px; margin-right:12px;
+    }
+    header nav {
+      margin-left:auto; display:flex; gap:1rem;
+    }
+    header nav a {
+      font-weight:500; color:#444; transition:color .2s;
+    }
+    header nav a:hover {
+      color:#000;
+    }
+
+    /* ───── Parallax Sections ───── */
+    section.parallax {
+      position:relative;
+      width:100vw; height:100vh;
+      background-size:cover;
+      background-position:center;
+      background-attachment:fixed;
+      display:flex; align-items:center; justify-content:center;
+    }
+    /* optional dark overlay if needed */
+    section.parallax::before {
+      content:""; position:absolute;
+      inset:0; background:rgba(0,0,0,0.3);
+    }
+
+    /* ───── Text Overlay ───── */
+    .overlay {
+      position:relative; z-index:1;
+      background:rgba(255,255,255,0.8);
+      padding:2rem; border-radius:8px;
+      max-width:800px;
+      line-height:2;
+      color:#111;
+      box-shadow:0 4px 12px rgba(0,0,0,0.15);
+    }
+    .overlay h1 {
+      margin-bottom:1rem;
+      font-family:'Playfair Display', serif;
+      font-size:2.5rem;
+      text-align:center;
+    }
+    .overlay p {
+      margin-bottom:1rem;
+      font-size:1.3rem;
+    }
+
+    /* ───── Scroll Container ───── */
+    #reader {
+      margin-top:60px; /* room for header */
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="logo">
+      <a href="index.html">
+        <img src="Livebyquran Logo.PNG" alt="Live by Quran">
+      </a>
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="books.html">Books</a>
+      <a href="lectures.html">Lectures</a>
+      <a href="articles.html">Articles</a>
+      <a href="qa.html">Q&amp;A</a>
+    </nav>
+  </header>
+
+  <div id="reader"></div>
+
+  <script>
+    (async ()=> {
+      // 1) Parse slug
+      const params = new URLSearchParams(location.search);
+      const slug   = params.get('slug');
+      if(!slug) {
+        alert('Reader page requires ?slug=<your-book-slug>');
+        return;
+      }
+
+      // 2) Set up your chapter-image sequence
+      //    (ensure these files exist under assets/books/{slug}/chapters/)
+      const chapters = [
+        'bg.jpg',
+        'chapter-1.jpg',
+        'chapter-2.jpg',
+        'chapter-3.jpg'
+      ];
+
+      // 3) Fetch & parse preface.txt
+      const prefaceText = await fetch(`assets/books/${slug}/preface.txt`)
+        .then(r=>r.ok ? r.text() : Promise.reject('No preface.txt'));
+
+      // 4) Render each section
+      const reader = document.getElementById('reader');
+
+      chapters.forEach((img, idx) => {
+        const sec = document.createElement('section');
+        sec.className = 'parallax';
+        sec.style.backgroundImage =
+          `url("assets/books/${slug}/chapters/${img}")`;
+
+        // only the first section shows the text
+        if(idx === 0) {
+          const ov = document.createElement('div');
+          ov.className = 'overlay';
+          // convert double-newlines to paragraphs
+          ov.innerHTML = '<h1>پیش لفظ</h1>' +
+            prefaceText.trim().split(/\n\s*\n/).map(p=>{
+              return `<p>${p.trim().replace(/\n/g,'<br>')}</p>`;
+            }).join('');
+          sec.appendChild(ov);
+        }
+
+        reader.appendChild(sec);
+      });
+    })()
+    .catch(err => {
+      console.error(err);
+      document.body.innerHTML = 
+        `<p style="padding:2rem; color:red;">
+           Error loading reader: ${err}
+         </p>`;
+    });
+  </script>
+</body>
+</html>
