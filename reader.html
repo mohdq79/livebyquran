@@ -5,22 +5,26 @@
   <title>Live by Quran — Reader</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
 
-  <!-- Load Nastaliq & Naskh fonts -->
+  <!-- Load Nastaliq & Naskh -->
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?
-      family=Noto+Nastaleeq+Urdu&family=Noto+Naskh+Arabic&display=swap"
+      family=Noto+Nastaliq+Urdu&family=Noto+Naskh+Arabic&display=swap"
     rel="stylesheet">
 
   <style>
     /*── Reset & Base ──*/
     * { margin:0; padding:0; box-sizing:border-box }
-    html, body { height:100%; overflow-x:hidden; font-family: 'Noto Nastaleeq Urdu', serif; }
-    body { background: #000; color: #111; }
+    html, body {
+      height:100%; overflow-x:hidden;
+      font-family: 'Noto Nastaliq Urdu', serif;
+      background: #000;
+      color: #fff;
+      direction: rtl;
+    }
 
     /*── Full-screen Background Overlay ──*/
     #bg-overlay {
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background: #000 center/cover no-repeat;
       transition: background 0.8s ease-out;
       z-index: -1;
@@ -28,23 +32,19 @@
 
     /*── Site Header & Nav ──*/
     header {
-      position: fixed;
-      top: 0; inline-start: 0; inline-end: 0;
-      height: 56px;
-      background: rgba(255,255,255,0.95);
-      display: flex;
-      align-items: center;
-      padding-inline: 1rem;
+      position: fixed; top: 0; inset-inline: 0;
+      height: 56px; background: rgba(255,255,255,0.95);
+      display: flex; align-items: center;
+      padding-inline: 1rem; z-index: 100;
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      z-index: 100;
+      direction: ltr; /* keep nav LTR for links */
     }
     header .logo img { height: 36px; }
     nav { margin-inline-start: auto; display: flex; gap: 1rem; }
     nav a {
-      text-decoration: none;
-      color: #333;
-      font-weight: 500;
-      transition: color 0.2s;
+      text-decoration: none; color: #333;
+      font-family: sans-serif; font-weight: 500;
+      transition: color .2s;
     }
     nav a:hover { color: #000; }
 
@@ -54,12 +54,10 @@
     .book-section {
       max-inline-size: 800px;
       margin: 2rem auto;
-      padding: 1.5rem;
-      background: rgba(255,255,255,0.85);
-      border-radius: 8px;
+      padding: 1rem;             /* tighter padding */
+      background: transparent;   /* fully transparent */
       line-height: 1.8;
       font-size: 1rem;
-      direction: rtl;
     }
     .section-title {
       font-size: 1.8rem;
@@ -72,21 +70,23 @@
     }
     .quran-verse {
       margin-block: 1rem;
-      padding-block: 0.75rem;
+      padding-block: .5rem;
       padding-inline: 1rem;
-      background: rgba(0,0,0,0.05);
-      border-inline-start: 4px solid #888;
+      background: rgba(0,0,0,0.3);   /* slight backdrop for verses */
+      border-inline-start: 4px solid #ccc;
       font-family: 'Noto Naskh Arabic', serif;
       font-style: italic;
       font-size: 1.1rem;
       text-align: right;
     }
 
-    /*── Mobile Responsiveness ──*/
+    /*── Mobile: add faint backdrop behind all text for legibility ──*/
     @media (max-width: 600px) {
       .book-section {
+        background: rgba(0,0,0,0.4);
         margin: 1rem;
         padding: 1rem;
+        border-radius: 6px;
       }
       .section-title { font-size: 1.5rem; }
       .quran-verse { font-size: 1rem; }
@@ -95,10 +95,8 @@
 </head>
 
 <body>
-  <!-- Background Overlay -->
   <div id="bg-overlay"></div>
 
-  <!-- Site Header -->
   <header>
     <a href="index.html" class="logo">
       <img src="Livebyquran Logo.PNG" alt="Live by Quran">
@@ -112,74 +110,58 @@
     </nav>
   </header>
 
-  <!-- Sections go here -->
   <div id="sections"></div>
 
   <script>
-    (async () => {
-      // 1) Read ?slug= parameter
+    (async()=>{
       const params = new URLSearchParams(location.search);
-      const slug = params.get('slug');
-      if (!slug) {
+      const slug   = params.get('slug');
+      if(!slug){
         document.getElementById('sections').innerHTML =
-          '<p style="padding:2rem; text-align:center; color:#eee;">کتاب منتخب نہیں کی گئی۔</p>';
+          '<p style="padding:2rem;text-align:center;">کتاب منتخب نہیں کی گئی۔</p>';
         return;
       }
-
       const base = `assets/books/${slug}`;
-
-      // 2) Load sections.json
       let config;
-      try {
-        config = await fetch(`${base}/sections.json`).then(r =>
-          r.ok ? r.json() : Promise.reject('sections.json نہیں ملا')
-        );
-      } catch (err) {
-        console.error(err);
+      try{
+        config = await fetch(`${base}/sections.json`)
+          .then(r=>r.ok?r.json():Promise.reject());
+      }catch{
         document.getElementById('sections').innerHTML =
-          '<p style="padding:2rem; text-align:center; color:salmon;">سیکشن کنفیگریشن لوڈ نہیں ہو سکی۔</p>';
+          '<p style="padding:2rem;text-align:center;color:salmon;">sections.json لوڈ نہیں ہوا۔</p>';
         return;
       }
 
-      // 3) Inject each HTML snippet and record its background
       const container = document.getElementById('sections');
-      const sections = [];
-      for (let sec of config.sections) {
+      const sections  = [];
+
+      for(let s of config.sections){
         let html = '';
-        try {
-          html = await fetch(`${base}/${sec.file}`).then(r =>
-            r.ok ? r.text() : Promise.reject(`${sec.file} نہیں ملا`)
-          );
-        } catch (err) {
-          html = `<p style="color:red;">${err} لوڈ نہیں ہو سکا۔</p>`;
+        try{
+          html = await fetch(`${base}/${s.file}`).then(r=>r.ok?r.text():Promise.reject());
+        }catch(e){
+          html = `<p style="color:red;">${s.file} لوڈ نہیں ہو سکا۔</p>`;
         }
         const div = document.createElement('div');
         div.className = 'book-section';
         div.innerHTML = html;
         container.appendChild(div);
-        sections.push({
-          element: div,
-          bg: `${base}/chapters/${sec.bg}`
-        });
+        sections.push({el:div, bg:`${base}/chapters/${s.bg}`});
       }
 
-      // 4) Set initial background
       const overlay = document.getElementById('bg-overlay');
       overlay.style.backgroundImage = `url("${sections[0].bg}")`;
 
-      // 5) Swap backgrounds as sections scroll into center viewport
-      const observer = new IntersectionObserver((entries) => {
-        for (let e of entries) {
-          if (e.isIntersecting) {
-            const idx = sections.findIndex(s => s.element === e.target);
+      const obs = new IntersectionObserver((entries)=>{
+        entries.forEach(ent=>{
+          if(ent.isIntersecting){
+            const idx = sections.findIndex(x=>x.el===ent.target);
             overlay.style.backgroundImage = `url("${sections[idx].bg}")`;
           }
-        }
-      }, {
-        rootMargin: '-50% 0px -50% 0px'
-      });
+        });
+      },{rootMargin:'-50% 0px -50% 0px'});
 
-      sections.forEach(s => observer.observe(s.element));
+      sections.forEach(s=>obs.observe(s.el));
     })();
   </script>
 </body>
