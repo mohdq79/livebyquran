@@ -1,157 +1,185 @@
 <!DOCTYPE html>
-<html lang="ur">
+<html lang="ur" dir="rtl">
 <head>
   <meta charset="utf-8">
   <title>Live by Quran — Reader</title>
   <meta name="viewport" content="width=device-width,initial-scale=1">
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Arabic:wght@400;700&family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
+  <!-- Load Nastaliq & Naskh fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?
+      family=Noto+Nastaleeq+Urdu&family=Noto+Naskh+Arabic&display=swap"
+    rel="stylesheet">
 
   <style>
-    /* reset */
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family: "Noto Sans Arabic", sans-serif; color:#fff; overflow-x:hidden; }
+    /*── Reset & Base ──*/
+    * { margin:0; padding:0; box-sizing:border-box }
+    html, body { height:100%; overflow-x:hidden; font-family: 'Noto Nastaleeq Urdu', serif; }
+    body { background: #000; color: #111; }
 
-    /* fixed, full-screen bg layer */
+    /*── Full-screen Background Overlay ──*/
     #bg-overlay {
-      position:fixed; top:0; left:0; width:100%; height:100%;
-      background: #000 url("") center/cover no-repeat;
+      position: fixed;
+      inset: 0;
+      background: #000 center/cover no-repeat;
       transition: background 0.8s ease-out;
-      z-index:-1;
+      z-index: -1;
     }
 
-    /* container for all sections */
-    #sections { position:relative; z-index:1; }
-
-    /* each section box */
-    .book-section {
-      max-width:800px;
-      margin:2rem auto;
-      padding:2rem;
-      background: rgba(0,0,0,0.4);
-      border-radius:8px;
-      line-height:1.7;
-    }
-
-    .section-title {
-      font-family:"Noto Nastaliq Urdu", serif;
-      font-size:2.2rem;
-      margin-bottom:1rem;
-    }
-
-    .book-section p {
-      margin-bottom:1.25rem;
-      font-size:1rem;
-    }
-
-    .quran-verse {
-      margin:1.5rem 0;
-      padding:1rem 1.5rem;
-      background:rgba(255,255,255,0.1);
-      border-left:4px solid rgba(255,255,255,0.7);
-      font-style:italic;
-    }
-
-    /* Mobile tweaks */
-    @media (max-width:600px) {
-      .book-section {
-        margin:1rem;
-        padding:1rem;
-      }
-      .section-title { font-size:1.8rem; }
-      .book-section p { font-size:0.95rem; }
-    }
-
-    /* header/nav */
+    /*── Site Header & Nav ──*/
     header {
-      position:fixed; top:0; left:0; right:0;
-      background:rgba(255,255,255,0.9);
-      color:#333; display:flex; align-items:center;
-      padding:0.5rem 1rem; z-index:2;
-      font-family:sans-serif;
+      position: fixed;
+      top: 0; inline-start: 0; inline-end: 0;
+      height: 56px;
+      background: rgba(255,255,255,0.95);
+      display: flex;
+      align-items: center;
+      padding-inline: 1rem;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      z-index: 100;
     }
-    header img { height:40px; }
-    header nav { margin-left:auto; }
-    header nav a {
-      margin-left:1rem; text-decoration:none; color:#333;
-      font-weight:500;
+    header .logo img { height: 36px; }
+    nav { margin-inline-start: auto; display: flex; gap: 1rem; }
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+      transition: color 0.2s;
     }
-    header nav a:hover { text-decoration:underline; }
+    nav a:hover { color: #000; }
+
+    /*── Sections Container ──*/
+    #sections { padding-block-start: 56px; }
+
+    .book-section {
+      max-inline-size: 800px;
+      margin: 2rem auto;
+      padding: 1.5rem;
+      background: rgba(255,255,255,0.85);
+      border-radius: 8px;
+      line-height: 1.8;
+      font-size: 1rem;
+      direction: rtl;
+    }
+    .section-title {
+      font-size: 1.8rem;
+      margin-block-end: 1rem;
+      font-weight: bold;
+      text-align: center;
+    }
+    .book-section p {
+      margin-block-end: 1rem;
+    }
+    .quran-verse {
+      margin-block: 1rem;
+      padding-block: 0.75rem;
+      padding-inline: 1rem;
+      background: rgba(0,0,0,0.05);
+      border-inline-start: 4px solid #888;
+      font-family: 'Noto Naskh Arabic', serif;
+      font-style: italic;
+      font-size: 1.1rem;
+      text-align: right;
+    }
+
+    /*── Mobile Responsiveness ──*/
+    @media (max-width: 600px) {
+      .book-section {
+        margin: 1rem;
+        padding: 1rem;
+      }
+      .section-title { font-size: 1.5rem; }
+      .quran-verse { font-size: 1rem; }
+    }
   </style>
 </head>
 
 <body>
-
+  <!-- Background Overlay -->
   <div id="bg-overlay"></div>
 
+  <!-- Site Header -->
   <header>
-    <a href="index.html"><img src="Livebyquran Logo.PNG" alt="Live by Quran"></a>
+    <a href="index.html" class="logo">
+      <img src="Livebyquran Logo.PNG" alt="Live by Quran">
+    </a>
     <nav>
-      <a href="index.html">Home</a>
-      <a href="books.html">Books</a>
-      <a href="lectures.html">Lectures</a>
-      <a href="articles.html">Articles</a>
-      <a href="qa.html">Q&A</a>
+      <a href="index.html">صفحۂ اول</a>
+      <a href="books.html">کتب</a>
+      <a href="lectures.html">لیکچرز</a>
+      <a href="articles.html">مضامین</a>
+      <a href="qa.html">سوال و جواب</a>
     </nav>
   </header>
 
+  <!-- Sections go here -->
   <div id="sections"></div>
 
   <script>
-    (async()=>{
-      // 1) grab 'slug' param:
+    (async () => {
+      // 1) Read ?slug= parameter
       const params = new URLSearchParams(location.search);
       const slug = params.get('slug');
-      if(!slug) {
+      if (!slug) {
         document.getElementById('sections').innerHTML =
-          '<p style="padding:2rem;text-align:center;color:#ccc;">No book specified.</p>';
+          '<p style="padding:2rem; text-align:center; color:#eee;">کتاب منتخب نہیں کی گئی۔</p>';
         return;
       }
 
       const base = `assets/books/${slug}`;
-      // 2) load sections.json
-      let conf;
+
+      // 2) Load sections.json
+      let config;
       try {
-        conf = await fetch(`${base}/sections.json`).then(r=>r.json());
-      } catch(err) {
+        config = await fetch(`${base}/sections.json`).then(r =>
+          r.ok ? r.json() : Promise.reject('sections.json نہیں ملا')
+        );
+      } catch (err) {
         console.error(err);
-        return document.getElementById('sections')
-          .innerHTML = `<p style="padding:2rem;color:#fcc;">Failed to load sections.json</p>`;
+        document.getElementById('sections').innerHTML =
+          '<p style="padding:2rem; text-align:center; color:salmon;">سیکشن کنفیگریشن لوڈ نہیں ہو سکی۔</p>';
+        return;
       }
 
+      // 3) Inject each HTML snippet and record its background
       const container = document.getElementById('sections');
-      // 3) for each section: fetch its HTML, inject, and record its bg
       const sections = [];
-      for(const sec of conf.sections){
-        const html = await fetch(`${base}/${sec.file}`).then(r=>r.text());
+      for (let sec of config.sections) {
+        let html = '';
+        try {
+          html = await fetch(`${base}/${sec.file}`).then(r =>
+            r.ok ? r.text() : Promise.reject(`${sec.file} نہیں ملا`)
+          );
+        } catch (err) {
+          html = `<p style="color:red;">${err} لوڈ نہیں ہو سکا۔</p>`;
+        }
         const div = document.createElement('div');
         div.className = 'book-section';
-        div.id = sec.slug;
         div.innerHTML = html;
         container.appendChild(div);
         sections.push({
-          el: div,
+          element: div,
           bg: `${base}/chapters/${sec.bg}`
         });
       }
 
-      const bgOverlay = document.getElementById('bg-overlay');
-      // initially set to the first section's bg
-      bgOverlay.style.backgroundImage = `url('${sections[0].bg}')`;
+      // 4) Set initial background
+      const overlay = document.getElementById('bg-overlay');
+      overlay.style.backgroundImage = `url("${sections[0].bg}")`;
 
-      // 4) as you scroll, swap the background
-      const io = new IntersectionObserver((entries)=>{
-        entries.forEach(e=>{
-          if(e.isIntersecting) {
-            const idx = sections.findIndex(s=>s.el===e.target);
-            bgOverlay.style.backgroundImage = `url('${sections[idx].bg}')`;
+      // 5) Swap backgrounds as sections scroll into center viewport
+      const observer = new IntersectionObserver((entries) => {
+        for (let e of entries) {
+          if (e.isIntersecting) {
+            const idx = sections.findIndex(s => s.element === e.target);
+            overlay.style.backgroundImage = `url("${sections[idx].bg}")`;
           }
-        });
-      },{ rootMargin:'-50% 0px -50% 0px' });
+        }
+      }, {
+        rootMargin: '-50% 0px -50% 0px'
+      });
 
-      sections.forEach(s => io.observe(s.el));
-
+      sections.forEach(s => observer.observe(s.element));
     })();
   </script>
 </body>
